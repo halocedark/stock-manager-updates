@@ -1,0 +1,983 @@
+<div class="container-fluid" id="view_docit_files">
+
+	<div class="wrapper d-none d-flex">
+
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_appointements.sectionTitle %></h1>
+
+        <div class="width-10px"></div>
+
+        <div class="d-flex align-items-center">
+			<a href="#" class="fs-14 fw-500 btn btn-success" data-perm="create_docit_files" onclick="CreateDocitMediaDialog()">
+				<%= UI_DISPLAY_LANG.views.pages.global.add_new_button %>
+            </a>
+		</div>
+
+        <div class="width-10px"></div>
+
+        <div class="d-flex align-items-center">
+			<a href="#" class="fs-14 fw-500 btn btn-success" data-perm="create_docit_files" onclick="CreateDocitFolderDialog()">
+				<%= UI_DISPLAY_LANG.views.pages.global.create_docit_folder %>
+            </a>
+		</div>
+
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-3">
+
+		<div class="table-nav">
+			
+			<div class="row">
+
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox2.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                        searchInputPlaceholder: UI_DISPLAY_LANG.views.pages.global.placeholder5,
+                        searchBtnStyle: 'width: 10%;height:100%;',
+                        searchBtnIconStyle: 'width: 17px;',
+                        searchBoxStyle: 'background-color: #F0F2F5; min-height: unset !important; height:40px; max-width:95%; border: none; border-radius: 20px;',
+                        searchInputStyle: 'background-color: #F0F2F5;',
+                        searchInputHolderStyle: 'border:none;',
+                    }) -%>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="mb-3 has-direction-ltr">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" id="folder_breadcrumb">
+                    <li class="breadcrumb-item d-none" id="folder_breadcrumb__0">
+                        <a href="#"><%= UI_DISPLAY_LANG.views.pages.global.home %></a>
+                    </li>
+                    <!-- <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data</li> -->
+                </ol>
+            </nav>
+        </div>
+
+        <div class="mb-4 overflow-x-hidden overflow-y-auto max-height-100 row gx-2 gy-3 py-5 px-3" id="tableElement">
+
+
+        </div>
+
+        <!-- <div class="text-center">
+            <button class="btn-01 min-width-160px" id="load_more_button">
+                <%= UI_DISPLAY_LANG.views.pages.global.load_more_button %>
+            </button>
+        </div> -->
+        
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#view_docit_files')
+
+if ( !page_container[0] ) return
+
+const search_btn = page_container.find('#search_btn')
+const search_input = page_container.find('#search_input')
+
+const tableElement = page_container.find('#tableElement')
+const load_more_button = page_container.find('#load_more_button')
+
+const folder_breadcrumb = page_container.find('#folder_breadcrumb')
+
+var FOLDER_ID = null
+var BREADCRUMB_FOLDERS = []
+
+var isLoading = false
+var PAGINATION = {
+    per_page: 10,
+    current_page: 1,
+    last_page: 0,
+    total: 0,
+}
+
+const params = {
+    searchTerm: '',
+    user_id: DEFAULT_INI_SETTINGS.DOCIT_USER.USER_ID,
+    // extensions: ['jpg', 'png', 'gif', 'webp'],
+    pagination: PAGINATION,
+    orderBy: 'id',
+    order: 'desc',
+}
+
+// search
+detectTypingEnd(search_input, val => {
+    search(val)
+})
+
+// load more
+load_more_button.off('click').on('click', e => {
+
+    if ( getIsLoading() ) return
+
+    if ( getPagination().current_page == getPagination().last_page ) 
+    {
+        // hide button
+        load_more_button.parent().addClass('d-none')
+        return
+    }
+
+    setPagination({
+        current_page: getPagination().current_page + 1,
+    })
+
+    setIsLoading(true)
+
+    displayAll(() => {
+        setIsLoading(false)
+    })
+
+})
+
+// search
+function search(searchTerm)
+{
+    let firstMatchIndex = -1
+
+    searchTerm = searchTerm.toLowerCase()
+
+    const elements = tableElement.children()
+
+    elements.each((k,v) => {
+        const element = $(v)
+        const text = element.find('.filename').text().trim().toLocaleLowerCase()
+
+        if (text.indexOf(searchTerm) !== -1) 
+        {
+            if (firstMatchIndex === -1) firstMatchIndex = k
+            
+            element.removeClass('d-none')
+        } 
+        else 
+        {
+            element.addClass('d-none')
+        }
+
+        // console.log(text)
+    })
+}
+// displayAll
+displayAll()
+
+async function displayAll(options = {})
+{
+
+    const defaultOptions = {
+        onData: (e) => {}
+    }
+
+    options = {...defaultOptions, ...options}
+
+    params.searchTerm = search_input.val()
+    params.pagination = PAGINATION
+    params.folder_id = FOLDER_ID
+
+    showPlaceholder()
+
+    var res = null
+
+    try 
+    {
+        // if ( !params.folder_id ) res = await MEDIA_MODEL.advancedSearch(params)
+        // else res = await MEDIA_MODEL.file_explorer(params)
+        res = await MEDIA_MODEL.file_explorer(params)
+    } 
+    catch (error) {
+        tableElement.html(`
+        <div class="col-lg-12 col-md-12 cursor-pointer">
+
+            <div class="overflow-hidden no-pointer">
+
+                <p class="fs-17 text-danger">
+                    ${ FUI_DISPLAY_LANG.views.messages.no_data_found }
+                </p>
+
+            </div>
+
+        </div>
+        `)
+        hidePlaceholder()
+        return
+    }
+
+    hidePlaceholder()
+
+    // clear
+    if ( options.clearOld ) tableElement.html('')
+
+    const data = res
+    var html = ''
+    
+    // Update PAGINATION
+    // PAGINATION.last_page = res.data.last_page
+    // PAGINATION.total = res.data.total
+    setPagination({
+        last_page: res.last_page,
+        total: res.total,
+        from: res.from,
+        to: res.to,
+    })
+
+    // init breadcrumb events
+    addBreadcrumb()
+
+    // check if inside a folder
+    if ( FOLDER_ID )
+    {
+        const folder = data[0]
+
+        // add breadcrumb
+        addBreadcrumb({
+            id: folder.id,
+            name: folder.name,
+        })
+        // children
+        for (let i = 0; i < folder.children.length; i++) {
+            const child = folder.children[i]
+            appendFile({}, child)
+        }
+        // files
+        for (let i = 0; i < folder.medias.length; i++) {
+            const file = folder.medias[i]
+            appendFile({}, file)
+        }
+    }
+    else
+    {
+        // clear breadcumb
+        clearBreadcrumb()
+        // 
+        $.each(data, (k,v) => {
+            appendFile({}, v)
+        })   
+    }
+
+    options.onData(data)
+}
+// appendHTML
+function appendFile(options = {}, file)
+{
+    const defaultOptions = {
+        append: true,
+    }
+
+    options = {...defaultOptions, ...options}
+
+    const id = `file_holder__${uniqid()}__${file.id}`
+
+    var html = ''
+
+    // check file | folder
+    if ( file.hasOwnProperty('icon') )
+    {
+        html = `
+        <div class="col-lg-12 col-md-12" id="${id}" data-role="row" data-type="folder" data-id="${file.id}" data-name="${file.name}" data-parent-id="${file.parent_id}">
+
+            <div class="rounded cursor-pointer border-bottom py-3 px-2  bg-color-hover-ebebeb">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="flex-shrink-0">
+
+                        ${ fileTypeIcon({
+                            extension: 'folder'
+                        }) }
+                        
+                    </div>
+
+                    <div class="width-25px"></div>
+
+                    <div class="w-100">
+
+                        <div class="filename">  
+                            ${ file.title ?? file.name }
+                        </div>
+
+                        <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+
+                            <div class="">
+                                ${ (file.children) ? file.children.length : 0 } ${ FUI_DISPLAY_LANG.views.pages.global.attributes.folders },
+                            </div>
+
+                            <div class="width-10px"></div>
+
+                            <div class="">
+                                ${ (file.medias) ? file.medias.length : 0 } ${ FUI_DISPLAY_LANG.views.pages.global.attributes.files }
+                            </div>
+
+                            <div class="width-10px" data-perm="delete_docit_files"></div>
+
+                            <div class="" data-perm="delete_docit_files">
+                                <a href="#" class="text-danger" id="delete_button__${id}">
+                                    ${ FUI_DISPLAY_LANG.views.pages.global.actions.delete }
+                                </a>
+                            </div>
+
+                            <div class="width-10px" data-perm="update_docit_files"></div>
+
+                            <div class="" data-perm="update_docit_files">
+                                <a href="#" class="text-primary" id="update_button__${id}">
+                                    ${ FUI_DISPLAY_LANG.views.pages.global.actions.update }
+                                </a>
+                            </div>
+
+                            <div class="width-10px"></div>
+
+                            <div class="d-flex align-items-center">
+                    
+                                <div class="dropdown">
+                                    <a class="text-decoration-none bg-white d-inline-flex justify-content-center align-items-center border-radius-10 cursor-pointer text-color-17 px-2 py-1" type="button" id="folder_more_actions_menu__${file.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu" id="folder_more_actions__menu__${file.id}" aria-labelledby="folder_more_actions_menu__${file.id}">
+                                        <li data-perm="share_docit_folder">
+                                            <a class="dropdown-item fs-14" href="#" data-role="SHARE" >
+                                                <%= UI_DISPLAY_LANG.views.pages.global.actions.share %>
+                                            </a>
+                                        </li>
+                                        <li data-perm="delete_share_docit_folder">
+                                            <a class="dropdown-item fs-14" href="#" data-role="DELETE_SHARE" >
+                                                <%= UI_DISPLAY_LANG.views.pages.global.actions.delete_share %>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex align-items-center text-color-17 mt-2">
+                        
+                    <div class="">
+                        ${ file.user_name }    
+                    </div>
+
+                    <div class="mx-2">.</div>
+
+                    <div class="">
+                        ${ formatDateTime(file.created_at, {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                        }) }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        `
+
+    }
+    else
+    {
+
+        html = `
+        <div class="col-lg-12 col-md-12" id="${id}" data-role="row" data-type="file" data-id="${file.id}" data-url="${file.url}">
+
+            <div class="rounded cursor-pointer border-bottom py-3 px-2  bg-color-hover-ebebeb">
+
+                <div class="d-flex align-items-center">
+
+                    <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+                    <div class="flex-shrink-0">
+
+                        ${ fileTypeIcon({
+                            url: file.url,
+                            extension: file.extension
+                        }) }
+                        
+                    </div>
+
+                    <div class="width-25px"></div>
+
+                    <div class="w-100">
+
+                        <div class="filename">  
+                            ${ file.name ?? file.title }
+                        </div>
+
+                        <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+
+                            <div class="">${formatBytes(file.size)}</div>
+
+                            <div class="width-10px"></div>
+
+                            <div class="">
+                                <button class="border width-25px height-25px rounded bg-transparent text-color-19" id="copy_to_clipboard__${id}">
+                                    <i class="fas fa-clipboard"></i>
+                                </button>
+                            </div>
+
+                            ${
+                                (isImageFile(file.url) || isVideoFile(file.url) || isPDFFile(file.url) ) ? `
+                                <div class="width-10px"></div>
+
+                                <div class="">
+                                    <a href="${file.url}" class="js_link_previewable">
+                                        ${ FUI_DISPLAY_LANG.views.pages.global.preview }
+                                    </a>
+                                </div>
+                                ` : ''
+                            }
+
+                            <div class="width-10px"></div>
+
+                            <div class="">
+                                <a href="${file.url}" download="${file.name}">
+                                    ${ FUI_DISPLAY_LANG.views.pages.global.download_button }
+                                </a>
+                            </div>
+
+                            <div class="width-10px" data-perm="delete_docit_files"></div>
+
+                            <div class="" data-perm="delete_docit_files">
+                                <a href="#" class="text-danger" id="delete_button__${id}">
+                                    ${ FUI_DISPLAY_LANG.views.pages.global.actions.delete }
+                                </a>
+                            </div>
+
+                            <div class="width-10px"></div>
+
+                            <div class="d-flex align-items-center">
+                    
+                                <div class="dropdown">
+                                    <div class="bg-white d-inline-flex justify-content-center align-items-center border-radius-10 cursor-pointer text-color-17 px-2 py-1" type="button" id="file_more_actions_menu__${file.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </div>
+
+                                    <ul class="dropdown-menu" id="file_more_actions__menu__${file.id}" aria-labelledby="file_more_actions_menu__${file.id}">
+                                        <li data-perm="share_docit_file">
+                                            <a class="dropdown-item fs-14" href="#" data-role="SHARE" >
+                                                <%= UI_DISPLAY_LANG.views.pages.global.actions.share %>
+                                            </a>
+                                        </li>
+                                        <li data-perm="delete_share_docit_file">
+                                            <a class="dropdown-item fs-14" href="#" data-role="DELETE_SHARE" >
+                                                <%= UI_DISPLAY_LANG.views.pages.global.actions.delete_share %>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex align-items-center text-color-17 mt-2">
+                        
+                    <div class="">
+                        ${ file.user_name }    
+                    </div>
+
+                    <div class="mx-2">.</div>
+
+                    <div class="">
+                        ${ formatDateTime(file.created_at, {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                        }) }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        `
+
+    }
+    //
+    if ( options.append ) tableElement.append(html)
+    else tableElement.prepend(html)
+
+    // dispatch_onNewAjaxContentLoaded()
+	dispatch_onNewAjaxContentLoaded()
+
+    //
+    const holder = page_container.find(`#${id}`)
+    const copy_to_clipboard__ = holder.find(`#copy_to_clipboard__${id}`)
+    const delete_button__ = holder.find(`#delete_button__${id}`)
+    const update_button__ = holder.find(`#update_button__${id}`)
+
+    const file_more_actions__menu__ = holder.find(`#file_more_actions__menu__${file.id}`)
+
+    const folder_more_actions__menu__ = holder.find(`#folder_more_actions__menu__${file.id}`)
+
+    file_more_actions__menu__.on('click', async e => {
+        const target = $(e.target)
+
+        if ( target.data('role') == 'SHARE' )
+        {
+            ShareDocitFileDialog({
+                file: file,
+            })
+        }
+        else if ( target.data('role') == 'DELETE_SHARE' )
+        {
+            DeleteShareDocitFileDialog({
+                file: file,
+            })
+        }
+    
+    })
+
+    folder_more_actions__menu__.on('click', async e => {
+        const target = $(e.target)
+
+        if ( target.data('role') == 'SHARE' )
+        {
+            ShareDocitFolderDialog({
+                folder: file,
+            })
+        }
+        else if ( target.data('role') == 'DELETE_SHARE' )
+        {
+            DeleteShareDocitFolderDialog({
+                folder: file,
+            })
+        }
+    
+    })
+
+
+    holder.on('click', e => {
+
+        // check if folder
+        if ( holder.data('type') == 'file' ) return
+
+        // check if a link or any other button
+        if ( e.target.nodeName == 'A' || e.target.nodeName == 'BUTTON' ) return
+
+        FOLDER_ID = holder.data('id')
+
+        holder.addClass('disabled')
+
+        displayAll({
+            clearOld: true,
+            onData: () => {
+                holder.removeClass('active')
+            }
+        })
+    })
+
+    // copy_to_clipboard__
+    copy_to_clipboard__.on('click', e => {
+
+        const copyIcon = '<i class="fas fa-clipboard"></i>'
+        const copiedIcon = '<i class="fas fa-clipboard-check"></i>'
+
+        copy_to_clipboard__.html(copiedIcon).addClass('text-success').removeClass('text-color-19')
+
+        setTimeout(() => {
+            copy_to_clipboard__.html(copyIcon).removeClass('text-success').addClass('text-color-19')
+        }, 5*1000);
+
+        copyToClipboard(file.url)
+
+        CreateToast('PS', FUI_DISPLAY_LANG.views.pages.global.text106, '')
+    })
+
+    // delete_button__
+    delete_button__.on('click', e => {
+        e.preventDefault()
+
+        if ( holder.data('type') == 'file' )
+        {
+            PromptConfirmDialog().then(async () => {
+
+                holder.addClass('disabled')
+
+                try 
+                {
+                    await MEDIA_MODEL.delete(holder.data('id'))
+                } 
+                catch (error) 
+                {
+                    CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error, '')
+                    holder.removeClass('disabled')
+                }
+
+                holder.removeClass('disabled')
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.success_delete, '')
+                displayAll({
+                    clearOld: true,
+                })
+
+            })
+        }
+        else if ( holder.data('type') == 'folder' )
+        {
+            PromptConfirmDialog('', FUI_DISPLAY_LANG.views.pages.global.text115).then(async () => {
+
+                holder.addClass('disabled')
+
+                try 
+                {
+                    await FOLDER_MODEL.delete(holder.data('id'))
+                } 
+                catch (error) 
+                {
+                    CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error, '')
+                    holder.removeClass('disabled')
+                }
+
+                holder.removeClass('disabled')
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.success_delete, '')
+                displayAll({
+                    clearOld: true,
+                })
+
+            })
+        }
+        
+    })
+    // update_button__
+    update_button__.on('click', async e => {
+        e.preventDefault()
+
+        if ( holder.data('type') == 'file' )
+        {
+            
+        }
+        else if ( holder.data('type') == 'folder' )
+        {
+            holder.addClass('disabled')
+
+            var res = null
+            try 
+            {
+                res = await FOLDER_MODEL.show(holder.data('id'))
+            } 
+            catch (error) 
+            {
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error, '')
+                holder.removeClass('disabled')
+            }
+
+            holder.removeClass('disabled')
+
+            CreateDocitFolderDialog(res.data)
+        }
+        
+    })
+
+}
+// set pagination
+function setPagination(options = {})
+{
+    PAGINATION = {...PAGINATION, ...options}
+}
+// get pagination
+function getPagination()
+{
+    return PAGINATION
+}
+// set isLoading
+function setIsLoading(value)
+{
+    isLoading = value
+}
+// get isLoading
+function getIsLoading()
+{
+    return isLoading
+}
+// show placeholder
+function showPlaceholder()
+{
+    const id = tableElement.attr('id')
+    const selector = `placeholder__${id}`
+    const html = `
+    <div class="col-lg-12 col-md-12 js_checkable_box_row no-pointer ${selector}">
+
+        <div class="overflow-hidden rounded js_checkable_radio_box cursor-pointer border-bottom py-3 px-2 d-flex align-items-center">
+
+            <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+            <div class="flex-shrink-0">
+                <div class="content-placeholder width-60px height-60px img-thumbnail"></div>
+            </div>
+
+            <div class="width-25px"></div>
+
+            <div class="w-100">
+
+                <div class="">  
+                    <div class="content-placeholder w-100 height-18px"></div>
+                </div>
+
+                <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+                    <div class="">
+                        <div class="content-placeholder width-50px height-5px"></div>    
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 js_checkable_box_row no-pointer ${selector}">
+
+    <div class="overflow-hidden rounded js_checkable_radio_box cursor-pointer border-bottom py-3 px-2 d-flex align-items-center">
+
+        <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+        <div class="flex-shrink-0">
+            <div class="content-placeholder width-60px height-60px img-thumbnail"></div>
+        </div>
+
+        <div class="width-25px"></div>
+
+        <div class="w-100">
+
+            <div class="">  
+                <div class="content-placeholder w-100 height-18px"></div>
+            </div>
+
+            <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+                <div class="">
+                    <div class="content-placeholder width-50px height-5px"></div>    
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 js_checkable_box_row no-pointer ${selector}">
+
+    <div class="overflow-hidden rounded js_checkable_radio_box cursor-pointer border-bottom py-3 px-2 d-flex align-items-center">
+
+        <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+        <div class="flex-shrink-0">
+            <div class="content-placeholder width-60px height-60px img-thumbnail"></div>
+        </div>
+
+        <div class="width-25px"></div>
+
+        <div class="w-100">
+
+            <div class="">  
+                <div class="content-placeholder w-100 height-18px"></div>
+            </div>
+
+            <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+                <div class="">
+                    <div class="content-placeholder width-50px height-5px"></div>    
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 js_checkable_box_row no-pointer ${selector}">
+
+    <div class="overflow-hidden rounded js_checkable_radio_box cursor-pointer border-bottom py-3 px-2 d-flex align-items-center">
+
+        <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+        <div class="flex-shrink-0">
+            <div class="content-placeholder width-60px height-60px img-thumbnail"></div>
+        </div>
+
+        <div class="width-25px"></div>
+
+        <div class="w-100">
+
+            <div class="">  
+                <div class="content-placeholder w-100 height-18px"></div>
+            </div>
+
+            <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+                <div class="">
+                    <div class="content-placeholder width-50px height-5px"></div>    
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 js_checkable_box_row no-pointer ${selector}">
+
+    <div class="overflow-hidden rounded js_checkable_radio_box cursor-pointer border-bottom py-3 px-2 d-flex align-items-center">
+
+        <input type="checkbox" class="d-none js_row_checkbox" data-role="CHECK">
+
+        <div class="flex-shrink-0">
+            <div class="content-placeholder width-60px height-60px img-thumbnail"></div>
+        </div>
+
+        <div class="width-25px"></div>
+
+        <div class="w-100">
+
+            <div class="">  
+                <div class="content-placeholder w-100 height-18px"></div>
+            </div>
+
+            <div class="fs-16 fw-300 text-color-17 d-flex align-items-center">
+                <div class="">
+                    <div class="content-placeholder width-50px height-5px"></div>    
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+    `
+
+    // check exists
+    if ( tableElement.find(`.${selector}`)[0] ) return
+
+    tableElement.append(html)
+
+    // disable load more button
+    load_more_button.addClass('disabled')
+}
+// hide placeholder
+function hidePlaceholder()
+{
+    const id = tableElement.attr('id')
+    const selector = `placeholder__${id}`
+
+    // check exists
+    if ( !tableElement.find(`.${selector}`)[0] ) return
+
+    tableElement.find(`.${selector}`).remove()
+    // enable load more button
+    load_more_button.removeClass('disabled')
+    
+    // check last page
+    if ( getPagination().current_page == getPagination().last_page ) 
+    {
+        // hide button
+        load_more_button.parent().addClass('d-none')
+        return
+    }
+}
+// add breadcrumb
+function addBreadcrumb(options = {})
+{
+    const home_crumb = folder_breadcrumb.find('#folder_breadcrumb__0')
+    home_crumb.removeClass('d-none')
+
+    home_crumb.off('click').on('click', e => {
+
+        FOLDER_ID = null
+        displayAll({
+            clearOld: true
+        })
+    })
+
+    if ( !options.id ) return
+
+    const selector = `folder_breadcrumb__${options.id}`
+
+    // check exists
+    if ( folder_breadcrumb.find(`#${selector}`)[0] )
+    {
+        folder_breadcrumb.find(`#${selector}`).addClass('active').siblings().removeClass('active')
+        return
+    }
+
+    // add folder
+    BREADCRUMB_FOLDERS.push(options.id)
+
+    const html = `
+    <li class="breadcrumb-item active" id="${selector}" data-id="${options.id}" data-name="${options.name}">
+        <a href="#">${options.name}</a>
+    </li>
+    `
+
+    folder_breadcrumb.append(html)
+    //
+    
+    const crumb = folder_breadcrumb.find(`#${selector}`)
+
+    crumb.siblings().removeClass('active')
+
+    crumb.off('click').on('click', e => {
+
+        FOLDER_ID = crumb.data('id')
+
+        // remove trailing folders
+        const breadCrumbsToRemove = BREADCRUMB_FOLDERS.splice( BREADCRUMB_FOLDERS.indexOf(FOLDER_ID) + 1 )
+
+        breadCrumbsToRemove.forEach((folderId, k) => {
+
+            deleteBreadcrumb({ id: folderId })
+        })
+
+        crumb.addClass('active').siblings().removeClass('active')
+
+        displayAll({
+            clearOld: true,
+        })
+    })
+}
+// delete breadcrumb
+function deleteBreadcrumb(options = {})
+{
+    const selector = `folder_breadcrumb__${options.id}`
+
+    folder_breadcrumb.find(`#${selector}`).remove()
+}
+// clear breadcrumb
+function clearBreadcrumb()
+{
+    const home_crumb = folder_breadcrumb.find('#folder_breadcrumb__0')
+
+    home_crumb.addClass('d-none')
+    folder_breadcrumb.children().each((k,v) => {
+        const item = $(v)
+
+        if ( item.attr('id') != 'folder_breadcrumb__0' ) item.remove()
+    })
+    
+}
+
+
+})
+
+</script>

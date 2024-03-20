@@ -1,0 +1,134 @@
+<div id="create_chat_group_post_dialog_container" class="overlay-fixed overlay-alpha-80 d-flex justify-content-center align-items-center d-none">
+
+    <div class="dialog-1 container max-width-550px has-direction-locale p-0">
+
+        <div class="dialog-1-header">
+            <h2 class="h2 dialog-1-title"><%= UI_DISPLAY_LANG.views.dialogs.create_chat_group_post_dialog.title %></h2>
+            <div class="dialog-1-close-button dialog_close_button">
+                <i class="xfb xfb-close"></i>
+            </div>
+        </div>
+
+        <div class="dialog-1-body px-0 overflow-x-hidden overflow-y-auto max-height-700px">
+
+            <div class="user-card-1 mb-4">
+                <div class="user-card-1-thumb">
+                    <img src="../assets/img/utils/user.png" alt="">
+                </div>
+                <div class="user-card-1-details">
+                    <div class="user-card-1-name">
+                        <span id="user_name">Abdennour Adouani</span>
+                        <span class="user-card-1-phone" id="user_phone">(0673479803)</span>
+                    </div>
+                    <div class="user-card-1-status" id="group_status">
+                        <span id="group_status_icon" class="d-inline-block vertical-align-middle"></span>
+                        <span id="group_status_text">Public Group</span>
+                    </div>
+                </div>
+            </div>
+
+            <input type="text" class="form-control form-control-sm mb-3 border-0" id="chat_group_post_area_title_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder13 %>">
+
+            <div class="position-relative" id="chat_group_post_content_area" style="padding-left: 0 !important; padding-right: 0 !important;">
+
+                <div class="chat-group-post-area-input js_has_area_placeholder" id="chat_group_post_area_input" contenteditable="" area-placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder14 %>"></div>
+
+                <div class="px-3">
+                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-media.template.ejs`, {
+                        componentId: 'chat_group_post_select_media_component_',
+                        classes: 'd-none',
+                        onCloseRemove: false,
+                        onMediaSelectionEventName: 'group-post-media-selected',
+                        onMediaClearedEventName: 'group-post-media-cleared',
+                    }) -%>
+                </div>
+
+                <div class="my-3">
+                    <div class="px-3">
+
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/add-to-your-post.template.ejs`, {
+                            componentId: 'chat_group_post_add_to_your_post_',
+                        }) -%>
+                
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center px-3">
+
+                    <div class="fb-post-image-backgrounds">
+
+                        <div class="fb-post-image-backgrounds-trigger" id="fb_post_image_backgrounds_trigger_open">
+                            <img src="../assets/img/icons/aa.png" alt="">
+                        </div>
+
+                        <div class="fb-post-image-backgrounds-wrapper d-none" id="fb_post_image_backgrounds_wrapper">
+
+                            <ul class="fb-post-image-backgrounds-list" id="fb_post_image_backgrounds_list">
+                                <li>
+                                    <button id="fb_post_image_backgrounds_trigger_close">
+                                        <i class="xfb xfb-angle-left"></i>
+                                    </button>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-1 fb-post-bg" data-role="background" data-class="fb-post-bg-1"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-2 fb-post-bg" data-role="background" data-class="fb-post-bg-2"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-3 fb-post-bg" data-role="background" data-class="fb-post-bg-3"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-4 fb-post-bg" data-role="background" data-class="fb-post-bg-4"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-5 fb-post-bg" data-role="background" data-class="fb-post-bg-5"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-6 fb-post-bg" data-role="background" data-class="fb-post-bg-6"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-7 fb-post-bg" data-role="background" data-class="fb-post-bg-7"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-8 fb-post-bg" data-role="background" data-class="fb-post-bg-8"></div>
+                                </li>
+                                <li>
+                                    <div class="fb-post-bg-9 fb-post-bg" data-role="background" data-class="fb-post-bg-9"></div>
+                                </li>
+                                <li>
+                                    <button>
+                                        <i class="xfb xfb-grid"></i>
+                                    </button>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="fb-post-emojies-trigger" id="emoji_picker_container_trigger_button">
+                        <span> <i class="xfb xfb-emoji-2"></i> </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+             <!-- PICKME EMOJI PICKER -->
+            <div id="emoji_picker_container">
+
+            </div>
+            <!-- END -->
+
+            <div class="px-3 mt-3">
+                <div class="dialog-1-submit-button disabled" id="chat_group_post_submit_button">
+                    <%= UI_DISPLAY_LANG.views.pages.global.actions.post %>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

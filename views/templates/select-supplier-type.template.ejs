@@ -1,0 +1,10 @@
+<span id="select_supplier_type_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label53 %></label>
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'supplier_type_select' %>">
+        <% for (let i = 0; i < UI_DISPLAY_LANG.views.pages.global.supplier_types.length; i++) { %>
+            <option value="<%= UI_DISPLAY_LANG.views.pages.global.supplier_types[i].value %>"><%= UI_DISPLAY_LANG.views.pages.global.supplier_types[i].name %></option>
+        <% } %>
+    </select>
+
+</span>

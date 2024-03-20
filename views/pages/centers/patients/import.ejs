@@ -1,0 +1,91 @@
+<div class="container-fluid container-fluid d-flex is-justify-content-center is-align-items-center flex-column" style="height: 100vh;" id="importPatientsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_patients.sectionTitle %></h1>
+	</div>
+	<div class="app-block container max-width-840px" id="wrapper01">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<!-- <input type="file" name="" id="uploadFiles"> -->
+		<form action="#" id="import_form">
+			
+
+            <div class="px-2 py-5 border rounded">
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_file %></label>
+                    <input type="file" class="input-text" id="file_input" accept=".xlsx">
+                    <p class="form-text">
+                        <%= UI_DISPLAY_LANG.views.pages.add_patients.text1 %> 
+
+                        <a href="" download="patients_template.xlsx" id="download_file_btn"> <%= UI_DISPLAY_LANG.views.pages.global.download_file_btn %> </a>
+                    </p>
+                </div>
+
+                <div class="">
+                    <input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.global.import_data_button %>">
+                </div>
+
+            </div>
+
+			
+		</form>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#importPatientsContainer')
+if ( !page_container[0] ) return
+
+const DataURI = require('../assets/js/include/DataURI');
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var import_form = page_container.find('#import_form')
+var import_form_submit = import_form.find('input[type="submit"]')
+var file_input = import_form.find('#file_input')
+var download_file_btn = import_form.find('#download_file_btn')
+
+var PatientJsonArr = []
+// set template in download button
+download_file_btn.attr('href', DataURI.PATIENT_XLSX)
+// submit
+import_form.on('submit', async e =>
+{
+    e.preventDefault()
+    var target = $(e.target)
+
+    if ( file_input[0].files.length == 0 ) return
+    
+    console.log( PatientJsonArr )
+    
+    import_form_submit.addClass('disabled')
+    var res = await PATIENT_MODEL.batchStore({
+        clinicId: USER_CONFIG.administration.clinicId,
+        list: PatientJsonArr
+    })
+    import_form_submit.removeClass('disabled')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+
+    target[0].reset()
+})
+// select file
+file_input.on('change', e =>
+{
+    if ( file_input[0].files.length == 0 ) return
+
+    xlsxToJson(file_input[0].files[0], results =>
+    {
+        PatientJsonArr = results.json
+    })
+})
+
+})
+
+</script>

@@ -1,0 +1,97 @@
+<div class="container-fluid" id="patientsStatsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+	</div>
+	<div class="mt-2 row gx-4 gy-3">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="app-block">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<canvas id="chartEl01" class="" style="max-height:100%;"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="biggestWeightLossDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text01 %></h6>
+				<div id="pagination1" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="biggestWeightGainDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text02 %></h6>
+				<div id="pagination2" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="oldestClientDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text03 %></h6>
+				<div id="pagination3" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="youngestClientDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text04 %></h6>
+				<div id="pagination4" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,236 @@
+<div class="container-fluid" id="sellProductsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.sell_products.sectionTitle %></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="table-nav">
+			<div class="row gx-2 gy-2">
+				<div class="col-lg-12 col-md-12 col-sm-12 d-none">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN"><%= UI_DISPLAY_LANG.views.pages.sell_products.btn01 %></button>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<input type="text" class="input-text input-text-outline" id="searchInput" placeholder="<%= UI_DISPLAY_LANG.views.pages.sell_products.ph01 %>">
+				</div>
+			</div>
+		</div>
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card-02 hover-shadow h-100 w-100 inline-flex">
+					<div class="card-header" style="background-image: url('http://megastoretech.com/uploads/users/1/Products/Images/629b58739759f7.21976518.jpg');">
+						
+					</div>
+					<div class="text-21 py-0_5 px-1">NewAir, AC-12200E, Compact Portable Air Conditioner and Fan, 12,000 BTU, 425 Square Foot Effective Range, White</div>
+					<div class="card-body">
+						<div class="list-04">
+							<div href="#" class="list-item">
+								Desription: 
+								<span class="text-04">
+									We don't know when or if this item will be back in stock.
+								</span>
+							</div>
+							<div href="#" class="list-item">
+								Prix: <span class="text-04">517.00 DA</span>
+							</div>
+							<div class="list-item">
+								Quantity: <span class="text-04">(5)</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var sellProductsContainer = $('#sellProductsContainer');
+
+var ERROR_BOX = sellProductsContainer.find('#ERROR_BOX');
+var deleteSelectedBTN = sellProductsContainer.find('#deleteSelectedBTN');
+var searchInput = sellProductsContainer.find('#searchInput');
+var pagination = sellProductsContainer.find('#pagination');
+var tableElement = sellProductsContainer.find('#tableElement');
+
+// delete selected
+deleteSelectedBTN.off('click');
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("حذف البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Suprimmer les données...");
+
+        var response = await PRODUCT_MODEL.batchDelete(selectedRows());
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        displayAll();
+    });
+});
+// tableElement click
+tableElement.off('click');
+tableElement.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'ADD_TO_CART' )
+    {
+        var parent = target.closest('[data-role="ROW"]');
+        OrderCartDialog({
+            id: parent.data('id'),
+            image: parent.data('image'),
+            name: parent.data('name'),
+            price: parent.data('price'),
+            totalQuantity: parent.data('quantity')
+        }, response =>
+        {
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        });
+    }
+});
+// search
+searchInput.off('keyup');
+searchInput.on('keyup', async e =>
+{
+    var val = searchInput.val();
+    var SearchObject = {
+        clinicId: USER_CONFIG.administration.clinicId,
+        query: val
+    };
+    // display loader
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        TopLoader("جاري البحث...");
+    if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        TopLoader("En train de rechercher...");
+
+    var response = await PRODUCT_MODEL.local_search(SearchObject);
+    // hide loader
+    TopLoader('', false);
+    // clear html
+    tableElement.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        var productImageUrl = (v.productImageData) ? JSON.parse(v.productImageData).url : 'assets/img/utils/placeholder.jpg';
+
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        {
+            html += `<div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="card-02 hover-shadow h-100 w-100 inline-flex" data-role="ROW" data-id="${v.productId}" data-name="${v.productName}" data-price="${parseFloat(v.productPrice).toFixed(2)}" data-image="${productImageUrl}" data-quantity="${v.productQuantity2}">
+                            <div class="card-header" data-role="ADD_TO_CART" style="cursor:pointer;background-image: url('${productImageUrl}');">
+                                
+                            </div>
+                            <div class="text-03 py-2 px-2">${v.productName.substr(0,35)}...</div>
+                            <div class="card-body">
+                                <div class="list-04">
+                                    <div class="list-item">
+                                        <span class="text-04">
+                                            ${v.productDesc.substr(0,50)}...
+                                        </span>
+                                    </div>
+                                    <div class="list-item">
+                                        السعر: <span class="text-04">${v.productPrice} ${CURRENCY.ar}</span>
+                                    </div>
+                                    <div class="list-item">
+                                        الكمية: <span class="text-04">(${v.productQuantity2})</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <button class="btn-03 w-100 " data-role="ADD_TO_CART">
+                                            أضف إلى قائمة المشتريات
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            html += `<div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="card-02 hover-shadow h-100 w-100 inline-flex" data-role="ROW" data-id="${v.productId}" data-name="${v.productName}" data-price="${parseFloat(v.productPrice).toFixed(2)}" data-image="${productImageUrl}" data-quantity="${v.productQuantity2}">
+                            <div class="card-header" data-role="ADD_TO_CART" style="cursor:pointer;background-image: url('${productImageUrl}');">
+                                
+                            </div>
+                            <div class="text-03 py-2 px-2">${v.productName.substr(0,35)}...</div>
+                            <div class="card-body">
+                                <div class="list-04">
+                                    <div class="list-item">
+                                        <span class="text-04">
+                                            ${v.productDesc.substr(0,50)}...
+                                        </span>
+                                    </div>
+                                    <div class="list-item">
+                                        le prix: <span class="text-04">${v.productPrice} ${CURRENCY.fr}</span>
+                                    </div>
+                                    <div class="list-item">
+                                        Quantité: <span class="text-04">(${v.productQuantity2})</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <button class="btn-03 w-100 " data-role="ADD_TO_CART">
+                                            Ajouter à la liste d'achat
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }	
+    });
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination, tableElement, options);
+});
+// display all
+displayAll();
+function displayAll()
+{
+    searchInput.trigger('keyup');
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="CHECK"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var check = $(items[i]);
+        if ( check.is(':checked') )
+            list.push({ productId: check.data('productid') });
+    }
+
+    return list;
+}
+
+})
+
+</script>

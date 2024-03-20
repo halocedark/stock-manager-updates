@@ -1,0 +1,278 @@
+<div id="<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label140 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced search_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+    
+    <div class="position-relative hover-parent">
+        <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'users_select__' %>">
+        
+        </select>
+        <div class="position-absolute top-50 start-locale-opposite-5 translate-y-50 fs-14 opacity-0 hover-opacity-1 js_clear_cache" data-trigger-input=".search_input">
+            <a href="#" class="text-color-12" >
+                <i class="fas fa-redo"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-3 multiple_selections_wrapper d-none">
+
+        <div class="border px-2 py-2 rounded bg-color-31 multiple_selections_list">
+
+            
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        const component = $(`#${componentId}`)
+        
+        const js_clear_cache = component.find('.js_clear_cache')
+        
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'users_select__' : `<%- locals.selectId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'user-selected' : `<%- locals.selectionEventName %>`
+
+        var search_input = component.find('.search_input')
+        var users_select__ = component.find(`#${selectId}`)
+
+        const multiple_selections_wrapper = component.find('.multiple_selections_wrapper')
+
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+        const defaultOptions = {
+            multiple: false,
+            hideCurrent: true,
+        }
+
+        options = {...defaultOptions, ...options}
+
+        // check is multiple
+        if ( options.multiple )
+        {
+            setupMultipleSelections()
+        }
+
+        // search
+        detectTypingEnd(search_input, val => {
+
+            const searchTerm = search_input.val().toLowerCase();
+            const options = users_select__.children()
+            let firstMatchIndex = -1;
+            
+            if ( search_input.val().length > 0 ) options.first().prop('hidden', true)
+            else options.first().prop('hidden', false)
+            
+            options.each((k,v) =>
+            {
+                const option = $(v)
+                const text = option.text().toLowerCase()
+    
+                if (text.indexOf(searchTerm) !== -1) 
+                {
+                    if (firstMatchIndex === -1) firstMatchIndex = k;
+                    
+                    option.prop('hidden', false)
+                } 
+                else 
+                {
+                    option.prop('hidden', true)
+                }
+            })
+
+            if (firstMatchIndex !== -1) {
+                options.eq(firstMatchIndex).prop('selected', true).attr('selected', true)
+            } else {
+                options.prop('selected', false).attr('docit_users', false)
+                CACHE_MODEL.remove('docit_users')
+                select_users_template_displayAll()
+            }
+
+        })
+  
+        select_users_template_displayAll()
+        async function select_users_template_displayAll()
+        {
+            users_select__.html('')
+            if ( search_input.val() == '' )
+                users_select__.html(`<option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>`)
+
+            var res = {}
+            // check exists in cache
+            if ( CACHE_MODEL.exists('docit_users') )
+            {
+                res = CACHE_MODEL.get('docit_users')
+            }
+            else
+            {
+                try {
+                    res = await DOCIT_USER_MODEL.search({
+                        searchTerm: search_input.val(),
+                        related_project: 'AL_ASSEL',
+                        offset: 0,
+                        limit: 10,
+                    })
+                } catch (error) {
+                    
+                }
+
+                CACHE_MODEL.put('docit_users', res, 3600) // 1 hour
+            }
+
+            //
+            var data = res
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+
+                if ( options.hideCurrent && USER_CONFIG.employee_phone == v.phone ) html += ``
+                else html += `<option value="${v.id}" data-object="${data}">${v.name}</option>`
+            })
+            // add html
+            users_select__.append(html)
+            //
+            dispatchCustomEvent(selectionEventName, { 
+                center: {
+                    id: users_select__.find(':selected').val(),
+                    name: users_select__.find(':selected').text(),
+                    data: checkJSON( decodeURIComponent( atob( users_select__.find(':selected').data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            }, users_select__[0])
+        }
+    
+        // clear cache
+        clearCache()
+        function clearCache()
+        {
+            const js_clear_cache = component.find('.js_clear_cache')
+
+            js_clear_cache.each((k, v) =>
+            {
+                const button = $(v)
+
+                button.on('click', e =>
+                {
+                    // const triggerInput = component.find(button.data('trigger-input'))
+                    CACHE_MODEL.remove('docit_users')
+                    select_users_template_displayAll()
+
+                })
+            })
+        }
+    
+        // setupMultipleSelections
+        function setupMultipleSelections()
+        {
+            multiple_selections_wrapper.removeClass('d-none')
+
+            const multiple_selections_list = multiple_selections_wrapper.find('.multiple_selections_list')
+
+            checkSelections()
+
+            users_select__.off('change').on('change', e => {
+                const selected = users_select__.find(':selected')
+
+                addSelection({
+                    id: selected.val(),
+                    name: selected.text(),
+                })
+            })
+            // clear-selection
+            users_select__.off('clear-selections').on('clear-selections', clearSelections)
+
+            // add selection
+            function addSelection(options = {})
+            {
+                if ( isNull(options.id) ) return
+                
+                const selector = `selection__${options.id}`
+                // check exists
+                if ( multiple_selections_wrapper.find(`#${selector}`)[0] ) return
+
+                const html = `
+                <div class="px-4 py-2 mb-2 rounded-pill shadow d-inline-flex align-items-center justify-content-center fs-14 text-color-17 bg-color-hover-ebebeb position-relative" data-role="selection" id="${selector}" data-id="${options.id}" data-name="${options.name}">
+                    <a href="#" class="position-absolute top-5 left-1 h-100 width-20px height-20px rounded-circle d-flex align-items-center justify-content-center bg-color-11 text-decoration-none text-color-17 selection_delete_button">
+                        &times;
+                    </a>
+                    <div class="">
+                        ${options.name}
+                    </div>
+                </div>
+                `
+
+                multiple_selections_list.append(html)
+                checkSelections()
+                //
+                // bind to select element
+                bindSelections()
+
+                const holder = multiple_selections_list.find(`#${selector}`)
+                const selection_delete_button = holder.find('.selection_delete_button')
+
+                selection_delete_button.on('click', e => {
+                    e.preventDefault()
+
+                    holder.remove()
+
+                    checkSelections()
+                    bindSelections()
+                })
+            }
+            // checkSelections
+            function checkSelections()
+            {
+                const items = multiple_selections_list.find('[data-role="selection"]')
+                
+                if ( items.length == 0 )
+                {
+                    multiple_selections_list.html(`
+                    <p class="fs-17 fw-300 text-color-17 has-text-centered list_placeholder">${ FUI_DISPLAY_LANG.views.messages.no_items_selected }<p>
+                    `)
+                }
+                else
+                {
+                    multiple_selections_list.find('.list_placeholder').remove()
+                }
+                bindSelections()
+            }
+            // 
+            function getSelections()
+            {
+                const items = multiple_selections_list.find('[data-role="selection"]')
+                var list = []
+
+                items.each((k,v) => {
+                    const item = $(v)
+
+                    list.push({
+                        id: item.data('id'),
+                        name: item.data('name'),
+                    })
+                })
+
+                return list
+            }
+            // bind selections
+            function bindSelections()
+            {
+                users_select__.data('selections', btoa( encodeURIComponent(JSON.stringify(getSelections())) ) )
+            }
+            // clear selections
+            function clearSelections()
+            {
+                multiple_selections_list.html('')
+                users_select__.data('selections', btoa( encodeURIComponent(JSON.stringify(getSelections())) ) )
+                checkSelections()
+            }
+        }
+    })
+
+</script>

@@ -1,0 +1,399 @@
+<div class="container-fluid" id="addAppointementsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_appointement.sectionTitle %></h1>
+	</div>
+	<div class="mt-3 app-block">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+        <div class="table-nav">
+			<div class="row gx-2 gy-5">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="section">
+						<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label13 %></label>
+						<select name="" class="select-01" id="clinicSelect">
+							
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="" id="wrapper01">
+			<form action="#" id="addForm">
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label01 %></label>
+					<select name="" class="input-text" id="classSelect">
+						
+					</select>
+				</div>
+				<div class="mb-2">
+					<ul class="list-h tabs-list">
+						<li class="list-item list-item-solid flex flex-center active" data-role="TAB" data-tab="#select_patient_wrapper">
+							<%= UI_DISPLAY_LANG.views.pages.add_appointement.text01 %>
+						</li>
+						<li class="list-item list-item-solid flex flex-center" data-role="TAB" data-tab="#add_patient_wrapper">
+							<%= UI_DISPLAY_LANG.views.pages.add_appointement.text02 %>
+						</li>
+					</ul>
+					<div>
+
+						<div id="select_patient_wrapper">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label02 %></label>
+							<input type="text" class="input-text input-text-outline border-0 mb-1" id="patientsSearchInput" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.ph01 %>">
+							<select name="" class="input-text" id="patientSelect">
+								
+							</select>
+						</div>
+						<div id="add_patient_wrapper" class="d-none">
+
+								<div class="mb-2">
+									<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_patients.form01.label01 %></label>
+									<input type="text" class="input-text" id="patientName_input">
+								</div>
+								<div class="mb-2">
+									<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_patients.form01.label02 %></label>
+									<input type="text" class="input-text" id="patientPhone_input">
+								</div>
+								<div class="">
+									<button type="button" class="btn btn-primary btn-sm" id="addPatientBTN">
+										<%= UI_DISPLAY_LANG.views.pages.add_patients.form01.submitBTN01 %>
+									</button>
+								</div>
+
+						</div>
+
+					</div>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label09 %></label>
+					<input type="text" class="input-text input-text-outline" id="aptNameInput">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label08 %></label>
+					<input type="number" step="any" class="input-text input-text-outline" id="aptPriceInput">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label03 %></label>
+					<textarea class="input-text input-text-outline" rows="4" id="aptNoteInput"></textarea>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label04 %></label>
+					<input type="date" class="input-text input-text-outline" id="aptDateInput">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label05 %></label>
+					<input type="time" step="any" class="input-text input-text-outline" id="aptTimeInput">
+				</div>
+				<div class="">
+					<input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.submitBTN01 %>">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var addAppointementsContainer = $('#addAppointementsContainer');
+if ( addAppointementsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = addAppointementsContainer.find('#ERROR_BOX');
+var addForm = addAppointementsContainer.find('#addForm');
+var clinicsSearchInput = addAppointementsContainer.find('#clinicsSearchInput');
+var clinicSelect = addAppointementsContainer.find('#clinicSelect');
+var classSelect = addForm.find('#classSelect');
+var patientsSearchInput = addForm.find('#patientsSearchInput');
+var patientSelect = addForm.find('#patientSelect');
+var aptNoteInput = addForm.find('#aptNoteInput');
+var aptDateInput = addForm.find('#aptDateInput');
+var aptTimeInput = addForm.find('#aptTimeInput');
+var aptNameInput = addForm.find('#aptNameInput');
+var aptPriceInput = addForm.find('#aptPriceInput');
+
+var wrapper01 = addAppointementsContainer.find('#wrapper01');
+
+var tabs_list = $('.tabs-list');
+
+var addPatientBTN = $('#addPatientBTN');
+
+var promise01 = null;
+var promise02 = null;
+var promise03 = null;
+// set default date / time
+var now = new Date();
+aptDateInput.val( date_time.format(now, 'YYYY-MM-DD') );
+aptTimeInput.val( date_time.format(now, 'HH:mm:ss') );
+var AppointementObject = {
+    aptId: sessionData().aptId,
+    clinicId: sessionData().clinicId,
+    classId: sessionData().classId,
+    patientId: sessionData().patientId,
+    patientName: sessionData().patientName,
+    aptNote: null,
+    aptDate: null,
+    aptTime: null,
+    type: 'private',
+}
+// clear session
+sessionData(true)
+// addForm submit
+addForm.off('submit');
+addForm.on('submit', async e =>
+{
+    e.preventDefault();
+    var target = addForm;
+    AppointementObject.clinicId = clinicSelect.find(':selected').val();
+    AppointementObject.clinicName = clinicSelect.find(':selected').text();
+    AppointementObject.classId = classSelect.find(':selected').val();
+    AppointementObject.className = classSelect.find(':selected').text();
+    AppointementObject.patientId = patientSelect.find(':selected').val();
+    AppointementObject.aptNote = aptNoteInput.val();
+    AppointementObject.aptDate = aptDateInput.val();
+    AppointementObject.aptTime = aptTimeInput.val();
+    AppointementObject.aptName = aptNameInput.val();
+    AppointementObject.aptPrice = aptPriceInput.val();
+
+    // display loader
+    SectionLoader(wrapper01);
+    // update
+    if ( AppointementObject.aptId != null )
+    {
+        var response = await APPOINTMENT_MODEL.update(AppointementObject)
+        
+        // hide loader
+        SectionLoader(wrapper01, '');
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        // reset
+        target[0].reset();
+        aptDateInput.val( date_time.format(now, 'YYYY-MM-DD') );
+        aptTimeInput.val( date_time.format(now, 'HH:mm:ss') );
+        //
+        AppointementObject.aptId = null;
+        
+        return;
+    }
+    // add
+    var response = await APPOINTMENT_MODEL.store(AppointementObject)
+    
+    // hide loader
+    SectionLoader(wrapper01, '');
+    if ( response.code == 404 )
+    {
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        return;
+    }
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+    // reset
+    target[0].reset();
+    aptDateInput.val( date_time.format(now, 'YYYY-MM-DD') );
+    aptTimeInput.val( date_time.format(now, 'HH:mm:ss') );
+    
+});
+// addPatientForm
+addPatientBTN.off('click');
+addPatientBTN.on('click', async e =>
+{
+    e.preventDefault();
+    var target = addPatientBTN.parent().parent();
+    // console.log(target.find('#patientName_input').val());
+    var PatientObject = {
+        patientId: null,
+    };
+    PatientObject.clinicId = clinicSelect.find(':selected').val();
+    PatientObject.patientHashId = uniqid();
+    PatientObject.patientCode = '';
+    PatientObject.patientName = $('#patientName_input').val();
+    PatientObject.patientPhone = $('#patientPhone_input').val();
+    PatientObject.patientPass = '';
+    PatientObject.patientAge = '';
+    PatientObject.patientGender = '';
+    PatientObject.patientAddress = '';
+    PatientObject.patientState = '';
+    PatientObject.patientWhatsapp = '';
+    PatientObject.patientFB = '';
+    PatientObject.patientTelegram = '';
+    PatientObject.patientChildren = '';
+    PatientObject.patientBirthPlace = '';
+    PatientObject.patientBirthDate = '';
+    PatientObject.hasDiabetes = '';
+    PatientObject.hasBloodPressure = '';
+    PatientObject.hasChronicDisease = '';
+
+    PatientObject.patientJob = '';
+    PatientObject.studyLevel = '';
+    PatientObject.patientGroup = '';
+    PatientObject.height = '';
+    PatientObject.weight = '';
+    PatientObject.best_weight = '';
+    PatientObject.signup_reason = '';
+    PatientObject.title = '';
+
+    SectionLoader(target);
+    //create qr code
+    var page = `${PROJECT_URL}Patient/Dashboard/?patient_session=${PatientObject.patientHashId}`;
+    var qrcode = await generateQRCode( page );
+    PatientObject.patientQRCode = qrcode;
+    var response = await PATIENT_MODEL.store(PatientObject);
+    SectionLoader(target, '');
+    if ( response.code == 404 )
+    {
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        return;
+    }
+    
+    AppointementObject.patientId = response.data.patientId;
+    patientsSearchInput.trigger('keyup');
+});
+// switch tabs
+tabs_list.off('click');
+tabs_list.on('click', e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'TAB' )
+    {
+        var tab = $(target.data('tab'));
+        tab.removeClass('d-none').siblings().addClass('d-none');
+        target.addClass('active').siblings().removeClass('active');
+    }
+});
+// search patients
+patientsSearchInput.off('keyup');
+patientsSearchInput.on('keyup', e =>
+{
+    var val = patientsSearchInput.val();
+    // display loader
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        TopLoader("جاري البحث...");
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        TopLoader("En train de rechercher...");
+
+    promise02 = PATIENT_MODEL.searchLocal({
+        clinicId: clinicSelect.find(':selected').val(),
+        query: val
+    })
+    promise02.then(response =>
+    {
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+        var html = '';
+        $.each(data, (k,v) =>
+        {
+            html += `<option value="${v.patientId}">${v.patientName}</option>`;
+        });
+        // add html
+        patientSelect.html(html);
+    });
+});
+patientsSearchInput.trigger('keyup');
+// select clinic
+clinicSelect.on('change', e =>
+{
+    patientsSearchInput.trigger('keyup');
+})
+// search clinics
+promise01 = CLINIC_MODEL.search('');
+promise01.then(response =>
+{
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.clinicId}">${v.clinicName}</option>`;	
+    });
+    // add html
+    clinicSelect.html(html);
+});
+// list clinic treatment classes
+promise03 = TREATMENT_CLASS_MODEL.index();
+promise03.then(response =>
+{
+    // hide loader
+    TopLoader('', false);
+    // clear html
+    classSelect.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        classSelect.html(`<option value="" selected>حدد قسم العلاج</option>`);
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        classSelect.html(`<option value="" selected>Sélectionnez la section de traitement</option>`);
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.classId}" data-price="${v.classPrice}">${v.className}</option>`;
+    });
+    // add html
+    classSelect.append(html);
+});
+// select class
+classSelect.off('change');
+classSelect.on('change', e =>
+{
+    var price = parseFloat(classSelect.find(':selected').data('price'));
+    aptPriceInput.val(price.toFixed(2));
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        aptNameInput.val('موعد '+classSelect.find(':selected').text());
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        aptNameInput.val('Rendez-vous de '+classSelect.find(':selected').text());
+});
+// display one
+displayOne();
+async function displayOne()
+{
+    await Promise.allSettled([promise01, promise02, promise03]);
+
+    setOptionSelected(classSelect, AppointementObject.classId, true);
+    setOptionSelected(patientSelect, AppointementObject.patientId);
+    setOptionSelected(clinicSelect, AppointementObject.clinicId);
+
+    if ( AppointementObject.aptId == null ) return;
+
+    // display loader
+    SectionLoader(wrapper01);
+
+    APPOINTMENT_MODEL.show({
+        aptId: AppointementObject.aptId
+    }).then(response =>
+    {
+        // hide loader
+        SectionLoader(wrapper01, '');
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+
+        setOptionSelected(classSelect, data.classId);
+        setOptionSelected(patientSelect, data.patientId);
+        setOptionSelected(clinicSelect, data.clinicId);
+        aptNoteInput.val( data.aptNote );
+        aptDateInput.val( data.aptDate );
+        aptTimeInput.val( data.aptTime );
+        aptNameInput.val(data.aptName);
+        aptPriceInput.val(data.aptPrice);
+    });	
+}
+
+
+})
+
+</script>

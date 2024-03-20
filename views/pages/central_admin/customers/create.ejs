@@ -1,0 +1,113 @@
+<div class="container-fluid" id="create_customers_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_clinics.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-3">
+
+        <form id="create_form">
+
+            <div class="mb-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label1 %></label>
+				<input type="text" class="input-text input-text-outline" name="name" id="name_input">
+            </div>
+
+            <div class="mb-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label2 %></label>
+				<input type="text" class="input-text input-text-outline" name="phone" id="phone_input">
+            </div>
+
+            <div class="mb-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label120 %></label>
+				<input type="text" class="input-text input-text-outline" name="email" id="email_input">
+            </div>
+
+            <div class="">
+                <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+            </div>
+
+        </form>
+        
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#create_customers_container')
+
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var create_form = page_container.find('#create_form')
+var name_input = page_container.find('#name_input')
+var phone_input = page_container.find('#phone_input')
+var email_input = page_container.find('#email_input')
+
+CustomerObject = sessionData(true)
+//
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    if ( isNull(name_input.val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_empty_input, '')
+        return
+    }
+
+    CustomerObject.administration_id = USER_CONFIG.administration.clinicId
+    CustomerObject.name = name_input.val()
+    CustomerObject.phone = phone_input.val()
+    CustomerObject.email = email_input.val()
+
+    create_form.find(':submit').addClass('disabled')
+    // update
+    if ( CustomerObject.id )
+    {
+        try 
+        {
+            var res = await CUSTOMER_MODEL.update(CustomerObject)    
+        } 
+        catch (error) 
+        {
+            console.error(error)
+            create_form.find(':submit').removeClass('disabled')
+            return
+        }
+        create_form.find(':submit').removeClass('disabled')
+        // reset
+        create_form[0].reset()
+        CustomerObject.id = null
+
+        return
+    }
+    // create
+    try 
+    {
+        var res = await CUSTOMER_MODEL.store(CustomerObject)    
+    } 
+    catch (error) 
+    {
+        console.error(error)
+        create_form.find(':submit').removeClass('disabled')
+        return
+    }
+    create_form.find(':submit').removeClass('disabled')
+    // reset
+    create_form[0].reset()
+})
+
+})
+
+</script>

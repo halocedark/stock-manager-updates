@@ -1,0 +1,281 @@
+<span id="<%= locals.componentId %>" class="pointer">
+
+    <div class="row gy-3">
+
+        <div class="<%= locals.columnsClass ? locals.columnsClass : 'col-lg-12 col-md-12' %>">
+
+            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label13 %></label>
+            <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="center_search_input_<%= locals.componentId %>">
+            <select name="" class="input-text" id="<%= locals.centerSelectId ? locals.centerSelectId : 'center_select' %>">
+                
+            </select>
+
+        </div>
+
+        <div class="<%= locals.columnsClass ? locals.columnsClass : 'col-lg-12 col-md-12' %>">
+
+            <div class="WRAPPER">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label12 %></label>
+                <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="client_search_input_<%= locals.componentId %>">
+                <select name="" class="input-text" id="<%= locals.clientSelectId ? locals.clientSelectId : 'client_select' %>">
+                    
+                </select>
+            </div>
+
+            <div class="mt-2 d-none js_create_client_panel_trigger">
+                <a class="fs-14 js_panel_toggler_button" href="#" data-target="#select_centers_with_clients_component__create_client_panel_<%= locals.componentId %>" >
+                    <%= UI_DISPLAY_LANG.views.pages.global.add_new_button %>
+                </a>
+            </div>
+
+            <div class="mt-2 d-none CREATE_CLIENT_PANEL" id="select_centers_with_clients_component__create_client_panel_<%= locals.componentId %>">
+
+                <div class="has-text-aligned-locale-inverted mb-4">
+                    <div class="close-button-sm js_panel_close_button" data-target="#select_centers_with_clients_component__create_client_panel_<%= locals.componentId %>">
+                        <i class="xfb xfb-close-sm-thin"></i>
+                    </div>
+                </div>
+
+                <div class="form-field-01">
+                    <div class="form-field-icon-holder js_select_center_with_clients__client_submit_button">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="form-field-input-holder">
+                        <input type="text" class="form-field-input js_select_center_with_clients__client_name_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder1 %>" id="<%= locals.clientNameInputId ? locals.clientNameInputId : '' %>">
+                        <input type="text" class="form-field-input js_select_center_with_clients__client_phone_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder2 %>" id="<%= locals.clientPhoneInputId ? locals.clientPhoneInputId : '' %>">
+                    </div>
+                </div>
+                <div class="w-100 height-5px rounded content-placeholder d-none js_create_client_panel__loading_placeholder">&nbsp;</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        const component = $(`#<%- locals.componentId %>`)
+        
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+        const defaultOptions = {
+            canCreateClient: false,
+        }
+
+        options = {...defaultOptions, ...options}
+
+        var centerSelectionEventName = (`<%- locals.centerSelectionEventName %>` == '' || `<%- locals.centerSelectionEventName %>` == null) ? 'center-selected' : `<%- locals.centerSelectionEventName %>`
+        var centerSelectId = (`<%- locals.centerSelectId %>` == '' || `<%- locals.centerSelectId %>` == null) ? 'center_select' : `<%- locals.centerSelectId %>`
+
+        let CENTERS_PROMISE
+
+        const center_search_input_ = component.find(`#center_search_input_<%= locals.componentId %>`)
+        const center_select_ = component.find('#'+centerSelectId)
+
+
+        var clientSelectionEventName = (`<%- locals.clientSelectionEventName %>` == '' || `<%- locals.clientSelectionEventName %>` == null) ? 'center-client-selected' : `<%- locals.clientSelectionEventName %>`
+        var clientSelectId = (`<%- locals.clientSelectId %>` == '' || `<%- locals.clientSelectId %>` == null) ? 'client_select' : `<%- locals.clientSelectId %>`
+
+        const client_search_input_ = component.find(`#client_search_input_<%= locals.componentId %>`)
+        const client_select_ = component.find('#'+clientSelectId)
+        
+        var clientNameInputId = (`<%- locals.clientNameInputId %>` == '' || `<%- locals.clientNameInputId %>` == null) ? `client_name_input_${uniqid()}` : `<%- locals.clientNameInputId %>`
+        var clientPhoneInputId = (`<%- locals.clientPhoneInputId %>` == '' || `<%- locals.clientPhoneInputId %>` == null) ? `client_phone_input_${uniqid()}` : `<%- locals.clientPhoneInputId %>`
+        component.find('.js_select_center_with_clients__client_name_input').attr('id', clientNameInputId)
+        component.find('.js_select_center_with_clients__client_phone_input').attr('id', clientPhoneInputId)
+
+        const client_name_input = component.find('#'+clientNameInputId)
+        const client_phone_input = component.find('#'+clientPhoneInputId)
+        const js_select_center_with_clients__client_submit_button = component.find('.js_select_center_with_clients__client_submit_button')
+        const js_create_client_panel__loading_placeholder = component.find('.js_create_client_panel__loading_placeholder')
+
+        // show client registration inputs
+        if ( options.canCreateClient )
+        {
+            component.find('.js_create_client_panel_trigger').removeClass('d-none')
+        }
+        // submit client
+        js_select_center_with_clients__client_submit_button.on('click', async e =>
+        {
+
+            // check if clinic selected
+            if ( isNull(center_select_.find(':selected').val()) )
+            {
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_center_not_selected, '')
+                return
+            }
+
+            js_create_client_panel__loading_placeholder.removeClass('d-none')
+            js_select_center_with_clients__client_submit_button.parent().addClass('disabled')
+
+            try 
+            {
+                var res = await PATIENT_MODEL.store({
+                    clinicId: center_select_.find(':selected').val(),
+                    clinicName: center_select_.find(':selected').text(),
+                    patientCode: uniqid(),
+                    patientName: client_name_input.val(),
+                    patientPhone: client_phone_input.val(),
+                });
+            } 
+            catch (error) 
+            {
+                console.error(error)
+                js_create_client_panel__loading_placeholder.addClass('d-none')
+                js_select_center_with_clients__client_submit_button.parent().removeClass('disabled')
+                return
+            }
+
+            js_create_client_panel__loading_placeholder.addClass('d-none')
+            js_select_center_with_clients__client_submit_button.parent().removeClass('disabled')
+
+            // reset
+            client_name_input.val(null)
+            client_phone_input.val(null)
+            
+            // set selected
+            select_centers_with_clients_template_clients_displayAll(callback =>
+            {
+                setOptionSelected( client_select_, res.data.patientId )
+            })
+        })
+       
+        // Centers
+        // select center
+        center_select_.on('change', e =>
+        {
+            select_centers_with_clients_template_clients_displayAll()
+        })
+        //
+        detectTypingEnd(center_search_input_, () =>
+        {
+            select_centers_with_clients_template_centers_displayAll()
+        }, 500)
+        // center_search_input_.on('keyup', )
+        // display all centers
+        select_centers_with_clients_template_centers_displayAll()
+        async function select_centers_with_clients_template_centers_displayAll()
+        {
+            center_select_.html('')
+            CENTERS_PROMISE = CLINIC_MODEL.search(center_search_input_.val())
+
+            var res = await CENTERS_PROMISE
+
+            if ( center_search_input_.val() == '' )
+                center_select_.html(`<option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>`)
+
+            if ( res.code == 404 ) return
+
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                html += `<option value="${v.clinicId}" data-object="${data}">${v.clinicName}</option>`	
+            })
+            // add html
+            center_select_.append(html)
+            // if ( isNull(center_select_.find(':selected').val()) ) return
+            // dispatch an event
+            dispatchCustomEvent(centerSelectionEventName, { 
+                center: {
+                    id: center_select_.find(':selected').val(),
+                    name: center_select_.find(':selected').text(),
+                    data: checkJSON( decodeURIComponent( atob( center_select_.find(':selected').data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            })
+            //
+            dispatchCustomEvent(centerSelectionEventName, { 
+                center: {
+                    id: center_select_.find(':selected').val(),
+                    name: center_select_.find(':selected').text(),
+                    data: checkJSON( decodeURIComponent( atob( center_select_.find(':selected').data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            }, center_select_[0])
+        } 
+
+        // Clients
+        detectTypingEnd(client_search_input_, () =>
+        {
+            select_centers_with_clients_template_clients_displayAll()
+        }, 500)
+        // client_search_input_.on('keyup', select_centers_with_clients_template_clients_displayAll)
+        
+        // display all clients
+        select_centers_with_clients_template_clients_displayAll()
+        async function select_centers_with_clients_template_clients_displayAll(callback = null)
+        {
+            Promise.allSettled([CENTERS_PROMISE])
+
+            SectionLoader(client_select_.closest('.WRAPPER'))
+
+            client_select_.html('')
+            if ( client_search_input_.val() == '' )
+            {
+                SectionLoader(client_select_.closest('.WRAPPER'), '')
+                client_select_.html(`<option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>`)
+            } 
+
+            if ( isNull(center_select_.find(':selected').val()) )
+            {
+                SectionLoader(client_select_.closest('.WRAPPER'), '')
+                
+                return
+            }
+
+            var res = await PATIENT_MODEL.searchLocal({
+                clinicId: center_select_.find(':selected').val(),
+                query: client_search_input_.val(),
+            })
+
+            SectionLoader(client_select_.closest('.WRAPPER'), '')
+
+            if ( res.code == 404 ) return
+
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                
+                html += `<option value="${v.patientId}" data-object="${data}">${v.patientName}</option>`	
+            })
+            // add html
+            client_select_.append(html)
+
+            if ( typeof callback == 'function' ) callback(data)
+
+            client_select_.trigger('change')
+            // dispatch an event
+            dispatchCustomEvent(clientSelectionEventName, { 
+                client: {
+                    id: client_select_.find(':selected').val(),
+                    name: client_select_.find(':selected').text(),
+                    data: checkJSON( decodeURIComponent( atob( client_select_.find(':selected').data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            })
+            //
+            dispatchCustomEvent(clientSelectionEventName, { 
+                client: {
+                    id: client_select_.find(':selected').val(),
+                    name: client_select_.find(':selected').text(),
+                    data: checkJSON( decodeURIComponent( atob( client_select_.find(':selected').data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            }, client_select_[0])
+        } 
+
+    
+    })
+
+</script>

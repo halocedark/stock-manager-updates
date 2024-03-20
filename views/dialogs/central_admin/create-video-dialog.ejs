@@ -1,0 +1,42 @@
+<div class="has-direction-locale px-3 py-3 h-100 position-relative overflow-x-hidden overflow-y-auto max-height-100">
+
+    <form id="create_video_dialog__form">
+
+        <div class="row gx-4 gy-4 mb-3">
+
+            <div class="col-md-6">
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label110 %></label>
+                    <input type="text" class="input-text input-text-outline" id="create_video_dialog__form__title_input">
+                </div>	
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label111 %></label>
+                    <textarea id="create_video_dialog__form__description_input" rows="5" class="input-text input-text-outline"></textarea>
+                </div>
+
+                <div class="">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label112 %></label>
+                    <input type="text" class="input-text input-text-outline" id="create_video_dialog__form__url_input">
+                </div>
+
+            </div>
+
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+
+                <iframe id="create_video_dialog__form__preview_iframe" class="d-block width-300px height-150px bg-color-16" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+            </div>
+
+        </div>
+
+        <div class="">
+            <button type="submit" class="btn btn-success d-block w-100 rounded-0">
+                <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+            </button>
+        </div>
+
+    </form>
+
+</div>

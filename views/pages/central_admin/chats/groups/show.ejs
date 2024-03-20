@@ -1,0 +1,1516 @@
+<div class="container-fluid" id="show_chat_groups_container">
+
+	<div class="wrapper d-none mb-3">
+		<h1 class="title-medium d-inline-block"><%= UI_DISPLAY_LANG.views.pages.send_message.sectionTitle %></h1>
+	</div>
+
+    <div class="row">
+
+        <div class="col-lg-8 col-md-6">
+
+            <div class="app-block mb-3">
+
+                <div class="mb-2">
+                    <img src="" class="js_image_src_placeholder w-100 max-height-500px" data-placeholder="../assets/img/utils/placeholder.png" id="chat_group_cover" alt="">
+                </div>
+
+                <div class="py-3">
+                    <h4 class="h4" id="chat_group_name"></h4>
+                </div>
+
+                <div class="border-top pt-3">
+                    <ul class="list-h js_list_tabs_navs mb-4 mt-3" id="chat_group_tabs_list">
+                        <li class="list-item list-item-solid flex flex-center active js_list_tab_nav" data-target="#discussion_tab" >
+                            <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab5 %>
+                        </li>
+                        <li class="list-item list-item-solid flex flex-center js_list_tab_nav" data-target="#people_tab">
+                            <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab6 %>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        
+            <div class="row" id="discussion_tab" data-role="tab_content">
+        
+                <div class="row">
+
+                    <div class="col-md-4 COL_WRAPPER">
+
+                        <div class="py-3 px-2 border rounded bg-white">
+
+                            <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.text57 %></h4>
+
+                            <div id="discussion_group_description"></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md">
+
+                        <div class="mb-4" data-perm="create_chat_group_posts">
+        
+                            <div class="write-chat-group-post-area container">
+                                <div class="chat-group-post-area-header">
+                                    <div class="d-flex justify-content-center-align-items-center">
+                                        <div class="chat-group-post-user-thumb mx-2">
+                                            <img src="../assets/img/utils/user.png" alt="" id="chat_group_post_user_thumb">
+                                        </div>
+                                        <div class="chat-group-post-input d-inline-flex align-items-center" id="create_chat_group_post_input">
+                                            <%= UI_DISPLAY_LANG.views.pages.global.placeholder13 %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                        </div>
+        
+                        <div id="discussion_posts_element" data-perm="view_chat_group_posts">
+        
+                            <!-- <div class="rounded border px-2 py-3 bg-white mb-3" data-role="row" data-id="${v.id}">
+
+                                <div class="user-card-1 mb-3">
+                                    <div class="user-card-1-thumb">
+                                        <img src="../assets/img/utils/user.png" alt="">
+                                    </div>
+                                    <div class="user-card-1-details">
+                                        <div class="user-card-1-name">
+                                            <span>Abdennour Adouani</span>
+                                        </div>
+                                        <div class="user-card-1-status">
+                                            <span>Top Contributor</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="px-2 py-3">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam facilis sapiente ipsam.
+                                </div>
+
+                                <div class="px-2 py-3 border-top border-bottom d-flex">
+                                    <div class="fb-like-button js_fb_like_button" data-role="post_like" data-id="${v.id}">
+                                        <span class="d-inline-block mx-2 vertical-align-middle"><i class="xfb xfb-like"></i></span>
+                                        <span><%= UI_DISPLAY_LANG.views.pages.global.actions.like %></span>
+                                    </div>
+                                    <div class="fb-like-button">
+                                        <span class="d-inline-block mx-2 vertical-align-middle"><i class="xfb xfb-comment"></i></span>
+                                        <span><%= UI_DISPLAY_LANG.views.pages.global.actions.comment %></span>
+                                    </div>
+                                    <div class="fb-like-button">
+                                        <span class="d-inline-block mx-2 vertical-align-middle"><i class="xfb xfb-share"></i></span>
+                                        <span><%= UI_DISPLAY_LANG.views.pages.global.actions.share %></span>
+                                    </div>
+                                </div>
+
+                            </div> -->
+        
+                        </div>
+
+                    </div>
+
+                </div>
+        
+            </div>
+        
+            <div class="row" id="people_tab" data-role="tab_content" style="display: none;">
+        
+                <div class="rounded border px-2 py-3 bg-white">
+
+                    <div class="py-4 border-bottom mb-3">
+
+                        <h4 class="h4 mb-2">
+                            <%= UI_DISPLAY_LANG.views.pages.global.text54 %>
+                            <span id="people_tab_members_total" class="fw-500 fs-16 text-secondary"></span>
+                        </h4>
+
+                        <p class="fw-300 mb-3">
+                            <%= UI_DISPLAY_LANG.views.pages.global.text55 %>
+                        </p>
+
+                        <div class="">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox2.template.ejs`, {
+                                searchBtnId: 'people_tab_search_btn',
+                                searchInputId: 'people_tab_search_input',
+                                searchBtnStyle: 'width: 5%;height:100%;',
+                                searchBoxStyle: 'background-color: #F0F2F5; min-height: unset !important; height:40px; border: none; border-radius: 20px;',
+                                searchInputStyle: 'background-color: #F0F2F5;',
+                                searchInputHolderStyle: 'border:none;',
+                            }) -%>
+                        </div>
+
+                        <div class="px-3 mt-4 d-none" data-perm="delete_chat_group_patients">
+                            <button class="btn btn-danger border-radius-10 position-relative" id="people_tab__members_delete_selected_button">
+                                <span><%= UI_DISPLAY_LANG.views.pages.global.actions.delete %></span>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">0</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="py-4 border-bottom mb-3">
+
+                        <div class="user-card-1">
+                            <div class="user-card-1-thumb">
+                                <img src="../assets/img/utils/user.png" id="people_tab_employee_avatar" class="width-60px height-60px" alt="">
+                            </div>
+                            <div class="user-card-1-details">
+                                <div class="user-card-1-name fs-16">
+                                    <span id="employee_name">Abdennour Adouani</span>
+                                    <span class="user-card-1-phone" id="people_tab_employee_phone">(0673479803)</span>
+                                </div>
+                                <div class="user-card-1-status">
+                                    <span id="people_tab_employee_group_role">Public Group</span>
+                                </div>
+                                <div class="fs-14 fw-300">
+                                    <span id="people_tab_employee_type"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="py-4 mb-3">
+
+                        <h4 class="h4 mb-3">
+                            <%= UI_DISPLAY_LANG.views.pages.global.text56 %>
+                        </h4>
+
+                        <div id="people_tab_people_table_element" class="overflow-x-hidden overflow-y-auto max-height-500px">
+
+                            <!-- <div class="user-card-1 user-card-1-hover mb-3 px-2 py-3 rounded cursor-pointer">
+                                <div class="user-card-1-thumb no-pointer">
+                                    <img src="../assets/img/utils/user.png" class="width-60px height-60px" alt="">
+                                </div>
+                                <div class="user-card-1-details no-pointer">
+                                    <div class="user-card-1-name fs-16">
+                                        <span>Abdennour Adouani</span>
+                                    </div>
+                                    <div class="fs-14 fw-300">
+                                        <span>0673479803</span>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+        
+            </div>
+
+        </div>
+
+        <div class="col-lg col-md">
+
+            <div class="app-block">
+
+                <div class="user-card-1 mb-4">
+                    <div class="user-card-1-thumb">
+                        <img src="" class="rounded width-50px height-50px" id="card_group_cover" alt="">
+                    </div>
+                    <div class="user-card-1-details">
+                        <div class="user-card-1-name fs-20">
+                            <span id="card_group_name">Abdennour Adouani</span>
+                        </div>
+                        <div class="user-card-1-status fw-400 fs-16" id="group_status" style="background-color: transparent;">
+                            <span class="d-inline-block vertical-align-middle" id="card_group_status_icon"></span>
+                            <span id="card_group_status_text">Public Group</span> 
+                            <span class="user-card-1-phone text-secondary fw-500" id="card_group_total_members"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text52 %></h4>
+
+                <div class="row mb-2">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox2.template.ejs`, {
+                            searchBtnId: 'other_groups_search_btn',
+                            searchInputId: 'other_groups_search_input',
+                        }) -%>
+                    </div>
+
+                </div>
+
+                <div id="other_groups_table_element" class="overflow-x-hidden overflow-y-auto max-height-500px">
+
+                    <!-- <div class="user-card-1 mb-3">
+                        <div class="user-card-1-thumb">
+                            <img src="" class="rounded width-50px height-50px"alt="">
+                        </div>
+                        <div class="user-card-1-details">
+                            <div class="user-card-1-name fs-18 fw-500">
+                                <span>Abdennour Adouani</span>
+                            </div>
+                            <div class="user-card-1-status fw-400 fs-16 pt-0" id="group_status" style="background-color: transparent;">
+                                <span id="card_group_status_text">Public Group</span> 
+                                <span class="user-card-1-phone text-secondary fw-500"></span>
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+	
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#show_chat_groups_container')
+
+if ( !page_container[0] ) return
+
+var ChatObject = sessionData(true)
+
+var chat_group_name = page_container.find('#chat_group_name')
+var chat_group_cover = page_container.find('#chat_group_cover')
+
+var chat_group_tabs_list = page_container.find('#chat_group_tabs_list')
+
+//
+if ( ChatObject.cover ) chat_group_cover.attr('src', ChatObject.cover)
+
+// chat_group_tabs_list on changed
+chat_group_tabs_list.on('tab-changed', e =>
+{
+    var detail = e.originalEvent.detail
+    var tab = detail.tab
+    
+    if ( tab.id == 'people_tab' )
+    {
+        displayGroupPeople({
+            method_type: 'group_patient_search',
+            query: '',
+            advanced: {
+                group_id: ChatObject.id,
+                orderBy: 'id',
+                order: 'desc',
+            }
+        })
+    }
+})
+
+// group card
+var card_group_cover = page_container.find('#card_group_cover')
+var card_group_name = page_container.find('#card_group_name')
+var card_group_status_icon = page_container.find('#card_group_status_icon')
+var card_group_status_text = page_container.find('#card_group_status_text')
+var card_group_total_members = page_container.find('#card_group_total_members')
+
+var other_groups_search_btn = page_container.find('#other_groups_search_btn')
+var other_groups_search_input = page_container.find('#other_groups_search_input')
+var other_groups_table_element = page_container.find('#other_groups_table_element')
+
+// discussion_tab
+var chat_group_post_user_thumb = page_container.find('#chat_group_post_user_thumb')
+var create_chat_group_post_input = page_container.find('#create_chat_group_post_input')
+
+var discussion_group_description = page_container.find('#discussion_group_description')
+
+var discussion_posts_element = page_container.find('#discussion_posts_element')
+
+// display info
+chat_group_name.text(ChatObject.name)
+chat_group_post_user_thumb.attr('src', imgFallback(USER_CONFIG.employee_avatar, '../assets/img/utils/user.png') )
+
+// check description
+if ( !ChatObject.description )
+{
+    discussion_group_description.closest('.COL_WRAPPER').addClass('d-none')
+}
+discussion_group_description.text(ChatObject.description)
+
+//
+card_group_cover.attr('src', imgFallback(ChatObject.cover, '../assets/img/utils/placeholder.png') )
+card_group_name.text(ChatObject.name)
+card_group_status_icon.html(  (ChatObject.type == 'public') ? `<i class="xfb xfb-globe pointer" title="${ FUI_DISPLAY_LANG.views.pages.global.chat_group_types[ChatObject.type] }"></i>` : `<i class="xfb xfb-lock pointer" title="${ FUI_DISPLAY_LANG.views.pages.global.chat_group_types[ChatObject.type] }"></i>`  )
+card_group_status_text.text( FUI_DISPLAY_LANG.views.pages.global.chat_group_types[ChatObject.type] )
+card_group_total_members.text( ' . ' + formatNumberToStr(ChatObject.clients.length) + ' ' + FUI_DISPLAY_LANG.views.pages.global.text51 )
+
+// discussion_tab
+// create post dialog
+create_chat_group_post_input.on('click', e =>
+{
+    CreateChatGroupPostDialog({
+        group_id: ChatObject.id,
+        group_name: ChatObject.name,
+        group_type: ChatObject.type,
+    }, (res) =>
+    {
+        var options = res.data
+        options.prepend = true
+        appendPostUI(options)
+    })
+})
+
+var isLoadingPosts = false
+var GROUP_POSTS_OFFSET = 0
+var GROUP_POSTS_LIMIT = 1
+var GROUP_POSTS_TOTAL = 1
+detectScrollEnd(MAIN_CONTENT_CONTAINER, e =>
+{
+    if ( isLoadingPosts ) return
+    if ( GROUP_POSTS_TOTAL >= ChatObject.posts.length ) return
+
+    isLoadingPosts = true
+    GROUP_POSTS_OFFSET++
+    // GROUP_POSTS_LIMIT++
+    GROUP_POSTS_TOTAL++
+    displayGroupPosts({
+        method_type: 'group_post_search',
+        query: '',
+        advanced: {
+            group_id: ChatObject.id,
+            orderBy: 'id',
+            order: 'desc',
+            offset: GROUP_POSTS_OFFSET,
+            limit: GROUP_POSTS_LIMIT,
+        }
+    }, () =>
+    {
+        isLoadingPosts = false
+    })
+})
+
+// people_tab
+
+
+var people_tab_members_total = page_container.find('#people_tab_members_total')
+
+var people_tab_employee_avatar = page_container.find('#people_tab_employee_avatar')
+var employee_name = page_container.find('#employee_name')
+var people_tab_employee_phone = page_container.find('#people_tab_employee_phone')
+var people_tab_employee_group_role = page_container.find('#people_tab_employee_group_role')
+var people_tab_employee_type = page_container.find('#people_tab_employee_type')
+
+var people_tab_search_btn  = page_container.find('#people_tab_search_btn')
+var people_tab_search_input  = page_container.find('#people_tab_search_input')
+var people_tab__members_delete_selected_button = page_container.find('#people_tab__members_delete_selected_button')
+var people_tab_people_table_element  = page_container.find('#people_tab_people_table_element')
+
+people_tab_members_total.text( ' . ' + formatNumberToStr(ChatObject.clients.length) )
+
+employee_name.text( USER_CONFIG.employee_name )
+people_tab_employee_phone.text( `(${USER_CONFIG.employee_phone})` )
+people_tab_employee_avatar.attr('src', imgFallback(USER_CONFIG.employee_avatar, '../assets/img/utils/user.png') )
+people_tab_employee_group_role.text( FUI_DISPLAY_LANG.views.pages.global.roles[ CHAT_GROUP_ADMIN ] )
+people_tab_employee_type.text( FUI_DISPLAY_LANG.views.pages.global.employee_type_codes[ USER_CONFIG.employee_type_code ] )
+
+// search group patients
+people_tab_search_btn.on('click', e =>
+{
+    people_tab_search_input.trigger('keyup')
+})
+detectTypingEnd(people_tab_search_input, val =>
+{
+    displayGroupPeople({
+        method_type: 'group_patient_search',
+        group_id: ChatObject.id,
+        query: val,
+        advanced: {
+            orderBy: 'id',
+            order: 'desc',
+        }
+    })
+})
+
+
+// search groups
+other_groups_search_btn.on('click', e =>
+{
+    other_groups_search_input.trigger('keyup')
+})
+detectTypingEnd(other_groups_search_input, val =>
+{
+    displayGroups({
+        method_type: 'group_search',
+        query: val
+    })
+})
+
+// display groups
+displayGroups({
+    method_type: 'group_search',
+    query: ''
+})
+async function displayGroups(params)
+{
+    SectionLoader(other_groups_table_element)
+    other_groups_table_element.html('')
+
+    if ( params.method_type == 'group_search' ) var res = await CHAT_MODEL.group_search(params)
+
+    SectionLoader(other_groups_table_element, '')
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        var cover = imgFallback(v.cover, '../assets/img/utils/placeholder.png' )
+        html += `<div class="user-card-1 user-card-1-hover mb-3 px-2 py-3 rounded cursor-pointer" data-role="row" data-id="${v.id}">
+                    <div class="user-card-1-thumb no-pointer">
+                        <img src="${cover}" class="rounded width-50px height-50px"alt="">
+                    </div>
+                    <div class="user-card-1-details no-pointer">
+                        <div class="user-card-1-name fs-18 fw-500">
+                            <span>${v.name}</span>
+                        </div>
+                        <div class="user-card-1-status fw-400 fs-16 pt-0" style="background-color: transparent;">
+                            <span id="card_group_status_text">${FUI_DISPLAY_LANG.views.pages.global.text53}</span> 
+                        </div>
+                    </div>
+                </div>`
+    })
+
+    other_groups_table_element.html(html)
+
+    // other_groups_table_element
+    other_groups_table_element.off('click').on('click', async e => 
+    {
+        var target = $(e.target)
+
+        if ( target.data('role') == 'row' )
+        {
+            SectionLoader(target)
+            var res = await CHAT_MODEL.group_show({
+                id: target.data('id')
+            })
+            if ( res.code == 404 )
+            {
+                target.remove()
+                return
+            }
+
+            ChatObject = res.data
+
+            goToPage('show-chat-group', ChatObject)
+        }
+    })
+}
+// display group people
+async function displayGroupPeople(params)
+{
+    // SectionLoader(people_tab_people_table_element)
+    people_tab_people_table_element.html(`
+    <div class="mx-3 my-2 border-radius-10 bg-white js_member_placeholder">
+        
+        <div class="d-flex px-3">
+            <div class="width-40px height-40px rounded-circle content-placeholder">&nbsp;</div>
+            <div class="width-10px"></div>   
+            <div class="w-100 d-flex align-items-center">
+                <div>
+                    <div class="d-block content-placeholder height-18px width-330px mb-2">&nbsp;</div>
+                    <div class="d-block content-placeholder height-5px width-330px">&nbsp;</div>    
+                </div>
+            </div> 
+        </div>
+
+    </div>
+    `)
+
+    if ( params.method_type == 'group_patient_search' ) var res = await CHAT_MODEL.group_patient_search(params)
+
+    // SectionLoader(people_tab_people_table_element, '')
+
+    if ( res.code == 404 ) 
+    {
+        people_tab_people_table_element.find('.js_member_placeholder').remove()
+        return
+    }
+    
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+
+        var avatar = imgFallback(v.patientData.patientAvatar, '../assets/img/utils/user.png' )
+        html += `<div class="js_checkable_box_row ">
+                    <div class="mx-3 my-2 border-radius-10 js_checkable_box cursor-pointer bg-color-hover-ebebeb" data-role="row" data-patient-id="${v.patientId}" data-patient-name="${v.patientName}" data-patient-phone="${v.patientPhone}" data-patient-avatar="${avatar}">
+                        <input type="checkbox" class="js_row_checkbox d-none" data-role="CHECK">
+                        <div class="user-card-1 user-card-1-hover mb-3 px-2 py-3 rounded no-pointer">
+                            <div class="user-card-1-thumb no-pointer">
+                                <img src="${avatar}" class="width-60px height-60px" alt="">
+                            </div>
+                            <div class="user-card-1-details no-pointer">
+                                <div class="user-card-1-name fs-16">
+                                    <span>${v.patientName}</span>
+                                </div>
+                                <div class="fs-14 fw-300">
+                                    <span>${v.patientPhone}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>PAG_SEP`
+    })
+
+    // people_tab_people_table_element.html(html)
+    new Paginator(people_tab_people_table_element, html.split('PAG_SEP'), {
+        perPage: 10,
+        position: 'top',
+        links: {
+            visible: true
+        }
+    })
+    //
+    people_tab_people_table_element.find('.js_member_placeholder').remove()
+    // delete
+    people_tab__members_delete_selected_button.off('click').on('click', e =>
+    {
+        PromptConfirmDialog().then(async () =>
+        {
+            people_tab__members_delete_selected_button.addClass('disabled')
+
+            var res = await CHAT_MODEL.group_patient_batchDelete({
+                collection: group_patient_selectedRows()
+            })
+
+            people_tab__members_delete_selected_button.removeClass('disabled')
+
+            if ( res.code == 404 ) return
+
+            people_tab__members_delete_selected_button.parent().addClass('d-none')
+            people_tab_search_input.trigger('keyup')
+        })
+    })
+    // people_tab_people_table_element
+    people_tab_people_table_element.off('click').on('click', async e => 
+    {
+        var target = $(e.target)
+
+        if ( target.data('role') == 'row' )
+        {
+            people_tab__members_delete_selected_button.find('.badge').text(group_patient_selectedRows().length)
+            if ( group_patient_selectedRows().length > 0 )
+            {
+                people_tab__members_delete_selected_button.parent().removeClass('d-none')
+            }
+            else
+            {
+                people_tab__members_delete_selected_button.parent().addClass('d-none')
+            }
+        }
+    })
+
+    // 
+    function group_patient_selectedRows()
+    {
+        var list = []
+
+        var items = people_tab_people_table_element.find('[data-role="row"]')
+
+        for (let i = 0; i < items.length; i++) 
+        {
+            const parent = $(items[i])
+            const check = parent.find('[data-role="CHECK"]')
+            
+            if ( check.is(':checked') )
+            {
+                list.push({
+                    group_id: ChatObject.id,
+                    patientId: parent.data('patient-id'),
+                })
+            }
+        }
+
+        return list
+    }
+}
+
+// display group people
+$(document).off('refresh-group-posts').on('refresh-group-posts', e =>
+{
+    displayGroupPosts({
+        method_type: 'group_post_search',
+        query: '',
+        advanced: {
+            group_id: ChatObject.id,
+            orderBy: 'id',
+            order: 'desc',
+            offset: GROUP_POSTS_OFFSET,
+            limit: GROUP_POSTS_LIMIT,
+        }
+    })
+})
+displayGroupPosts({
+    method_type: 'group_post_search',
+    query: '',
+    advanced: {
+        group_id: ChatObject.id,
+        orderBy: 'id',
+        order: 'desc',
+        offset: GROUP_POSTS_OFFSET,
+        limit: GROUP_POSTS_LIMIT,
+    }
+})
+async function displayGroupPosts(params, callback = null, error = null)
+{
+    // save posts container height for better UX
+    discussion_posts_element.css('min-height', discussion_posts_element.height() )
+    // SectionLoader(discussion_posts_element)
+    discussion_posts_element.append(`
+    <div class="rounded border px-0 pt-3 bg-white mb-3 js_post_placeholder">
+        
+        <div class="d-flex mb-4 px-3">
+            <div class="width-40px height-40px rounded-circle content-placeholder">&nbsp;</div>
+            <div class="width-10px"></div>   
+            <div class="w-100 d-flex align-items-center">
+                <div>
+                    <div class="d-block content-placeholder height-18px width-330px mb-2">&nbsp;</div>
+                    <div class="d-block content-placeholder height-5px width-330px">&nbsp;</div>    
+                </div>
+            </div> 
+        </div>
+        <div>
+            <div class="content-placeholder height-500px w-100">&nbsp;</div>    
+        </div>
+
+    </div>
+    `)
+    // return
+    // var load_more_posts_button_html = `<div class="has-text-centered">
+    //                             <div class="fb-load-more-button" id="fb_load_more_posts_button">
+    //                                 <span class="d-inline-flex justify-content-center align-items-center vertical-align-middle">
+    //                                     <i class="xfb xfb-cog-lg"></i>
+    //                                 </span>
+    //                                 <span>${FUI_DISPLAY_LANG.views.pages.global.load_more_button}</span>
+    //                             </div>
+    //                         </div>`
+
+    if ( params.method_type == 'group_post_search' ) var res = await CHAT_MODEL.group_post_search(params)
+
+    // SectionLoader(discussion_posts_element, '')
+
+    if ( res.code == 404 ) 
+    {
+        if ( typeof error == 'function' ) error(res)
+
+        discussion_posts_element.find('.js_post_placeholder').remove()
+
+        return
+    } 
+
+    var data = res.data
+    var html = ''
+    
+    $.each(data, (k,v) =>
+    {
+        appendPostUI(v)
+    })
+
+    // check if limit is less then group total posts
+    // if ( GROUP_POSTS_LIMIT < ChatObject.posts.length )
+    //     discussion_posts_element.append(load_more_posts_button_html)
+
+    if ( typeof callback == 'function' ) callback(data)
+    // discussion_posts_element
+    discussion_posts_element.off('click').on('click', async e => 
+    {
+        var target = $(e.target)
+
+        // if ( target.data('role') == 'row' )
+        // {
+        //     SectionLoader(target)
+        //     var res = await CHAT_MODEL.group_show({
+        //         id: target.data('id')
+        //     })
+        //     if ( res.code == 404 )
+        //     {
+        //         target.remove()
+        //         return
+        //     }
+
+        //     ChatObject = res.data
+
+        //     goToPage('show-chat-group', ChatObject)
+        // }
+    })
+    // fb_load_more_posts_button
+    // const fb_load_more_posts_button = discussion_posts_element.find('#fb_load_more_posts_button')
+
+    // if ( fb_load_more_posts_button[0] )
+    // {
+    //     fb_load_more_posts_button.off('click').on('click', e =>
+    //     {
+    //         GROUP_POSTS_LIMIT++
+
+    //         fb_load_more_posts_button.addClass('disabled')
+    //         fb_load_more_posts_button.find('.xfb').addClass('animate-rotate')
+            
+    //         displayGroupPosts({
+    //             method_type: 'group_post_search',
+    //             query: '',
+    //             advanced: {
+    //                 group_id: ChatObject.id,
+    //                 orderBy: 'id',
+    //                 order: 'desc',
+    //                 offset: GROUP_POSTS_OFFSET,
+    //                 limit: GROUP_POSTS_LIMIT,
+    //             }
+    //         }, () =>
+    //         {
+    //             fb_load_more_posts_button.removeClass('disabled')
+    //             fb_load_more_posts_button.find('.xfb').removeClass('animate-rotate')
+    //             // scroll to bottom
+    //             // MAIN_CONTENT_CONTAINER.scrollTop( MAIN_CONTENT_CONTAINER[0].scrollHeight )
+    //         },
+    //         error =>
+    //         {
+    //             fb_load_more_posts_button.removeClass('disabled')
+    //             fb_load_more_posts_button.find('.xfb').removeClass('animate-rotate')
+    //         })
+    //     })
+    // }
+
+}
+// append post
+function appendPostUI(options)
+{
+    var avatar = ''
+    var user_name = ''
+    var user_phone = ''
+    var role = ''
+    var isLiked = false
+    var user_reaction = null
+    var post_total_reactions_comments = '<div class="px-2 py-3 d-flex justify-content-between align-items-center">'
+    var css = options.css
+    var media_html = ''
+
+    if ( options.media )
+    {
+        media_html = '<div class="row px-0 py-3 mx-0 gx-2 gy-2">'
+        for (let i = 0; i < options.media.length; i++) 
+        {
+            const media = options.media[i];
+            
+            if ( i == 0 )
+            {
+                if ( isImageFile(media.url) )
+                {
+                    media_html += `<div class="col-md-12 px-0"><img src="${media.url}" class="w-100 h-100 max-height-500px js_img_previewable"></div>`
+                }
+
+                if ( isVideoFile(media.url) )
+                {
+                    media_html += `<div class="col-md-12 px-0"><video src="${media.url}" class="w-100 h-100 max-height-500px object-fit-cover js_video_previewable" controls muted></video></div>`
+                }
+            }
+            else
+            {
+                if ( isImageFile(media.url) )
+                {
+                    media_html += `<div class="col-md-4 px-0"><img src="${media.url}" class="w-100 h-100 max-height-500px js_img_previewable"></div>`
+                }
+
+                if ( isVideoFile(media.url) )
+                {
+                    media_html += `<div class="col-md-4 px-0"><video src="${media.url}" class="w-100 h-100 max-height-500px object-fit-cover js_video_previewable" controls muted></video></div>`
+                }
+            }
+        }
+
+        media_html+= '</div>'
+        
+    }
+    
+    if ( options.employeeData )
+    {
+        avatar = imgFallback(options.employeeData.employee_avatar, '../assets/img/utils/user.png' )
+        user_name = options.employee_name
+        user_phone = options.employee_phone
+        role = CHAT_GROUP_ADMIN
+        if ( options.reactions )
+        {
+            for (let i = 0; i < options.reactions.length; i++) 
+            {
+                const reaction = options.reactions[i]
+
+                if ( reaction.employee_id == USER_CONFIG.employee_id )
+                {
+                    isLiked = true
+                    user_reaction = reaction
+                    break
+                }
+            }
+        } 
+    }
+    else
+    {
+        avatar = imgFallback(options.patientData.patientAvatar, '../assets/img/utils/user.png' )
+        user_name = options.patientName
+        user_phone = options.patientPhone
+        role = CHAT_GROUP_CONTRIBUTOR
+    }
+
+    if ( options.reactions_with_total.length > 0 )
+    {
+        post_total_reactions_comments += `<div>
+                                            <ul class="fb-reactions-list-2">`
+        for (let i = 0; i < options.reactions_with_total.length; i++) 
+        {
+            const reaction = options.reactions_with_total[i]
+
+            // check how many people used unique reaction types used in this post
+            post_total_reactions_comments += `<li><img src="${ CHAT_GROUP_POST_REACTIONS[reaction.reaction].url }" data-code="${reaction.reaction}"></li>`
+        }
+
+        post_total_reactions_comments += `<li class="fs-14"><a href="#" class="text-secondary pointer">${options.reactions_with_total.length}</a></li>`
+
+        post_total_reactions_comments += `</ul>
+                                        </div>`
+    }
+
+    if ( options.total_comments > 0 )
+    {
+        post_total_reactions_comments+= `<div>
+                                            <a href="#" class="text-secondary pointer">
+                                                <span class="d-inline-flex justify-content-center align-items-center vertical-align-middle"><i class="xfb xfb-comment-sm"></i></span>
+                                                <span>${options.total_comments}</span>
+                                            </a> 
+                                        </div>`
+    }
+
+    post_total_reactions_comments += '</div>'
+
+    html = `<div class="rounded border px-0 py-3 bg-white mb-3 js_fb_post" id="group_post_${options.id}" data-role="row" data-id="${options.id}" data-name="${options.name}" data-is-liked="${isLiked}">
+
+                <div class="d-flex justify-content-between">
+                    
+                    <div class="user-card-1 mb-3">
+                        <div class="user-card-1-thumb">
+                            <img src="${avatar}" alt="">
+                        </div>
+                        <div class="user-card-1-details">
+                            <div class="user-card-1-name">
+                                <span>${user_name}</span>
+                                <span>${user_phone}</span>
+                            </div>
+                            <div class="user-card-1-status d-inline-block">
+                                <span>${ FUI_DISPLAY_LANG.views.pages.global.roles[role] }</span>
+                            </div>
+                            <span> . </span>
+                            <span class="fw-300 fs-14 d-inline-block vertical-align-middle">${ (options.created_at_diff.days >= 1) ? options.date_format : options.created_at_diff.auto }</span>
+                            <span class="d-inline-block vertical-align-middle"> ${ (ChatObject.type == 'public') ? `<i class="xfb xfb-globe pointer" title="${ FUI_DISPLAY_LANG.views.pages.global.chat_group_types[ChatObject.type] }"></i>` : `<i class="xfb xfb-lock pointer" title="${ FUI_DISPLAY_LANG.views.pages.global.chat_group_types[ChatObject.type] }"></i>` } </span>
+                        </div>
+                    </div>
+
+                    <div class="px-2">
+                        <div class="dropdown">
+                            <div class="bg-color-hover-ebebeb d-inline-flex justify-content-center align-items-center rounded-circle cursor-pointer text-color-10 width-28px height-28px" type="button" id="chat_group_post_actions_menu_${options.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+        
+                            <ul class="dropdown-menu" id="chat_group_post_actions__menu_${options.id}" aria-labelledby="chat_group_post_actions_menu_${options.id}">
+                                <li data-perm="update_chat_group_posts">
+                                    <a class="dropdown-item d-flex align-items-center py-2 text-decoration-none" href="#" data-role="UPDATE" >
+                                        <div><i class="xfb xfb-pencil"></i></div>
+                                        <div class="width-10px"></div>
+                                        <div class="fw-500 fs-17 no-pointer">
+                                            ${FUI_DISPLAY_LANG.views.pages.global.actions.update} ${FUI_DISPLAY_LANG.views.pages.global.attributes.post}
+                                        </div>
+                                    </a>
+                                </li>
+                                <li data-perm="delete_chat_group_posts">
+                                    <a class="dropdown-item d-flex align-items-center py-2 text-decoration-none" href="#" data-role="DELETE" >
+                                        <div><i class="xfb xfb-recycle-bin"></i></div>
+                                        <div class="width-10px"></div>
+                                        <div class="fw-500 fs-17 no-pointer">
+                                            ${FUI_DISPLAY_LANG.views.pages.global.actions.delete} ${FUI_DISPLAY_LANG.views.pages.global.attributes.post}
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="px-2 py-3">
+                    <h4 class="h4">${options.name}</h4>
+                </div>
+
+                <div class="px-2 py-3 ${ (css) ? css.classes.join(' ') : '' } ">
+                    ${options.body}
+                </div>  
+
+                ${media_html}
+
+                ${post_total_reactions_comments}
+
+                <div class="px-2 py-3 border-top border-bottom d-flex">
+                    
+                    <div class="position-relative js_fb_action_button_holder w-100">
+                        <ul class="fb-reactions-list">
+                            <li><img src="../assets/img/reactions/like.gif" data-reaction="like"></li>
+                            <li><img src="../assets/img/reactions/love.gif" data-reaction="love"></li>
+                            <li><img src="../assets/img/reactions/haha.gif" data-reaction="haha"></li>
+                            <li><img src="../assets/img/reactions/wow.gif" data-reaction="wow"></li>
+                            <li><img src="../assets/img/reactions/sad.gif" data-reaction="sad"></li>
+                            <li><img src="../assets/img/reactions/angry.gif" data-reaction="angry"></li>
+                        </ul>
+                        <div class="fb-like-button js_fb_action_like_button position-relative" data-action="post_like">
+                            <span class="d-inline-block vertical-align-middle js_fb_like_button_icon">
+                                <i class="xfb xfb-like"></i>
+                            </span>
+                            <span class="js_fb_like_button_text"><%= UI_DISPLAY_LANG.views.pages.global.actions.like %></span>
+                        </div>
+                    </div>
+
+                    <div class="fb-like-button js_fb_action_comment_button" data-action="post_comment">
+                        <span class="d-inline-block vertical-align-middle"><i class="xfb xfb-comment"></i></span>
+                        <span><%= UI_DISPLAY_LANG.views.pages.global.actions.comment %></span>
+                    </div>
+                    <div class="fb-like-button js_fb_action_share_button d-none" data-action="post_share">
+                        <span class="d-inline-block vertical-align-middle"><i class="xfb xfb-share"></i></span>
+                        <span><%= UI_DISPLAY_LANG.views.pages.global.actions.share %></span>
+                    </div>
+                </div>
+
+                <div class="js_post_comments_section d-none">
+
+                    <div class="js_fb_comment_emojy_container"></div>
+
+                    <div class="px-2 py-3">
+
+                        <ul class="fb-comments-list fb-comments-list-level-1 js_fb_add_comment_area">
+                            <li class="fb-comment">
+                                <div class="fb-comment-avatar">
+                                    <img src="${ imgFallback(USER_CONFIG.employee_avatar, '../assets/img/utils/user.png') }" class=""> 
+                                </div>
+                                <div class="fb-comment-details w-100">
+
+                                    <div class="fb-comment-body js_has_area_placeholder outline-none js_add_comment__comment_input" contenteditable area-placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder15 %>"></div>
+
+                                    <div class="fb-comment-actions">
+                                        <ul class="fb-comment-actions-list">
+                                            <li class="js_fb_comment_action_emojy_trigger_button"><i class="xfb xfb-emoji no-pointer"></i></li>
+                                            <li class="js_fb_comment_action_add_media_button"><i class="xfb xfb-camera"></i></li>
+                                        </ul>
+                                        <div class="fb-comment-submit-button js_fb_add_comment__submit_button">
+                                            <i class="xfb xfb-send"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 js_add_comment__media_file_input_holder d-none">
+                                        <input type="file" class="js_add_comment__media_file_input js_file_input_has_progress js_file_input_previewable d-none" accept="image/*" data-preview-target=".js_add_comment__media_preview">    
+                                    </div>
+
+                                    <div class="mt-2 js_add_comment__media_preview_holder d-none">
+                                        <div class="has-text-aligned-locale-inverted">
+                                            <button class="close-button-sm js_add_comment__media_preview_holder_close_button">
+                                                <i class="xfb xfb-close-sm-thin"></i>    
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <img src="" class="js_add_comment__media_preview js_img_previewable width-120px height-68px">     
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="px-2 py-3 js_fb_post_comments_wrapper">
+
+                        <ul class="fb-comments-list fb-comments-list-level-1 js_fb_post_comments_list">
+                            
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>`
+    
+    //
+    discussion_posts_element.find('.js_post_placeholder').remove()
+
+    if ( options.prepend )
+        discussion_posts_element.prepend(html)
+    else discussion_posts_element.append(html)
+
+    const post = discussion_posts_element.find(`#group_post_${options.id}`)
+    const post_id = post.data('id')
+    const post_name = post.data('name')
+
+    // post
+    post.off('click').on('click', async e =>
+    {
+        var target = $(e.target)
+     
+        if ( target.data('role') == 'UPDATE' )
+        {
+            
+            target.addClass('disabled')
+            var res = await CHAT_MODEL.group_post_show({
+                id: post_id,
+            })
+            target.removeClass('disabled')
+
+            if ( res.code == 404 )
+            {
+                CreateToast('PS', res.message, '')
+                return
+            }
+
+            var data = res.data
+
+            const defaultData = {
+                group_id: ChatObject.id,
+                group_name: ChatObject.name,
+                group_type: ChatObject.type,
+            }
+
+            data = {...defaultData, ...data}
+     
+            CreateChatGroupPostDialog(data, (dialogRes) =>
+            {
+                post.remove()
+                var options = dialogRes.data
+                options.prepend = true
+                appendPostUI(options)
+            })
+        }
+        else if ( target.data('role') == 'DELETE' )
+        {
+            PromptConfirmDialog().then(async () =>
+            {
+                target.addClass('disabled')
+                var res = await CHAT_MODEL.group_post_delete({
+                    id: post_id,
+                })
+                target.removeClass('disabled')
+
+                if ( res.code == 404 )
+                {
+                    CreateToast('PS', res.message, '')
+                    return
+                }
+
+                post.remove()
+            })
+
+        }
+    })
+
+    // REACTIONS //
+    const js_fb_action_like_button = post.find('.js_fb_action_like_button')
+    const js_fb_action_button_holder = js_fb_action_like_button.closest('.js_fb_action_button_holder')
+    const xfb_like = js_fb_action_like_button.find('.xfb-like')
+    const js_fb_like_button_icon = js_fb_action_like_button.find('.js_fb_like_button_icon')
+	const js_fb_like_button_text = js_fb_action_like_button.find('.js_fb_like_button_text')
+
+    // like
+    js_fb_action_like_button.off('click').on('click', async e =>
+    {
+        var reaction = CHAT_GROUP_POST_REACTIONS['like']
+        if ( post.data('is-liked') )
+        {
+            js_fb_action_like_button.removeClass('active')
+            xfb_like.removeClass('animate-pop')
+            post.data('is-liked', false).attr('data-is-liked', false)
+            
+            js_fb_like_button_icon.html( reaction.icon )
+            js_fb_like_button_text.html( FUI_DISPLAY_LANG.views.pages.global.reactions[reaction.code] )
+                    .removeClass( js_fb_like_button_text.data('prior-class') )
+                    .addClass(reaction.color).data('prior-class', reaction.color).data('data-prior-class', reaction.color)
+            // unlike
+            var res = await CHAT_MODEL.group_post_reaction_deleteByPostAndEmployee({
+                post_id: post_id,
+                employee_id: USER_CONFIG.employee_id,
+            })
+
+            if ( res.code == 404 ) 
+            {
+                CreateToast('PS', res.message, '')
+                return
+            }
+            // dispatch_onRefreshGroupPosts()
+            dispatch_onRefreshGroupPosts()
+        }
+        else
+        {
+            js_fb_action_like_button.addClass('active')
+            xfb_like.addClass('animate-pop')
+            post.data('is-liked', true).attr('data-is-liked', true)
+            // like
+            var res = await CHAT_MODEL.group_post_reaction_store({
+                post_id: post_id,
+                post_name: post_name,
+                employee_id: USER_CONFIG.employee_id,
+                employee_name: USER_CONFIG.employee_name,
+                employee_phone: USER_CONFIG.employee_phone,
+                employee_type_id: USER_CONFIG.employee_type_id,
+                employee_type_code: USER_CONFIG.employee_type_code,
+                reaction: 'like'
+            })
+
+            if ( res.code == 404 ) 
+            {
+                CreateToast('PS', res.message, '')
+                return
+            }
+            // dispatch_onRefreshGroupPosts()
+            dispatch_onRefreshGroupPosts()
+        }
+    })
+
+    js_fb_action_button_holder.off('mouseenter').on('mouseenter', async e =>
+    {
+        //
+        const reactions_list = js_fb_action_button_holder.find('.fb-reactions-list')
+        reactions_list.addClass('active')
+        reactions_list.off('click').on('click', async e =>
+        {
+            var target = $(e.target)
+
+            if ( target[0].nodeName == 'IMG' )
+            {
+                var reaction = CHAT_GROUP_POST_REACTIONS[target.data('reaction')]
+
+                // hide reactions
+                reactions_list.removeClass('active')
+
+                if ( reaction.code == 'like' )
+                {
+                    js_fb_action_like_button.addClass('active')
+                    xfb_like.addClass('animate-pop')
+                    post.data('is-liked', true).attr('data-is-liked', true)
+                }
+                else
+                {
+                    js_fb_action_like_button.removeClass('active')
+                    js_fb_like_button_icon.html(reaction.icon)
+                    js_fb_like_button_text.html( FUI_DISPLAY_LANG.views.pages.global.reactions[reaction.code] )
+                    .removeClass( js_fb_like_button_text.data('prior-class') )
+                    .addClass(reaction.color).data('prior-class', reaction.color).data('data-prior-class', reaction.color)
+                }
+
+                // like
+                var res = await CHAT_MODEL.group_post_reaction_store({
+                    post_id: post_id,
+                    post_name: post_name,
+                    employee_id: USER_CONFIG.employee_id,
+                    employee_name: USER_CONFIG.employee_name,
+                    employee_phone: USER_CONFIG.employee_phone,
+                    employee_type_id: USER_CONFIG.employee_type_id,
+                    employee_type_code: USER_CONFIG.employee_type_code,
+                    reaction: reaction.code
+                })
+    
+                if ( res.code == 404 ) 
+                {
+                    CreateToast('PS', res.message, '')
+                    return
+                }
+                // dispatch_onRefreshGroupPosts()
+                dispatch_onRefreshGroupPosts()
+            }
+        })
+    })
+    .off('mouseleave').on('mouseleave', e =>
+    {
+        const reactions_list = js_fb_action_button_holder.find('.fb-reactions-list')
+
+        reactions_list.removeClass('active')
+    })
+    
+    if ( user_reaction )
+    {
+        var reaction = CHAT_GROUP_POST_REACTIONS[user_reaction.reaction]
+        if ( user_reaction.reaction == 'like' )
+        {
+            post.find('.js_fb_action_like_button').addClass('active')  
+        }
+        else
+        {
+            post.find('.js_fb_like_button_icon').html( reaction.icon )
+            post.find('.js_fb_like_button_text').text( FUI_DISPLAY_LANG.views.pages.global.reactions[reaction.code] )
+            .addClass(reaction.color).data('prior-class', reaction.color).data('data-prior-class', reaction.color)   
+        }
+    }
+    // COMMENTS //
+    const js_post_comments_section =  post.find('.js_post_comments_section')
+
+    const js_fb_action_comment_button = post.find('.js_fb_action_comment_button')
+
+    const js_fb_add_comment_area = js_post_comments_section.find('.js_fb_add_comment_area')
+    var js_fb_add_comment__submit_button = js_post_comments_section.find('.js_fb_add_comment__submit_button')
+    var js_add_comment__comment_input = js_post_comments_section.find('.js_add_comment__comment_input')
+  
+    const js_fb_post_comments_wrapper = js_post_comments_section.find('.js_fb_post_comments_wrapper')
+    const js_fb_post_comments_list = js_post_comments_section.find('.js_fb_post_comments_list')
+
+    // trigger emojies
+    const js_fb_comment_action_emojy_trigger_button = js_post_comments_section.find('.js_fb_comment_action_emojy_trigger_button')
+    const js_fb_comment_action_add_media_button = js_post_comments_section.find('.js_fb_comment_action_add_media_button')
+
+    const js_fb_comment_emojy_container = js_post_comments_section.find('.js_fb_comment_emojy_container')
+
+    const comments_pickmePicker = new PickmePicker({
+        rootElement: js_fb_comment_emojy_container,
+        trigger: js_fb_comment_action_emojy_trigger_button,
+    })
+
+    const js_add_comment__media_file_input_holder = js_post_comments_section.find('.js_add_comment__media_file_input_holder')
+    const js_add_comment__media_file_input = js_post_comments_section.find('.js_add_comment__media_file_input')
+
+    const js_add_comment__media_preview_holder = js_post_comments_section.find('.js_add_comment__media_preview_holder')
+    const js_add_comment__media_preview_holder_close_button = js_post_comments_section.find('.js_add_comment__media_preview_holder_close_button')
+    
+    var PostCommentObject = {}
+    // emojy-selected
+    js_fb_comment_emojy_container.off('emojy-selected')
+	.on('emojy-selected', e =>
+	{
+		var emojy = e.originalEvent.detail.emojy
+        console.log(emojy)
+		// js_add_comment__comment_input.append(emojy.img)
+        console.log( js_add_comment__comment_input[0] )
+        js_add_comment__comment_input.append(emojy.span)
+		setCursorAtEnd(js_add_comment__comment_input)
+	})
+	// comments_pickmePicker.off('emojy-selected')
+	// .on('emojy-selected', e =>
+	// {
+	// 	var emojy = e.originalEvent.detail.emojy
+    //     console.log()
+	// 	// js_add_comment__comment_input.append(emojy.img)
+    //     console.log( js_add_comment__comment_input[0] )
+    //     js_add_comment__comment_input.append(emojy.span)
+	// 	setCursorAtEnd(js_add_comment__comment_input)
+	// })
+
+    var groupPostCommentsLimit = 3
+    // toggle comments section
+    js_fb_action_comment_button.off('click').on('click', e =>
+    {
+        js_post_comments_section.toggleClass('d-none')
+
+        js_add_comment__comment_input.trigger('focus')
+
+        if ( !js_post_comments_section.hasClass('d-none') )
+        {
+            displayPostComments({
+                method_type: 'group_post_comment_search',
+                query: '',
+                advanced: {
+                    post_id: post_id,
+                    orderBy: 'id',
+                    order: 'desc',
+                    offset: 0,
+                    limit: groupPostCommentsLimit
+                }
+            })
+        }
+    })
+
+    // trigger media file input
+    js_fb_comment_action_add_media_button.off('click').on('click', e =>
+    {
+        js_add_comment__media_file_input.trigger('click')
+    })
+    // select media
+    js_add_comment__media_file_input.off('change').on('change', async e =>
+    {
+        if ( js_add_comment__media_file_input[0].files.length == 0 ) return
+
+        const file = js_add_comment__media_file_input[0].files[0]
+
+        PostCommentObject.media = [
+            {
+                url: await imageToDataURL(file)
+            }
+        ]
+
+        js_add_comment__media_preview_holder.removeClass('d-none')
+    })
+    // js_add_comment__comment_input
+    js_add_comment__comment_input.off('keyup').on('keyup', e =>
+	{
+		if ( checkContentEditableEmpty(js_add_comment__comment_input) ) js_fb_add_comment__submit_button.removeClass('active')
+		else js_fb_add_comment__submit_button.addClass('active')
+
+        if ( e.key == 'Enter' && !e.shiftKey ) js_fb_add_comment__submit_button.trigger('click')
+	})
+    // js_fb_add_comment__submit_button
+    js_fb_add_comment__submit_button.off('click').on('click', async e =>
+    {
+        SectionLoader(js_fb_add_comment_area)
+
+        PostCommentObject.post_id = post_id
+        PostCommentObject.post_name = post_name
+        PostCommentObject.employee_id = USER_CONFIG.employee_id
+        PostCommentObject.employee_name = USER_CONFIG.employee_name
+        PostCommentObject.employee_phone = USER_CONFIG.employee_phone
+        PostCommentObject.employee_type_id = USER_CONFIG.employee_type_id
+        PostCommentObject.employee_type_code = USER_CONFIG.employee_type_code
+        PostCommentObject.comment = js_add_comment__comment_input.html()
+
+        var res = await CHAT_MODEL.group_post_comment_store(PostCommentObject)
+        SectionLoader(js_fb_add_comment_area, '')
+        if ( res.code == 404 ) return
+
+        resetPostCommentForm()
+        // prepend comment
+        var commentOptions = res.data
+
+        commentOptions.prepend = true
+        appendPostCommentUI(commentOptions)
+    })
+    //
+    // close media preview
+    js_add_comment__media_preview_holder_close_button.off('click').on('click', e =>
+    {
+        js_add_comment__media_preview_holder.addClass('d-none')
+        js_add_comment__media_file_input.val(null)
+        PostCommentObject.media = []
+    })
+    // dispatch_onNewAjaxContentLoaded
+    dispatch_onNewAjaxContentLoaded()
+
+    // reset comment form
+    function resetPostCommentForm()
+    {
+        js_add_comment__media_preview_holder.addClass('d-none')
+        js_add_comment__media_file_input_holder.addClass('d-none')
+        js_add_comment__media_file_input.val(null)
+        js_add_comment__comment_input.html('').trigger('blur')
+        PostCommentObject = {}
+    }
+
+    // displayPostComments
+    async function displayPostComments(params, callback = null)
+    {
+        // save comments container height for better UX
+        js_fb_post_comments_list.css('min-height', js_fb_post_comments_list.height() )
+
+        js_fb_post_comments_list.html('')
+
+        var view_more_comments_button_html = `<div class="">
+                                            <a class="text-secondary js_fb_load_more_comments_button" href="#">${FUI_DISPLAY_LANG.views.pages.global.view_more_comments_button}</a>
+                                        <div>`
+
+        if ( params.method_type == 'group_post_comment_search' ) var res = await CHAT_MODEL.group_post_comment_search(params)
+
+        if ( res.code == 404 ) return
+
+        var data = res.data
+        
+        $.each(data, (k,comment) =>
+        {
+            appendPostCommentUI(comment)
+        })
+
+        // append view more button
+        var js_fb_load_more_comments_button = js_fb_post_comments_wrapper.find('.js_fb_load_more_comments_button')
+        if ( groupPostCommentsLimit < options.total_comments )
+        {
+            if ( !js_fb_load_more_comments_button[0] )
+            {
+                js_fb_post_comments_wrapper.append(view_more_comments_button_html)
+                var js_fb_load_more_comments_button = js_fb_post_comments_wrapper.find('.js_fb_load_more_comments_button')
+            }
+        }
+        
+        if ( js_fb_load_more_comments_button[0] )
+        {
+            js_fb_load_more_comments_button.off('click').on('click', e =>
+            {
+                groupPostCommentsLimit += 3
+                displayPostComments({
+                    method_type: 'group_post_comment_search',
+                    query: '',
+                    advanced: {
+                        post_id: post_id,
+                        orderBy: 'id',
+                        order: 'desc',
+                        offset: 0,
+                        limit: groupPostCommentsLimit
+                    }
+                }, () =>
+                {
+                    // MAIN_CONTENT_CONTAINER.scrollTop( MAIN_CONTENT_CONTAINER[0].scrollHeight )
+                })
+                js_fb_load_more_comments_button.remove()
+            })
+        }
+
+        if ( typeof callback == 'function' )
+            callback(data)
+    }
+    // append post comment UI
+    function appendPostCommentUI(options = {})
+    {
+        var avatar = ''
+        var post_comment_media_html = ''
+
+        if ( options.media )
+        {
+            post_comment_media_html = '<div class="row gx-2 gy-2 mt-2">'
+            for (let i = 0; i < options.media.length; i++) 
+            {
+                const media = options.media[i]
+                
+                post_comment_media_html += `<div class="col-md-4">
+                                                <img src="${media.url}" class="js_img_previewable max-width-260px max-height-146px border-radius-10px">
+                                            </div>`
+            }
+            post_comment_media_html+= '</div>'
+        }
+
+        if ( options.employeeData )
+        {
+            avatar = imgFallback(options.employeeData.employee_avatar, '../assets/img/utils/user.png' )
+            user_name = options.employee_name
+            user_phone = options.employee_phone
+        }
+        else
+        {
+            avatar = imgFallback(options.patientData.patientAvatar, '../assets/img/utils/user.png' )
+            user_name = options.patientName
+            user_phone = options.patientPhone
+        }
+        var html = `<li class="fb-comment mb-3" data-role="post-comment" id="post_comment_${options.id}" data-id="${options.id}">
+                        <div class="fb-comment-avatar">
+                            <img src="${avatar}" class=""> 
+                        </div>
+                        <div class="fb-comment-details w-100">
+                            <div class="fb-comment-user-name">${user_name}</div>
+                            <div class="fb-comment-body">
+                               ${options.comment}  
+                            </div>
+                            ${post_comment_media_html}
+                        </div>
+                    </li>`
+
+        if ( options.prepend ) js_fb_post_comments_list.prepend(html)
+        else js_fb_post_comments_list.append(html)
+
+        // dispatch_onNewAjaxContentLoaded
+        dispatch_onNewAjaxContentLoaded()
+    }
+}
+
+
+
+})
+
+</script>

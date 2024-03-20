@@ -1,0 +1,251 @@
+<div class="container-fluid" id="create_contractors_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.sectionTitle %></h1>
+	</div>
+
+    <div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+        <img src="assets/img/utils/info.png" class="alert-icon" alt="">
+        <div class="alert-text" id="text"></div>
+    </div>
+
+	<div class="mt-5">
+
+		<form action="#" id="create_form">
+			<div class="row gx-4 gy-4">
+
+				<div class="col-md-6">
+
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label01 %></label>
+							<input type="text" class="input-text input-text-outline" name="name" id="name_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label02 %></label>
+							<input type="text" class="input-text input-text-outline" name="phone1" id="phone1_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label03 %></label>
+							<input type="text" class="input-text input-text-outline" name="phone2" id="phone2_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label04 %></label>
+							<input type="text" class="input-text input-text-outline" name="phone3" id="phone3_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label05 %></label>
+							<input type="text" class="input-text input-text-outline" name="address" id="address_input">
+						</div>	
+					</div>
+
+				</div>
+
+				<div class="col-md-6">
+
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label06 %></label>
+							<input type="email" class="input-text input-text-outline" name="email1" id="email1_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label07 %></label>
+							<input type="email" class="input-text input-text-outline" name="email2" id="email2_input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label08 %></label>
+							<input type="email" class="input-text input-text-outline" name="email3" id="email3_input">
+						</div>	
+					</div>
+
+				</div>
+				
+				<div class="col-md-12">
+
+					<div class="row">
+
+						<div class="col-md-6">
+
+							<div class=" w-100">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-file.template.ejs`, {
+                                    componentId: 'select_file_component',
+                                    fileInputId: 'image_file_input',
+                                    options: {
+                                        isDismissable: false,
+                                        accept: 'image/*',
+                                        previewTarget: '#image_preview'
+                                    }
+                                }) -%>
+                            </div>
+
+						</div>
+
+						<div class="col-md-6 d-flex justify-content-center align-items-center">
+
+							<div class="w-100 height-280px d-flex justify-content-center align-items-center">
+								<img src="" id="image_preview" data-placeholder="../assets/img/utils/placeholder.jpg" class="img-thumbnail w-100 h-100 js_image_src_placeholder" alt="">	
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+			</div>
+			<div class="mt-3">
+				<input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.submitBTN01 %>">
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+
+    $(function()
+    {
+
+        const page_container = $('#create_contractors_container')
+        if ( !page_container[0] ) return
+
+        const create_form = page_container.find('#create_form')
+        const name_input = page_container.find('#name_input')
+        const phone1_input = page_container.find('#phone1_input')
+        const phone2_input = page_container.find('#phone2_input')
+        const phone3_input = page_container.find('#phone3_input')
+        const address_input = page_container.find('#address_input')
+        const email1_input = page_container.find('#email1_input')
+        const email2_input = page_container.find('#email2_input')
+        const email3_input = page_container.find('#email3_input')
+        const image_file_input = page_container.find('#image_file_input')
+        const image_preview = page_container.find('#image_preview')
+
+        var ContractorObject = sessionData(true)
+        // submit
+        create_form.on('submit', async e =>
+        {
+            e.preventDefault()
+
+            // check name
+            if ( isNull(name_input.val()) )
+            {
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_empty_input, '')
+                return
+            }
+
+            const FORM_DATA = new FormData()
+
+
+            FORM_DATA.append('administration_id', USER_CONFIG.administration.clinicId)
+            FORM_DATA.append('administration_name', USER_CONFIG.administration.clinicName)
+            FORM_DATA.append('name', name_input.val())
+            FORM_DATA.append('phone1', phone1_input.val())
+            FORM_DATA.append('phone2', phone2_input.val())
+            FORM_DATA.append('phone3', phone3_input.val())
+            FORM_DATA.append('address', address_input.val())
+            FORM_DATA.append('email1', email1_input.val())
+            FORM_DATA.append('email2', email2_input.val())
+            FORM_DATA.append('email3', email3_input.val())
+            
+            if ( image_file_input[0].files.length > 0 ) FORM_DATA.append('image', image_file_input[0].files[0] )
+
+            create_form.find(':submit').addClass('disabled')
+
+            // update
+            if ( !isNull(ContractorObject.id) )
+            {
+                FORM_DATA.append('id', ContractorObject.id)
+                try 
+                {
+                    image_file_input.next().removeClass('d-none')
+                    var res = await CONTRACTOR_MODEL.update(FORM_DATA, progress =>
+                    {
+                        const percent = progress.percentComplete.toFixed(2)
+	
+					    image_file_input.next().find('.progress-bar').css('width', percent + '%')
+                    })
+                    
+                } 
+                catch (error) 
+                {
+                    console.error(error)
+                    CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error, '')
+                    image_file_input.next().addClass('d-none')
+                    create_form.find(':submit').removeClass('disabled')
+                    return
+                }
+
+                image_file_input.next().addClass('d-none')
+                create_form.find(':submit').removeClass('disabled')
+                CreateToast('PS', res.message, '')
+
+                if ( res.code == 404 ) return
+
+                ContractorObject.id = null
+                create_form[0].reset()
+                image_preview.removeAttr('src')
+                // dispatch_onNewAjaxContentLoaded
+                dispatch_onNewAjaxContentLoaded()
+
+                return
+            }
+            // create
+            try 
+            {
+                image_file_input.next().removeClass('d-none')
+                var res = await CONTRACTOR_MODEL.store(FORM_DATA, progress =>
+                {
+                    const percent = progress.percentComplete.toFixed(2)
+
+                    image_file_input.next().find('.progress-bar').css('width', percent + '%')
+                })
+                
+            } 
+            catch (error) 
+            {
+                console.error(error)
+                CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error, '')
+                image_file_input.next().addClass('d-none')
+                create_form.find(':submit').removeClass('disabled')
+                return
+            }
+
+            image_file_input.next().addClass('d-none')
+            create_form.find(':submit').removeClass('disabled')
+            CreateToast('PS', res.message, '')
+            
+            if ( res.code == 404 ) return
+
+            create_form[0].reset()
+            image_preview.removeAttr('src')
+            // dispatch_onNewAjaxContentLoaded
+            dispatch_onNewAjaxContentLoaded()
+        })
+        // displayOne
+        displayOne()
+        function displayOne()
+        {
+            if ( isNull(ContractorObject.id) ) return
+
+            fillForm(create_form, ContractorObject)
+
+            if ( ContractorObject.image )
+            {
+                image_preview.attr('src', ContractorObject.image.url)
+            }
+        }
+    })
+
+</script>

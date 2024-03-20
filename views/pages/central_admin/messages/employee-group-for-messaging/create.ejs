@@ -1,0 +1,286 @@
+<div class="container-fluid" id="create_employee_group_for_messaging_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_employees.sectionTitle %></h1>
+	</div>
+
+    <div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+        <img src="assets/img/utils/info.png" class="alert-icon" alt="">
+        <div class="alert-text" id="text"></div>
+    </div>
+
+	<div class="mt-3" id="wrapper01">
+
+		<form action="#" id="create_form">
+			
+            <div class="row">
+
+                <div class="col-lg-4 col-md-6">
+
+                    <div class="app-block">
+
+                        <div class="mb-2">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-employees.template.ejs`, {
+                                eventsReceiverId: 'create_employee_group_for_messaging_container',
+                                selectId: "employee_select",
+                            }) -%>
+                        </div>
+
+                        <div class="mb-2">
+
+                            <div class="table-nav">
+
+                                <div class="row gy-3">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                            searchBtnId: 'search_btn',
+                                            searchInputId: 'search_input',
+                                        }) -%>
+                                    </div>
+                    
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-centers.template.ejs`, {
+                                            eventsReceiverId: 'create_employee_group_for_messaging_container',
+                                            selectId: "center_select"
+                                        }) -%>
+                                    </div>
+                    
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-employee-type.template.ejs`, {
+                                            eventsReceiverId: 'create_employee_group_for_messaging_container',
+                                            selectId: "employee_job_select",
+                                            employeeTypeTargetCenter: "all",
+                                        }) -%>
+                                    </div>
+                    
+                                </div>
+                    
+                            </div>
+
+                        </div>
+
+                        <div class="">
+                            <input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+                <div class="col-lg col-md">
+
+                    <div class="app-block">
+
+                        <div id="pagination" class="my-3 flex flex-center"></div>
+
+                        <div class="utable shadowed" id="table_element">
+                            <div class="thead">
+                                <div class="td">#</div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th11 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th12 %></div>
+                            </div>
+                            <div class="tbody">
+                                <!--
+                                <div class="tr">
+                                    <div class="td">
+                                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+                                    </div>
+                                    <div class="td">clinicname</div>
+                                    <div class="td">classname</div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+		</form>
+
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#create_employee_group_for_messaging_container');
+if ( page_container[0] == undefined ) return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var create_form = page_container.find('#create_form');
+var pagination = page_container.find('#pagination');
+var table_element = page_container.find('#table_element');
+
+var search_input = page_container.find('#search_input');
+var search_btn = page_container.find('#search_btn');
+
+var employee_select = page_container.find('#employee_select');
+var center_select = page_container.find('#center_select');
+var employee_job_select = page_container.find('#employee_job_select');
+
+var GroupForMessagingObject = {
+    data: sessionData(true)
+}
+// submit
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    var target = create_form
+
+    var employee = checkJSON( decodeURIComponent( atob( employee_select.find(':selected').data('object') ) ) )
+
+    GroupForMessagingObject.employee_id = employee.employee_id
+    GroupForMessagingObject.employee_name = employee.employee_name
+    GroupForMessagingObject.employee_phone = employee.employee_phone
+    GroupForMessagingObject.employee_type_id = employee.employee_type_id
+    GroupForMessagingObject.employee_type_code = employee.employee_type_code
+    GroupForMessagingObject.administration_id = employee.administration_id
+    GroupForMessagingObject.administration_name = employee.administration_name
+    GroupForMessagingObject.targets = selectedTargets()
+
+    SectionLoader(target)
+
+    // if ( GroupForMessagingObject.id )
+    // {
+    //     var res = await EMPLOYEE_MODEL.employee_group_for_messaging_update(GroupForMessagingObject)
+    //     SectionLoader(target, '')
+
+    //     ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+        
+    //     if (res.code == 404) return
+
+    //     target[0].reset()
+    //     GroupForMessagingObject.id = null
+
+    //     return
+    // }
+
+    var res = await EMPLOYEE_MODEL.employee_group_for_messaging_batchStore(GroupForMessagingObject)
+    SectionLoader(target, '')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    
+    if (res.code == 404) return
+
+    target[0].reset()
+})
+// search
+search_btn.on('click', e =>
+{
+    displayAll({
+        method_type: 'search',
+        query: search_input.val(),
+        advanced: {
+            administration_id: center_select.find(':selected').val(),
+            employee_type_id: employee_job_select.find(':selected').val(),
+        }
+    })
+})
+search_input.on('click', e =>
+{
+    displayAll({
+        method_type: 'search',
+        query: search_input.val(),
+    })
+})
+// display all
+displayAll({
+    method_type: 'search',
+    query: search_input.val()
+})
+async function displayAll(params)
+{
+    table_element.find('.tbody').html('')
+    SectionLoader(table_element)
+    if ( params.method_type == 'search' ) var res = await EMPLOYEE_MODEL.search(params)
+
+    SectionLoader(table_element, '')
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        var checked = ''
+        for (let i = 0; i < GroupForMessagingObject.data.length; i++) 
+        {
+            const row = GroupForMessagingObject.data[i]
+            
+            if ( v.employee_id == row.target_employee_id )
+                checked = 'checked'
+        }
+
+        html += `<div class="tr" data-role="row" data-employee-id="${v.employee_id}" data-employee-name="${v.employee_name}" data-employee-phone="${v.employee_phone}" data-employee-type-id="${v.employee_type_id}" data-employee-type-code="${v.employee_type_code}" data-administration-id="${v.administration_id}" data-administration-name="${v.administration_name}">
+                    <div class="td">
+                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK" ${checked}>
+                    </div>
+                    <div class="td">
+                        <div class="mb-2">${v.employee_name} (${v.employee_phone})</div> 
+                        <div class="mb-2">(${FUI_DISPLAY_LANG.views.pages.global.employee_type_codes[v.employee_type_code]})</div>    
+                    </div>
+                    <div class="td">
+                        ${v.administration_name}
+                    </div>
+                </div>PAG_SEP`
+    })
+
+    new SmoothPagination(pagination, table_element.find('.tbody'), {
+        data: html.split('PAG_SEP')
+    })
+}
+
+// display info
+displayInfo()
+function displayInfo()
+{
+    if ( Object.keys(GroupForMessagingObject.data).length == 0 ) return
+
+    $(document).off('employee-selected').on('employee-selected', e =>
+    {
+        var detail = e.originalEvent.detail
+
+        setOptionSelected( employee_select, detail.employee.id )
+    })
+}
+
+// selected targets
+function selectedTargets()
+{
+    var list = []
+
+    var items = table_element.find('[data-role="row"]')
+
+    for (let i = 0; i < items.length; i++) 
+    {
+        const parent = $(items[i])
+        const check = parent.find('[data-role="CHECK"]')
+
+        if ( check.is(':checked') )
+        {
+            list.push({
+                target_employee_id: parent.data('employee-id'),
+                target_employee_name: parent.data('employee-name'),
+                target_employee_phone: parent.data('employee-phone'),
+                target_employee_type_id: parent.data('employee-type-id'),
+                target_employee_type_code: parent.data('employee-type-code'),
+                target_administration_id: parent.data('administration-id'),
+                target_administration_name: parent.data('administration-name'),
+            })
+        }
+    }
+
+    return list
+}
+
+})
+
+</script>

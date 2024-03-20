@@ -1,0 +1,2548 @@
+<div class="container-fluid" id="general_totals_statistics_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_clinics.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-5">
+
+        <div class="row gy-4 mb-4">
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="appointments_total_box" data-perm="general_totals_appointments_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/appointment.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text6 %></div>
+                        <div class="box-1-value">0</div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'appointments_total_box_chart_timestamp',
+                        selectId: 'appointments_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_appointments_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_appointments_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_appointments_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_appointments_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_appointments_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_appointments_total_chart_statistics">
+                        <canvas id="appointments_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+                <div class="mt-4" data-perm="detailed_tables_total_appointments_for_each_class">
+                    <a href="#" class="js_panel_toggler_button" data-target="#detailed_tables_appointments_panel">
+                        <%= UI_DISPLAY_LANG.views.pages.global.statistics.text15 %>
+                    </a>
+                </div>
+
+                <div class="d-none bg-white border py-3 px-2 rounded mt-4" id="detailed_tables_appointments_panel">
+
+                    <div class="has-text-aligned-locale-inverted">
+                        <div class="close-button-sm js_panel_close_button" data-target="#detailed_tables_appointments_panel">
+                            <i class="xfb xfb-close-sm-thin"></i>
+                        </div>
+                    </div>
+
+                    <div class="">
+
+                        <div class="table-nav">
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                        searchBtnId: 'detailed_tables_appointments_search_btn',
+                                        searchInputId: 'detailed_tables_appointments_search_input',
+                                    }) -%>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                        dateStartId: 'detailed_tables_appointments_date_start_input',
+                                        dateEndId: 'detailed_tables_appointments_date_end_input',
+                                    }) -%>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div id="detailed_tables_appointments_pagination" class="my-3 flex flex-center"></div>
+                        <div class="utable shadowed" id="detailed_tables_appointments_tableElement">
+                            <div class="thead">
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th48 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text6 %></div>
+                            </div>
+                            <div class="tbody">
+                                <!--
+                                <div class="tr">
+                                    <div class="td">
+                                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+                                    </div>
+                                    <div class="td">clinicname</div>
+                                    <div class="td">classname</div>
+                                    <div class="td">classdesc</div>
+                                    <div class="td">date</div>
+                                    <div class="td">
+                                        <button class="btn btn-primary btn-sm pointer" data-role="UPDATE" data-aptid="">
+                                            <span class="no-pointer"><i class="fas fa-edit"></i></span>
+                                        </button>		
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="prescriptions_total_box" data-perm="general_totals_prescriptions_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/prescription.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text7 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'prescriptions_total_box_chart_timestamp',
+                        selectId: 'prescriptions_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_prescriptions_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_prescriptions_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_prescriptions_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_prescriptions_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_prescriptions_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_prescriptions_total_chart_statistics">
+                        <canvas id="prescriptions_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="store_selling_invoices_total_box" data-perm="general_totals_store_selling_invoices_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/invoice.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text8 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'store_selling_invoices_total_box_chart_timestamp',
+                        selectId: 'store_selling_invoices_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_store_selling_invoices_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_store_selling_invoices_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_store_selling_invoices_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_store_selling_invoices_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_store_selling_invoices_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_store_selling_invoices_total_chart_statistics">
+                        <canvas id="store_selling_invoices_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+                <div class="mt-4" data-perm="detailed_tables_total_sales_for_each_product">
+                    <a href="#" class="js_panel_toggler_button" data-target="#detailed_tables_store_selling_invoices_product_sales_panel">
+                        <%= UI_DISPLAY_LANG.views.pages.global.statistics.text16 %>
+                    </a>
+                </div>
+
+                <div class="d-none bg-white border py-3 px-2 rounded mt-4" id="detailed_tables_store_selling_invoices_product_sales_panel">
+
+                    <div class="has-text-aligned-locale-inverted">
+                        <div class="close-button-sm js_panel_close_button" data-target="#detailed_tables_store_selling_invoices_product_sales_panel">
+                            <i class="xfb xfb-close-sm-thin"></i>
+                        </div>
+                    </div>
+
+                    <div class="">
+
+                        <div class="table-nav">
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                        searchBtnId: 'detailed_tables_store_selling_invoices_product_sales_search_btn',
+                                        searchInputId: 'detailed_tables_store_selling_invoices_product_sales_search_input',
+                                    }) -%>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                        dateStartId: 'detailed_tables_store_selling_invoices_product_sales_date_start_input',
+                                        dateEndId: 'detailed_tables_store_selling_invoices_product_sales_date_end_input',
+                                    }) -%>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div id="detailed_tables_store_selling_invoices_product_sales_pagination" class="my-3 flex flex-center"></div>
+                        <div class="utable shadowed" id="detailed_tables_store_selling_invoices_product_sales_tableElement">
+                            <div class="thead">
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th26 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text17 %></div>
+                            </div>
+                            <div class="tbody">
+                                <!--
+                                <div class="tr">
+                                    <div class="td">
+                                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+                                    </div>
+                                    <div class="td">clinicname</div>
+                                    <div class="td">classname</div>
+                                    <div class="td">classdesc</div>
+                                    <div class="td">date</div>
+                                    <div class="td">
+                                        <button class="btn btn-primary btn-sm pointer" data-role="UPDATE" data-aptid="">
+                                            <span class="no-pointer"><i class="fas fa-edit"></i></span>
+                                        </button>		
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="patients_total_box" data-perm="general_totals_patients_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/youth.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text9 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'patients_total_box_chart_timestamp',
+                        selectId: 'patients_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_patients_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_patients_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_patients_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_patients_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_patients_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_patients_total_chart_statistics">
+                        <canvas id="patients_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+                <div class="mt-4">
+                    <a href="#" class="js_panel_toggler_button" data-target="#view_more_patients_total_panel">
+                        <%= UI_DISPLAY_LANG.views.pages.global.view_more %>
+                    </a>
+                </div>
+
+                <div class="d-none bg-white border py-3 px-2 rounded mt-4" id="view_more_patients_total_panel">
+
+                    <div class="has-text-aligned-locale-inverted">
+                        <div class="close-button-sm js_panel_close_button" data-target="#view_more_patients_total_panel">
+                            <i class="xfb xfb-close-sm-thin"></i>
+                        </div>
+                    </div>
+
+                    <div class="row gy-3">
+
+                        <div class="col-md-12">
+
+                            <div class="box-1 mb-5" id="patients_total_males_box" data-perm="general_totals_patients_total_males_statistics">
+                                <div class="box-1-image-holder">
+                                    <img src="../assets/img/icons/male.png" alt="">
+                                </div>
+                                <div class="box-1-content">
+                                    <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text30 %></div>
+                                    <div class="box-1-value"></div>
+                                </div>
+                            </div>
+            
+                            <div class="">
+            
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                    componentId: 'patients_total_males_box_chart_timestamp',
+                                    selectId: 'patients_total_males_box_chart_timestamp_select',
+                                    options: {
+                                        option1: {
+                                            permission: 'general_totals_patients_total_males_chart_current_week_statistics',
+                                        },
+                                        option2: {
+                                            permission: 'general_totals_patients_total_males_chart_current_month_statistics',
+                                        },
+                                        option3: {
+                                            permission: 'general_totals_patients_total_males_chart_current_year_statistics',
+                                        },
+                                        option4: {
+                                            permission: 'general_totals_patients_total_males_chart_today_statistics',
+                                        },
+                                        option5: {
+                                            permission: 'general_totals_patients_total_males_chart_all_time_statistics',
+                                        },
+                                    },
+                                }) -%>
+            
+                                <div class="w-100 h-100" data-perm="general_totals_patients_total_males_chart_statistics">
+                                    <canvas id="patients_total_males_box_chart"></canvas>
+                                </div>
+            
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="box-1 mb-5" id="patients_total_females_box" data-perm="general_totals_patients_total_females_statistics">
+                                <div class="box-1-image-holder">
+                                    <img src="../assets/img/icons/female.png" alt="">
+                                </div>
+                                <div class="box-1-content">
+                                    <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text31 %></div>
+                                    <div class="box-1-value"></div>
+                                </div>
+                            </div>
+            
+                            <div class="">
+            
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                    componentId: 'patients_total_females_box_chart_timestamp',
+                                    selectId: 'patients_total_females_box_chart_timestamp_select',
+                                    options: {
+                                        option1: {
+                                            permission: 'general_totals_patients_total_females_chart_current_week_statistics',
+                                        },
+                                        option2: {
+                                            permission: 'general_totals_patients_total_females_chart_current_month_statistics',
+                                        },
+                                        option3: {
+                                            permission: 'general_totals_patients_total_females_chart_current_year_statistics',
+                                        },
+                                        option4: {
+                                            permission: 'general_totals_patients_total_females_chart_today_statistics',
+                                        },
+                                        option5: {
+                                            permission: 'general_totals_patients_total_females_chart_all_time_statistics',
+                                        },
+                                    },
+                                }) -%>
+            
+                                <div class="w-100 h-100" data-perm="general_totals_patients_total_females_chart_statistics">
+                                    <canvas id="patients_total_females_box_chart"></canvas>
+                                </div>
+            
+                            </div>
+
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <h2 class="h2 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text13 %></h2>
+
+        <div class="row gy-4 mb-4">
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="products_total_box" data-perm="general_totals_products_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/box.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text25 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'products_total_box_chart_timestamp',
+                        selectId: 'products_total_box_chart_timestamp_select',
+                        selected: 'all_time',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_products_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_products_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_products_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_products_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_products_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_products_total_chart_statistics">
+                        <canvas id="products_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="consummables_total_box" data-perm="general_totals_consummables_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/syringe.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text26 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'consummables_total_box_chart_timestamp',
+                        selectId: 'consummables_total_box_chart_timestamp_select',
+                        selected: 'all_time',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_consummables_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_consummables_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_consummables_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_consummables_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_consummables_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_consummables_total_chart_statistics">
+                        <canvas id="consummables_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <h2 class="h2 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text21 %></h2>
+
+        <div class="row gy-4 mb-4">
+            
+            <div class="col-lg-12 col-md-12">
+
+                <div class="box-1 mb-5" id="depts_total_box" data-perm="general_totals_depts_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/liability.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text22 %></div>
+                        <div class="box-1-value">0</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="dept_actions_in_mount_total_box" data-perm="general_totals_dept_actions_in_mount_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/increase.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text23 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'dept_actions_in_mount_total_box_chart_timestamp',
+                        selectId: 'dept_actions_in_mount_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_dept_actions_in_mount_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_dept_actions_in_mount_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_dept_actions_in_mount_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_dept_actions_in_mount_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_dept_actions_in_mount_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_products_total_chart_statistics">
+                        <canvas id="dept_actions_in_mount_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="box-1 mb-5" id="dept_actions_out_amount_total_box" data-perm="general_totals_dept_actions_out_amount_total_statistics">
+                    <div class="box-1-image-holder">
+                        <img src="../assets/img/icons/decrease.png" alt="">
+                    </div>
+                    <div class="box-1-content">
+                        <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text24 %></div>
+                        <div class="box-1-value"></div>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                        componentId: 'dept_actions_out_amount_total_box_chart_timestamp',
+                        selectId: 'dept_actions_out_amount_total_box_chart_timestamp_select',
+                        options: {
+                            option1: {
+                                permission: 'general_totals_dept_actions_out_amount_total_chart_current_week_statistics',
+                            },
+                            option2: {
+                                permission: 'general_totals_dept_actions_out_amount_total_chart_current_month_statistics',
+                            },
+                            option3: {
+                                permission: 'general_totals_dept_actions_out_amount_total_chart_current_year_statistics',
+                            },
+                            option4: {
+                                permission: 'general_totals_dept_actions_out_amount_total_chart_today_statistics',
+                            },
+                            option5: {
+                                permission: 'general_totals_dept_actions_out_amount_total_chart_all_time_statistics',
+                            },
+                        },
+                    }) -%>
+
+                    <div class="w-100 h-100" data-perm="general_totals_products_total_chart_statistics">
+                        <canvas id="dept_actions_out_amount_total_box_chart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#general_totals_statistics_container')
+if ( !page_container[0] ) return
+
+// set MAIN_CONTENT_CONTAINER css
+MAIN_CONTENT_CONTAINER.css('background-color', '#ffffff')
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var center_id = USER_CONFIG.administration.clinicId
+
+// total
+setup_general_totals()
+function setup_general_totals()
+{
+    const appointments_total_box = page_container.find('#appointments_total_box')
+    const appointments_total_box_chart_timestamp_select =  page_container.find('#appointments_total_box_chart_timestamp_select')
+    const appointments_total_box_chart =  page_container.find('#appointments_total_box_chart')
+    var appointments_total_box_chartjs = null
+
+    const prescriptions_total_box = page_container.find('#prescriptions_total_box')
+    const prescriptions_total_box_chart_timestamp_select =  page_container.find('#prescriptions_total_box_chart_timestamp_select')
+    const prescriptions_total_box_chart =  page_container.find('#prescriptions_total_box_chart')
+    var prescriptions_total_box_chartjs = null
+
+    const store_selling_invoices_total_box = page_container.find('#store_selling_invoices_total_box')
+    const store_selling_invoices_total_box_chart_timestamp_select =  page_container.find('#store_selling_invoices_total_box_chart_timestamp_select')
+    const store_selling_invoices_total_box_chart =  page_container.find('#store_selling_invoices_total_box_chart')
+    var store_selling_invoices_total_box_chartjs = null
+
+    const patients_total_box = page_container.find('#patients_total_box')
+    const patients_total_box_chart_timestamp_select =  page_container.find('#patients_total_box_chart_timestamp_select')
+    const patients_total_box_chart =  page_container.find('#patients_total_box_chart')
+    var patients_total_box_chartjs = null
+
+    const patients_total_males_box = page_container.find('#patients_total_males_box')
+    const patients_total_males_box_chart_timestamp_select =  page_container.find('#patients_total_males_box_chart_timestamp_select')
+    const patients_total_males_box_chart =  page_container.find('#patients_total_males_box_chart')
+    var patients_total_males_box_chartjs = null
+
+    const patients_total_females_box = page_container.find('#patients_total_females_box')
+    const patients_total_females_box_chart_timestamp_select =  page_container.find('#patients_total_females_box_chart_timestamp_select')
+    const patients_total_females_box_chart =  page_container.find('#patients_total_females_box_chart')
+    var patients_total_females_box_chartjs = null
+
+    const products_total_box = page_container.find('#products_total_box')
+    const products_total_box_chart_timestamp_select =  page_container.find('#products_total_box_chart_timestamp_select')
+    const products_total_box_chart =  page_container.find('#products_total_box_chart')
+    var products_total_box_chartjs = null
+
+    const consummables_total_box = page_container.find('#consummables_total_box')
+    const consummables_total_box_chart_timestamp_select =  page_container.find('#consummables_total_box_chart_timestamp_select')
+    const consummables_total_box_chart =  page_container.find('#consummables_total_box_chart')
+    var consummables_total_box_chartjs = null
+
+    const depts_total_box = page_container.find('#depts_total_box')
+
+    const dept_actions_in_mount_total_box = page_container.find('#dept_actions_in_mount_total_box')
+    const dept_actions_in_mount_total_box_chart_timestamp_select =  page_container.find('#dept_actions_in_mount_total_box_chart_timestamp_select')
+    const dept_actions_in_mount_total_box_chart =  page_container.find('#dept_actions_in_mount_total_box_chart')
+    var dept_actions_in_mount_total_box_chartjs = null
+
+    const dept_actions_out_amount_total_box = page_container.find('#dept_actions_out_amount_total_box')
+    const dept_actions_out_amount_total_box_chart_timestamp_select =  page_container.find('#dept_actions_out_amount_total_box_chart_timestamp_select')
+    const dept_actions_out_amount_total_box_chart =  page_container.find('#dept_actions_out_amount_total_box_chart')
+    var dept_actions_out_amount_total_box_chartjs = null
+
+    // appointments
+    appointments_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = appointments_total_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                type: 'private',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(aptId) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                type: 'private',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(aptId) as total, aptDate as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(aptId) as total, aptDate as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(aptId) as total, aptDate as date, DATE_FORMAT(aptDate, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(aptId) as total, aptDate as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(aptId) as total, aptDate as date, DATE_FORMAT(aptDate, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(aptId) as total, aptDate as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.appointment_search(TotalSearchObject)
+
+        appointments_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            appointments_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.appointment_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            appointments_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        appointments_total_box_chart.removeClass('d-none')
+    
+        createAppointment_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text6,
+                        data: values,
+                        borderColor: 'rgba(109, 157, 255, 1)',
+                        backgroundColor: 'rgba(109, 157, 255, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    appointments_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function createAppointment_box_chart(options = {})
+    {
+        const ctx = appointments_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text10
+                    }
+                }
+            },
+        }
+
+        if ( appointments_total_box_chartjs ) appointments_total_box_chartjs.destroy()
+
+        appointments_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // prescriptions
+    prescriptions_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = prescriptions_total_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(prescriptionId) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date, DATE_FORMAT(prescriptionDate, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date, DATE_FORMAT(prescriptionDate, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(prescriptionId) as total, prescriptionDate as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.prescription_search(TotalSearchObject)
+
+        prescriptions_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            prescriptions_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.prescription_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            prescriptions_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        prescriptions_total_box_chart.removeClass('d-none')
+    
+        createPrescriptions_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text7,
+                        data: values,
+                        borderColor: 'rgba(255, 128, 213, 1)',
+                        backgroundColor: 'rgba(255, 128, 213, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    prescriptions_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function createPrescriptions_box_chart(options = {})
+    {
+        const ctx = prescriptions_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text7
+                    }
+                }
+            },
+        }
+
+        if ( prescriptions_total_box_chartjs ) prescriptions_total_box_chartjs.destroy()
+
+        prescriptions_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // store selling invoices
+    store_selling_invoices_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = store_selling_invoices_total_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                supplier_id: center_id,
+                order_direction: 'CENTER_TO_CLIENT_SELLING_INVOICE',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(order_id) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                supplier_id: center_id,
+                order_direction: 'CENTER_TO_CLIENT_SELLING_INVOICE',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(order_id) as total, order_date as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(order_id) as total, order_date as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(order_id) as total, order_date as date, DATE_FORMAT(order_date, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(order_id) as total, order_date as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(order_id) as total, order_date as date, DATE_FORMAT(order_date, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(order_id) as total, order_date as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.order_search(TotalSearchObject)
+       
+        store_selling_invoices_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            store_selling_invoices_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.order_search(ChartSearchObject)
+        
+        if ( res.code == 404 )
+        {
+            store_selling_invoices_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        store_selling_invoices_total_box_chart.removeClass('d-none')
+    
+        createOrders_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text8,
+                        data: values,
+                        borderColor: 'rgba(0, 179, 0, 1)',
+                        backgroundColor: 'rgba(102, 255, 102, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    store_selling_invoices_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function createOrders_box_chart(options = {})
+    {
+        const ctx = store_selling_invoices_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text11
+                    }
+                }
+            },
+        }
+
+        if ( store_selling_invoices_total_box_chartjs ) store_selling_invoices_total_box_chartjs.destroy()
+
+        store_selling_invoices_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // Patients
+    patients_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = patients_total_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(patientId) as total FROM",
+                },
+                is_deleted: false,
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+                is_deleted: false,
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.patient_search(TotalSearchObject)
+
+        patients_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            patients_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.patient_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            patients_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        patients_total_box_chart.removeClass('d-none')
+    
+        createPatients_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text9,
+                        data: values,
+                        borderColor: 'rgba(255, 184, 77, 1)',
+                        backgroundColor: 'rgba(255, 184, 77, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    patients_total_box_chart_timestamp_select.trigger('change')
+    
+    // Patients males
+    patients_total_males_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = patients_total_males_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(patientId) as total FROM",
+                },
+                is_deleted: false,
+                patientGender: 'ذكر',
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+                is_deleted: false,
+                patientGender: 'ذكر',
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.patient_search(TotalSearchObject)
+
+        patients_total_males_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            patients_total_males_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.patient_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            patients_total_males_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        patients_total_males_box_chart.removeClass('d-none')
+    
+        createPatientsMales_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text30,
+                        data: values,
+                        borderColor: 'rgba(230, 255, 153, 1)',
+                        backgroundColor: 'rgba(230, 255, 153, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    patients_total_males_box_chart_timestamp_select.trigger('change')
+    
+    // Patients females
+    patients_total_females_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = patients_total_females_box_chart_timestamp_select.find(':selected').val()
+      
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT COUNT(patientId) as total FROM",
+                },
+                is_deleted: false,
+                patientGender: 'أنثى',
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+                is_deleted: false,
+                patientGender: 'أنثى',
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date, DATE_FORMAT(patientDate, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(patientId) as total, patientDate as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.patient_search(TotalSearchObject)
+
+        patients_total_females_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            patients_total_females_box.find('.box-1-value').text( res.data[0].total )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.patient_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            patients_total_females_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        patients_total_females_box_chart.removeClass('d-none')
+    
+        createPatientsFemales_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text31,
+                        data: values,
+                        borderColor: 'rgba(255, 128, 255, 1)',
+                        backgroundColor: 'rgba(255, 128, 255, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    patients_total_females_box_chart_timestamp_select.trigger('change')
+
+    // create chart
+    function createPatients_box_chart(options = {})
+    {
+        const ctx = patients_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text12
+                    }
+                }
+            },
+        }
+
+        if ( patients_total_box_chartjs ) patients_total_box_chartjs.destroy()
+
+        patients_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    
+    function createPatientsMales_box_chart(options = {})
+    {
+        const ctx = patients_total_males_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text32
+                    }
+                }
+            },
+        }
+
+        if ( patients_total_males_box_chartjs ) patients_total_males_box_chartjs.destroy()
+
+        patients_total_males_box_chartjs = new Chart(ctx, config)
+                
+    }
+    
+    function createPatientsFemales_box_chart(options = {})
+    {
+        const ctx = patients_total_females_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text33
+                    }
+                }
+            },
+        }
+
+        if ( patients_total_females_box_chartjs ) patients_total_females_box_chartjs.destroy()
+
+        patients_total_females_box_chartjs = new Chart(ctx, config)
+                
+    }
+    
+    // Inventory Products
+    STATISTICS_MODEL.product_center_search({
+        query: '',
+        advanced: {
+            administration_id: center_id,
+            select : {
+                search: "SELECT * FROM",
+                replace: "SELECT SUM(productQuantity) as total FROM",
+            },
+        }
+    })
+    .then(res =>
+    {
+        products_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            products_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+    })
+
+    products_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = products_total_box_chart_timestamp_select.find(':selected').val()
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                administration_id: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        //
+        var res = await STATISTICS_MODEL.product_center_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            products_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        products_total_box_chart.removeClass('d-none')
+    
+        createInventory_products_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text14,
+                        data: values,
+                        borderColor: 'rgba(255, 140, 102, 1)',
+                        backgroundColor: 'rgba(255, 140, 102, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    products_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function createInventory_products_box_chart(options = {})
+    {
+        const ctx = products_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text19
+                    }
+                }
+            },
+        }
+
+        if ( products_total_box_chartjs ) products_total_box_chartjs.destroy()
+
+        products_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // Inventory Consummables
+    STATISTICS_MODEL.consummable_center_search({
+        query: '',
+        advanced: {
+            administration_id: center_id,
+            select : {
+                search: "SELECT * FROM",
+                replace: "SELECT SUM(consommable_quantity) as total FROM",
+            },
+        }
+    })
+    .then(res =>
+    {
+        consummables_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            consummables_total_box.find('.box-1-value').text( res.data[0].total )
+        }
+    })
+    consummables_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = consummables_total_box_chart_timestamp_select.find(':selected').val()
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                administration_id: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT COUNT(id) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        //
+        var res = await STATISTICS_MODEL.consummable_center_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            consummables_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        consummables_total_box_chart.removeClass('d-none')
+    
+        createInventory_consummables_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text18,
+                        data: values,
+                        borderColor: 'rgba(255, 51, 51, 1)',
+                        backgroundColor: 'rgba(255, 51, 51, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    consummables_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function createInventory_consummables_box_chart(options = {})
+    {
+        const ctx = consummables_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text20
+                    }
+                }
+            },
+        }
+
+        if ( consummables_total_box_chartjs ) consummables_total_box_chartjs.destroy()
+
+        consummables_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // Depts total
+    STATISTICS_MODEL.patient_search({
+        query: '',
+        advanced: {
+            clinicId: center_id,
+            select: {
+                search: 'SELECT * FROM',
+                replace: 'SELECT SUM(total_depts) as total FROM',
+            }
+        }
+    })
+    .then(res =>
+    {
+        if ( res.code == 404 ) return
+        if ( !res.data[0].total ) return
+
+        depts_total_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+    })
+    // In amount
+    dept_actions_in_mount_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = dept_actions_in_mount_total_box_chart_timestamp_select.find(':selected').val()
+    
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(in_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+    
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+    
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.patient_dept_action_search(TotalSearchObject)
+
+        dept_actions_in_mount_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            dept_actions_in_mount_total_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.patient_dept_action_search(ChartSearchObject)
+    
+        if ( res.code == 404 )
+        {
+            dept_actions_in_mount_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        dept_actions_in_mount_total_box_chart.removeClass('d-none')
+    
+        create_dept_actions_in_mount_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text22,
+                        data: values,
+                        borderColor: 'rgba(153, 255, 102, 1)',
+                        backgroundColor: 'rgba(153, 255, 102, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    dept_actions_in_mount_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function create_dept_actions_in_mount_box_chart(options = {})
+    {
+        const ctx = dept_actions_in_mount_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text23
+                    }
+                }
+            },
+        }
+
+        if ( dept_actions_in_mount_total_box_chartjs ) dept_actions_in_mount_total_box_chartjs.destroy()
+
+        dept_actions_in_mount_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    // Out amount
+    dept_actions_out_amount_total_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = dept_actions_out_amount_total_box_chart_timestamp_select.find(':selected').val()
+    
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(out_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                clinicId: center_id,
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+    
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+    
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.patient_dept_action_search(TotalSearchObject)
+
+        dept_actions_out_amount_total_box.find('.box-1-value').text(0)
+        if ( res.data[0].total )
+        {
+            dept_actions_out_amount_total_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.patient_dept_action_search(ChartSearchObject)
+    
+        if ( res.code == 404 )
+        {
+            dept_actions_out_amount_total_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = (v.month_name) ? FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()] : ''
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        dept_actions_out_amount_total_box_chart.removeClass('d-none')
+    
+        create_dept_actions_out_amount_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text22,
+                        data: values,
+                        borderColor: 'rgba(255, 102, 153, 1)',
+                        backgroundColor: 'rgba(255, 102, 153, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    dept_actions_out_amount_total_box_chart_timestamp_select.trigger('change')
+    // create chart
+    function create_dept_actions_out_amount_box_chart(options = {})
+    {
+        const ctx = dept_actions_out_amount_total_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text23
+                    }
+                }
+            },
+        }
+
+        if ( dept_actions_out_amount_total_box_chartjs ) dept_actions_out_amount_total_box_chartjs.destroy()
+
+        dept_actions_out_amount_total_box_chartjs = new Chart(ctx, config)
+                
+    }
+    
+    // detailed tables
+    $(document).off('panel:opened').on('panel:opened', e =>
+    {
+        var detail = e.originalEvent.detail
+
+        if ( detail.panel.attr('id') == 'detailed_tables_appointments_panel' ) // appointments
+        {
+
+            const detailed_tables_appointments_search_btn = page_container.find('#detailed_tables_appointments_search_btn')
+            const detailed_tables_appointments_search_input = page_container.find('#detailed_tables_appointments_search_input')
+            const detailed_tables_appointments_date_start_input = page_container.find('#detailed_tables_appointments_date_start_input')
+            const detailed_tables_appointments_date_end_input = page_container.find('#detailed_tables_appointments_date_end_input')
+
+
+            const detailed_tables_appointments_pagination = page_container.find('#detailed_tables_appointments_pagination')
+            const detailed_tables_appointments_tableElement = page_container.find('#detailed_tables_appointments_tableElement')
+
+            // set primary dates
+            // detailed_tables_appointments_date_start_input.val(CURRENT_DATE)
+            // detailed_tables_appointments_date_end_input.val(CURRENT_DATE)
+
+            // search
+            detailed_tables_appointments_search_btn.off('click').on('click', e =>
+            {
+                detailed_tables_appointments_displayAll({
+                    method_type: 'appointment_search',
+                    query: detailed_tables_appointments_search_input.val(),
+                    advanced: {
+                        clinicId: center_id,
+                        type: 'private',
+                        select: {
+                            search: 'SELECT * FROM',
+                            replace: 'SELECT COUNT(aptId) as total, classId, className FROM',
+                        },
+                        groupBy: 'classId',
+                        start: detailed_tables_appointments_date_start_input.val(),
+                        end: detailed_tables_appointments_date_end_input.val(),
+                    }
+                })
+            })
+            detailed_tables_appointments_search_input.off('keyup').on('keyup', e =>
+            {
+                detailed_tables_appointments_displayAll({
+                    method_type: 'appointment_search',
+                    query: detailed_tables_appointments_search_input.val(),
+                    advanced: {
+                        clinicId: center_id,
+                        type: 'private',
+                        select: {
+                            search: 'SELECT * FROM',
+                            replace: 'SELECT COUNT(aptId) as total, classId, className FROM',
+                        },
+                        groupBy: 'classId',
+                    }
+                })
+            })
+            detailed_tables_appointments_search_input.trigger('keyup')
+            // display appointments
+            async function detailed_tables_appointments_displayAll(params)
+            {
+                // check timestamp
+                timestamp_value = appointments_total_box_chart_timestamp_select.find(':selected').val()
+                
+                if ( timestamp_value == 'today' )
+                {
+                    params.advanced['today'] = true
+                }
+                else if ( timestamp_value == 'current_week' )
+                {
+                    params.advanced['week_date'] = CURRENT_DATE
+                }
+                else if ( timestamp_value == 'current_month' )
+                {
+                    params.advanced['month_date'] = CURRENT_DATE
+                }
+                else if ( timestamp_value == 'current_year' )
+                {
+                    params.advanced['current_year'] = CURRENT_DATE
+                }
+          
+                SectionLoader(detailed_tables_appointments_tableElement)
+                if ( params.method_type == 'appointment_search' ) var res = await STATISTICS_MODEL.appointment_search(params)
+
+                SectionLoader(detailed_tables_appointments_tableElement, '')
+                if ( res.code == 404 )
+                {
+                    detailed_tables_appointments_tableElement.find('.tbody').html('')
+                    return
+                }
+
+                var data = res.data
+                var html = ''
+
+                $.each(data, (k,v) =>
+                {
+                    html += `<div class="tr">
+                                <div class="td">${v.className}</div>
+                                <div class="td">(${v.total})</div>
+                            </div>PAG_SEP`
+                })
+
+                new SmoothPagination(detailed_tables_appointments_pagination, detailed_tables_appointments_tableElement.find('.tbody'), {
+                    data: html.split('PAG_SEP')
+                })
+            }
+
+        }
+        else if ( detail.panel.attr('id') == 'detailed_tables_store_selling_invoices_product_sales_panel' ) // product sales
+        {
+
+            const detailed_tables_store_selling_invoices_product_sales_search_btn = page_container.find('#detailed_tables_store_selling_invoices_product_sales_search_btn')
+            const detailed_tables_store_selling_invoices_product_sales_search_input = page_container.find('#detailed_tables_store_selling_invoices_product_sales_search_input')
+            const detailed_tables_store_selling_invoices_product_sales_date_start_input = page_container.find('#detailed_tables_store_selling_invoices_product_sales_date_start_input')
+            const detailed_tables_store_selling_invoices_product_sales_date_end_input = page_container.find('#detailed_tables_store_selling_invoices_product_sales_date_end_input')
+
+
+            const detailed_tables_store_selling_invoices_product_sales_pagination = page_container.find('#detailed_tables_store_selling_invoices_product_sales_pagination')
+            const detailed_tables_store_selling_invoices_product_sales_tableElement = page_container.find('#detailed_tables_store_selling_invoices_product_sales_tableElement')
+
+            // set primary dates
+            // detailed_tables_store_selling_invoices_product_sales_date_start_input.val(CURRENT_DATE)
+            // detailed_tables_store_selling_invoices_product_sales_date_end_input.val(CURRENT_DATE)
+
+            // search
+            detailed_tables_store_selling_invoices_product_sales_search_btn.off('click').on('click', e =>
+            {
+                detailed_tables_product_sales_displayAll({
+                    method_type: 'product_center_search',
+                    query: detailed_tables_store_selling_invoices_product_sales_search_input.val(),
+                    advanced: {
+                        administration_id: center_id,
+                        start: detailed_tables_store_selling_invoices_product_sales_date_start_input.val(),
+                        end: detailed_tables_store_selling_invoices_product_sales_date_end_input.val(),
+                        with: {
+                            sales: {
+                                query: '',
+                                advanced: {
+                                    select: {
+                                        search: 'SELECT * FROM',
+                                        replace: 'SELECT COUNT(id) as total FROM',
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            })
+            detailed_tables_store_selling_invoices_product_sales_search_input.off('keyup').on('keyup', e =>
+            {
+                detailed_tables_product_sales_displayAll({
+                    method_type: 'product_center_search',
+                    query: detailed_tables_store_selling_invoices_product_sales_search_input.val(),
+                    advanced: {
+                        administration_id: center_id,
+                        with: {
+                            sales: {
+                                query: '',
+                                advanced: {
+                                    select: {
+                                        search: 'SELECT * FROM',
+                                        replace: 'SELECT SUM(quantity) as total FROM',
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            })
+            detailed_tables_store_selling_invoices_product_sales_search_input.trigger('keyup')
+            // display product sales
+            async function detailed_tables_product_sales_displayAll(params)
+            {
+                // check timestamp
+                timestamp_value = store_selling_invoices_total_box_chart_timestamp_select.find(':selected').val()
+                
+                if ( timestamp_value == 'today' )
+                {
+                    params.advanced.with.sales.advanced['today'] = true
+                }
+                else if ( timestamp_value == 'current_week' )
+                {
+                    params.advanced.with.sales.advanced['week_date'] = CURRENT_DATE
+                }
+                else if ( timestamp_value == 'current_month' )
+                {
+                    params.advanced.with.sales.advanced['month_date'] = CURRENT_DATE
+                }
+                else if ( timestamp_value == 'current_year' )
+                {
+                    params.advanced.with.sales.advanced['current_year'] = CURRENT_DATE
+                }
+          
+                SectionLoader(detailed_tables_store_selling_invoices_product_sales_tableElement)
+                if ( params.method_type == 'product_center_search' ) var res = await STATISTICS_MODEL.product_center_search(params)
+
+                SectionLoader(detailed_tables_store_selling_invoices_product_sales_tableElement, '')
+                if ( res.code == 404 )
+                {
+                    detailed_tables_store_selling_invoices_product_sales_tableElement.find('.tbody').html('')
+                    return
+                }
+
+                var data = res.data
+                var html = ''
+
+                $.each(data, (k,v) =>
+                {
+                    const total = v.sales[0].total
+                    if ( total > 0 )
+                    {
+                        html += `<div class="tr">
+                                    <div class="td">${v.productName}</div>
+                                    <div class="td">(${total})</div>
+                                </div>PAG_SEP`
+                    }
+                })
+
+                new SmoothPagination(detailed_tables_store_selling_invoices_product_sales_pagination, detailed_tables_store_selling_invoices_product_sales_tableElement.find('.tbody'), {
+                    data: html.split('PAG_SEP')
+                })
+            }
+
+        }
+    
+    })
+}
+
+})
+
+</script>

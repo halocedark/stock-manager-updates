@@ -1,0 +1,93 @@
+<span id="select_employees_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label35 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_employees_template_search_input">
+    <select name="" class="input-text has-direction-ltr" id="<%= locals.selectId ? locals.selectId : 'select_employees_template_employee_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_employees_template_employee_select' : `<%- locals.selectId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'employee-selected' : `<%- locals.selectionEventName %>`
+
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+        const defaultOptions = {
+            showAdministration: true,
+            search: {
+                currentAdministrationOnly: false
+            }
+        }
+
+        options = {...defaultOptions, ...options}
+
+        var select_employees_template = $('#select_employees_template_'+componentId)
+        var select_employees_template_search_input = select_employees_template.find('#select_employees_template_search_input')
+
+        var select_employees_template_employee_select = select_employees_template.find(`#${selectId}`)
+
+        // set css
+        select_employees_template_employee_select.css('text-align', (FUI_DISPLAY_LANG.lang == 'ar') ? 'right' : 'left' )
+
+        detectTypingEnd(select_employees_template_search_input, () =>
+        {
+            select_employees_template_displayAll()
+        }, 500)
+        // select_employees_template_search_input.on('keyup', select_employees_template_displayAll)
+        // display all
+        select_employees_template_displayAll()
+        
+        async function select_employees_template_displayAll()
+        {
+            // select_employees_template_employee_select.html(`<option value="">${FUI_DISPLAY_LANG.views.pages.global.label31}</option>`)
+            var Params = {
+                query: select_employees_template_search_input.val(),
+                advanced: {}
+            }
+
+            if ( options.search.currentAdministrationOnly )
+            {
+                Params.advanced['administration_id'] = USER_CONFIG.administration.clinicId
+            }
+            
+            var res = await EMPLOYEE_MODEL.search(Params)
+
+            if ( res.code == 404 ) return
+
+            // dispatch event
+
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+
+                html += `<option value="${v.employee_id}" data-object="${data}">${v.employee_name} ${ (options.showAdministration) ? ` --- (${v.administration_name})` : '' }</option>`
+	
+            })
+            // add html
+            select_employees_template_employee_select.html(html)
+            // dispatch an event
+            var event = new CustomEvent(selectionEventName, { 
+                detail: { 
+                    employee: {
+                        id: select_employees_template_employee_select.find(':selected').val(),
+                        name: select_employees_template_employee_select.find(':selected').text(),
+                        data: checkJSON( decodeURIComponent( atob( select_employees_template_employee_select.find(':selected').data('object') ) ) ),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                } 
+            });
+
+            document.dispatchEvent(event)
+        } 
+    })
+
+</script>

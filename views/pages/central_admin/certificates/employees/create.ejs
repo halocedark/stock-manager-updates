@@ -1,0 +1,267 @@
+<div class="container-fluid" id="createEmployeeCertificate_page">
+
+    <div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_clinics.sectionTitle %></h1>
+	</div>
+
+    <div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+        <img src="assets/img/utils/info.png" class="alert-icon" alt="">
+        <div class="alert-text" id="text"></div>
+    </div>
+
+	<div class="row gx-4 gy-5">
+
+        <div class="col-lg-12 col-md-12">
+
+            <div class="mb-5 d-flex is-align-items-center is-justify-content-center" id="print_page"> 
+                
+            </div>
+
+            <div class="mb-3 row">
+
+                <div class="col-lg-3 col-md-4">
+                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-content-template.template.ejs`, {
+                        eventsReceiverId: 'createEmployeeCertificate_page',
+                        type: 'certificate'
+                    }) -%>
+                </div>
+
+            </div>
+
+            <div class="has-text-centered p-5 border rounded" data-perm="print_employee_certificates">
+                <div class="dropdown">
+                    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="print_dropdown_menu_link" data-bs-toggle="dropdown" aria-expanded="false">
+                        <%= UI_DISPLAY_LANG.views.pages.global.text2 %>
+                    </a>
+                  
+                    <ul class="dropdown-menu" aria-labelledby="print_dropdown_menu_link">
+                      <li><a class="dropdown-item" href="#" data-role="paper_orientation" data-orientation="landscape" data-size="A4" data-margin="0 0 0 -1cm" data-css-class="certificate-landscape" data-perm="print_employee_landscape_certificates"><%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[0].name %></a></li>
+                      <li><a class="dropdown-item" href="#" data-role="paper_orientation" data-orientation="portrait" data-size="A5" data-margin="0cm 0cm 0cm -1cm"  data-css-class="certificate-portrait" data-perm="print_employee_portrait_certificates"><%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[1].name %></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+
+            <div class="app-block">
+
+                <form action="" id="create_cert_form">
+
+                    <div class="mb-2">
+                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label16 %></label>
+                        <select name="" id="certificate_print_types" class="select-01">
+                            <option value="<%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[0].value %>" data-perm="print_employee_landscape_certificates">
+                                <%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[0].name %>
+                            </option>
+                            <option value="<%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[1].value %>" data-perm="print_employee_portrait_certificates">
+                                <%= UI_DISPLAY_LANG.views.pages.global.paper_orientations[1].name %>
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label13 %></label>
+                        <select name="" class="select-01" id="clinicSelect">
+                    
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label33 %></label>
+                        <input type="text" id="search_targets" class="input-text input-text-outline border-bottom-forced mb-2" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+                        <select name="" id="target_select" class="select-01"></select>
+                    </div>
+
+                    <div class="">
+                        <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#createEmployeeCertificate_page')
+
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+var print_page = page_container.find('#print_page')
+var print_dropdown_menu_link = page_container.find('#print_dropdown_menu_link')
+
+var create_cert_form = page_container.find('#create_cert_form')
+var clinicSelect = create_cert_form.find('#clinicSelect')
+var search_targets = create_cert_form.find('#search_targets')
+var target_select = create_cert_form.find('#target_select')
+
+print_page.html( await (getPage('../views/prints/certificate-landscape-page.ejs')) )
+
+var certificate_print = print_page.find('.certificate-print')
+var certificate_name = certificate_print.find('#certificate_name')
+var certificate_body = certificate_print.find('#certificate_body')
+var center_stamp = certificate_print.find('#center_stamp')
+
+
+var CertificateObject = sessionData()
+
+let promise1
+// clear session data
+sessionData(true)
+// submit
+create_cert_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    SectionLoader(create_cert_form)
+    // update
+    if ( CertificateObject.id )
+    {
+        var res = await CERTIFICATE_MODEL.update({
+            id: CertificateObject.id,
+            administration_id: clinicSelect.find(':selected').val(),
+            target_id: target_select.find(':selected').val(),
+            target_name: target_select.find(':selected').text(),
+            _target: CERT_TARGET_EMPLOYEE,
+            name: certificate_name.html(),
+            body: certificate_body.html(),
+        })
+        SectionLoader(create_cert_form, '')
+
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+        CertificateObject.id = null
+        return
+    }
+    // store
+    var res = await CERTIFICATE_MODEL.store({
+        administration_id: clinicSelect.find(':selected').val(),
+        target_id: target_select.find(':selected').val(),
+        target_name: target_select.find(':selected').text(),
+        _target: CERT_TARGET_EMPLOYEE,
+        name: certificate_name.html(),
+        body: certificate_body.html(),
+    })
+    SectionLoader(create_cert_form, '')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+})
+
+// print
+print_dropdown_menu_link.closest('.dropdown').on('click', e =>
+{
+    var target = $(e.target)
+
+    if ( target.data('role') == 'paper_orientation' )
+    {
+        var orientation = target.data('orientation')
+        var margin = target.data('margin')
+        var size = target.data('size')
+        var css_class = target.data('css-class')
+        var css_classes = ['certificate-landscape', 'certificate-portrait']
+        
+        certificate_print.removeClass(css_classes)
+        certificate_print.addClass(css_class)
+
+        printHTMLToPdf( certificate_print[0].outerHTML, {
+            top: 10000,
+            left: 10000,
+            page: {
+                size: `${size} ${orientation}`,
+                margin: margin 
+            }
+        } )
+    }
+})
+// list clinics
+var res = await CLINIC_MODEL.search('')
+if ( res.code == 200 )
+{
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.clinicId}" data-stamp="${v.clinicStamp}">${v.clinicName}</option>`
+    })
+
+    clinicSelect.html(html)
+    clinicSelect.trigger('change')
+}
+// select clinic
+clinicSelect.on('change', e =>
+{
+    search_targets.trigger('keyup')
+    displayDataInPrint()
+})
+// list targets
+search_targets.on('keyup', async e =>
+{
+    target_select.html('') 
+    promise1 = PATIENT_MODEL.searchLocal({
+        clinicId: clinicSelect.find(':selected').val(),
+        query: search_targets.val()
+    })
+    
+    var res = await promise1
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.patientId}">${v.patientName}</option>`
+    })
+
+    target_select.html(html)  
+})
+search_targets.trigger('keyup')
+
+// display data in print
+displayDataInPrint()
+function displayDataInPrint()
+{
+    center_stamp.attr('src', clinicSelect.find(':selected').data('stamp'))
+}
+// select content template
+$(document).off('content-template-selected').on('content-template-selected', e =>
+{
+    var detail = e.originalEvent.detail
+    PromptConfirmDialog().then(c =>
+    {
+        certificate_body.html( detail.contentTemplate.body )
+    })
+})
+// display info
+displayInfo()
+async function displayInfo()
+{
+    if ( !CertificateObject.id ) return
+    
+    await promise1
+
+    console.log(CertificateObject)
+
+    certificate_name.html(CertificateObject.name)
+    certificate_body.html(CertificateObject.body)
+    
+    setOptionSelected(clinicSelect, CertificateObject.administration_id)
+    target_select.append(`<option value="${CertificateObject.target_id}">${CertificateObject.target_name}</option>`)
+    setOptionSelected(target_select, CertificateObject.target_id)
+}
+
+})
+
+</script>

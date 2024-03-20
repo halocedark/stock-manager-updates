@@ -1,0 +1,10 @@
+<span class="pointer" id="<%= locals.componentId ? locals.componentId : 'searchbox2_component' %>">
+    <div class="form-field-01" style="<%= locals.searchBoxStyle ? locals.searchBoxStyle : '' %>">
+        <div class="form-field-icon-holder search_btn" id="<%= locals.searchBtnId ? locals.searchBtnId : 'search_btn' %>" style="<%= locals.searchBtnStyle ? locals.searchBtnStyle : '' %>">
+            <img src="assets/img/utils/search.svg" class="form-field-icon" alt="" style="<%= locals.searchBtnIconStyle ? locals.searchBtnIconStyle : '' %>">	
+        </div>
+        <div class="form-field-input-holder" style="<%= locals.searchInputHolderStyle ? locals.searchInputHolderStyle : '' %>">
+            <input type="text" id="<%= locals.searchInputId ? locals.searchInputId : 'search_input' %>" style="<%= locals.searchInputStyle ? locals.searchInputStyle : '' %> background-color: transparent;" class="form-field-input search_input" placeholder="<%= locals.searchInputPlaceholder ? locals.searchInputPlaceholder : UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+        </div>
+    </div>
+</span>

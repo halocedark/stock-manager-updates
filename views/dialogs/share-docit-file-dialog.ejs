@@ -1,0 +1,242 @@
+<div class="has-direction-locale px-3 py-3 h-100 position-relative overflow-x-hidden overflow-y-auto max-height-700px">
+
+    <div id="share_docit_file_dialog__file_info" class="mb-3 fs-17 fw-200 text-color-17">
+
+        <div class="row">
+
+            <div class="col-md-10">
+
+                <div class="pb-2 mb-2 border-bottom d-flex align-items-center">
+                    <div class="fw-500">
+                        <%= UI_DISPLAY_LANG.views.pages.global.file_info.name %>:
+                    </div>
+                    <div class="width-5px"></div>
+                    <div class="file_info__name text-elipsis max-width-340px">
+                        
+                    </div>
+                </div>
+        
+                <div class="pb-2 mb-2 border-bottom d-flex align-items-center">
+                    <div class="fw-500">
+                        <%= UI_DISPLAY_LANG.views.pages.global.file_info.size %>:
+                    </div>
+                    <div class="width-5px"></div>
+                    <div class="file_info__size">
+                        
+                    </div>
+                </div>
+        
+                <div class="pb-2 mb-2 border-bottom d-flex align-items-center">
+                    <div class="fw-500">
+                        <%= UI_DISPLAY_LANG.views.pages.global.file_info.url %>:
+                    </div>
+                    <div class="width-5px"></div>
+                    <div class="">
+                        <button class="border width-25px height-25px rounded bg-transparent text-color-19 file_info__copy_url_to_clipboard">
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md d-flex justify-content-center align-items-center">
+                <div class="file_info__icon"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="share_docit_file_dialog__sharing_choises_tabs" class="row">
+
+        <div class="col-lg-6 col-md-6 text-center" data-perm="share_docit_file_with_people">
+
+            <button class="border bg-white bg-color-hover-ebebeb px-5 py-5 w-100 h-100 share_docit_file_dialog__sharing_choises_tabs__tab_buttons" data-tab="#share_docit_file_dialog__share_with_people_tab">
+
+                <h1 class="fs-22 fw-500 mb-3 js_tab_button_title">
+                    <%= UI_DISPLAY_LANG.views.pages.global.sharing_options.share_with_people %>
+                </h1>
+
+                <p class="fs-17 fw-200 text-color-17 mb-3">
+                    <%= UI_DISPLAY_LANG.views.pages.global.sharing_options.share_with_people_text %>
+                </p>
+
+                <div class="mb-3">
+                    <img src="../assets/img/utils/people.png" class="width-50px height-50px rounded-circle" alt="">
+                </div>
+
+                <p class="fs-14 text-color-17" id="share_docit_file_dialog__sharing_choises_tabs__groups_total">
+                   
+                </p>
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-6 col-md-6 text-center" data-perm="share_docit_file_with_groups">
+
+            <button class="border bg-white bg-color-hover-ebebeb px-5 py-5 w-100 h-100 share_docit_file_dialog__sharing_choises_tabs__tab_buttons" data-tab="#share_docit_file_dialog__share_with_groups_tab">
+
+                <h1 class="fs-22 fw-500 mb-3 js_tab_button_title">
+                    <%= UI_DISPLAY_LANG.views.pages.global.sharing_options.share_with_groups %>
+                </h1>
+
+                <p class="fs-17 fw-200 text-color-17 mb-3">
+                    <%= UI_DISPLAY_LANG.views.pages.global.sharing_options.share_with_groups_text %>
+                </p>
+
+                <div class="mb-3">
+                    <img src="../assets/img/utils/group.png" class="width-50px height-50px rounded-circle" alt="">
+                </div>
+
+                <p class="fs-14 text-color-17" id="share_docit_file_dialog__sharing_choises_tabs__people_total">
+                   
+                </p>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="">
+        
+        <div id="share_docit_file_dialog__share_with_people_tab" class="d-none share_docit_file_dialog__tabs">
+    
+            <h2 class="fs-22 mb-5 js_tab_title"></h2>
+    
+            <div class="mb-4">
+
+                <form id="share_docit_file_dialog__share_with_people_tab__create_form">
+
+                    <div class="row gy-3 mb-4">
+
+                        <div class="col-lg-6 col-md-12">
+
+                            <div class="">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/external/docit/select-users.template.ejs`, {
+                                    componentId: 'share_docit_file_dialog__share_with_people_tab__create_form__select_users_template',
+                                    selectId: 'share_docit_file_dialog__share_with_people_tab__create_form__user_select',
+                                    options: {
+                                        multiple: true,
+                                    }
+                                }) -%>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-12">
+
+                            <div class="">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/external/docit/select-share-permissions.template.ejs`, {
+                                    componentId: 'share_docit_file_dialog__share_with_people_tab__create_form__select_share_permissions_template',
+                                    selectId: 'share_docit_file_dialog__share_with_people_tab__create_form__share_permissions_select',
+                                    options: {
+                                        multiple: true,
+                                    }
+                                }) -%>
+                            </div>
+
+                        </div>
+
+                    </div>
+    
+                    <div class="">
+                        <button type="submit" class="btn btn-success rounded">
+                            <%= UI_DISPLAY_LANG.views.pages.global.actions.share %>
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="has-text-aligned-locale-inverted">
+                <button class="btn btn-success btn-sm share_docit_file_dialog__tab__back_button d-inline-flex align-items-center">
+                    <div class="">
+                        <%= UI_DISPLAY_LANG.views.pages.global.back_button %>
+                    </div>
+                    <div class="width-10px"></div>
+                    <div class="">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </div>
+                </button>
+            </div>
+    
+        </div>
+    
+        <div id="share_docit_file_dialog__share_with_groups_tab" class="d-none share_docit_file_dialog__tabs">
+
+            <h2 class="fs-22 mb-5 js_tab_title"></h2>
+    
+            <div class="mb-4">
+
+                <div id="share_docit_file_dialog__share_with_groups_tab__create_form">
+
+                    <div class="row gy-3 mb-4">
+
+                        <div class="col-lg col-md-12">
+
+                            <div class="mb-3">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox2.template.ejs`, {
+                                    searchBtnId: 'share_docit_file_dialog__share_with_groups_tab__create_form__add_people_to_docit_group_dialog__search_btn',
+                                    searchInputId: 'share_docit_file_dialog__share_with_groups_tab__create_form__add_people_to_docit_group_dialog__search_input',
+                                    searchInputPlaceholder: UI_DISPLAY_LANG.views.pages.global.placeholder5,
+                                    searchBtnStyle: 'width: 10%;height:100%;',
+                                    searchBtnIconStyle: 'width: 17px;',
+                                    searchBoxStyle: 'background-color: #F0F2F5; min-height: unset !important; height:40px; max-width:95%; border: none; border-radius: 20px;',
+                                    searchInputStyle: 'background-color: #F0F2F5;',
+                                    searchInputHolderStyle: 'border:none;',
+                                }) -%>
+                            </div>
+
+                            <div class="row gy-2 overflow-x-hidden overflow-y-auto max-height-500px" id="share_docit_file_dialog__share_with_groups_tab__create_form__tableElement">
+                                
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <a href="#" class="text-color-32 pointer" id="share_docit_file_dialog__share_with_groups_tab__create_form__load_more_button">
+                                    <%= UI_DISPLAY_LANG.views.pages.global.load_more_button %>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-12">
+
+                            <div class="">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/external/docit/select-share-permissions.template.ejs`, {
+                                    componentId: 'share_docit_file_dialog__share_with_groups_tab__create_form__select_share_permissions_template',
+                                    selectId: 'share_docit_file_dialog__share_with_groups_tab__create_form__share_permissions_select',
+                                    options: {
+                                        multiple: true,
+                                    }
+                                }) -%>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+    
+            <div class="has-text-aligned-locale-inverted">
+                <button class="btn btn-success btn-sm share_docit_file_dialog__tab__back_button d-inline-flex align-items-center">
+                    <div class="">
+                        <%= UI_DISPLAY_LANG.views.pages.global.back_button %>
+                    </div>
+                    <div class="width-10px"></div>
+                    <div class="">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

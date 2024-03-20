@@ -1,0 +1,69 @@
+<span id="select_distributor_clients_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label52 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_distributor_clients_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'select_distributor_clients_template_client_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_distributor_clients_template_client_select' : `<%- locals.selectId %>`
+
+        var select_distributor_clients_template = $('#select_distributor_clients_template_'+componentId)
+        var select_distributor_clients_template_search_input = select_distributor_clients_template.find('#select_distributor_clients_template_search_input')
+
+        var select_distributor_clients_template_client_select = select_distributor_clients_template.find(`#${selectId}`)
+
+        detectTypingEnd(select_distributor_clients_template_search_input, () =>
+        {
+            select_distributor_clients_template_displayAll()
+        }, 500)
+        // select_distributor_clients_template_search_input.on('keyup', select_distributor_clients_template_displayAll)
+        // display all
+        select_distributor_clients_template_displayAll()
+        async function select_distributor_clients_template_displayAll()
+        {
+            // select_distributor_clients_template_client_select.html(`<option value="">${FUI_DISPLAY_LANG.views.pages.global.label31}</option>`)
+            var res = await EMPLOYEE_MODEL.distributor_client_local_search({
+                distributor_id: USER_CONFIG.employee_id,
+                query: select_distributor_clients_template_search_input.val(),
+            })
+            
+            if ( res.code == 404 ) return
+
+            // dispatch event
+            
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                html += `<option value="${v.pharmacy_id}" data-object="${data}">${v.name}</option>`	
+            })
+            // add html
+            select_distributor_clients_template_client_select.html(html)
+            // dispatch an event
+            var event = new CustomEvent('distributor-client-selected', { 
+                detail: { 
+                    distributor_client: {
+                        id: select_distributor_clients_template_client_select.find(':selected').val(),
+                        name: select_distributor_clients_template_client_select.find(':selected').text(),
+                        data: checkJSON( decodeURIComponent( atob( select_distributor_clients_template_client_select.find(':selected').data('object') ) ) ),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                } 
+            });
+
+            document.dispatchEvent(event)
+        } 
+    })
+
+</script>

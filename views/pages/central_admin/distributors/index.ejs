@@ -1,0 +1,239 @@
+<div class="container-fluid" id="allDistributorsContainer">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_employees.sectionTitle %></h1>
+	</div>
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+	<div class="mt-3 WRAPPER" id="wrapper01">
+		<div class="table-nav">
+
+			<div class="row gx-4 gy-3">
+
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                        dataIgnoreDefaultValue: true,
+                    }) -%>
+				</div>
+                <div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="distributors_total">0</span>
+                    </div>
+                    <ul class="list-group list-group-flush" id="distributors_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+                </div> 
+
+			</div>
+
+		</div>
+		<div id="pagination1" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement1">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card hover-shadow" data-role="APT" data-aptid="" style="cursor: pointer;">
+					<div class="card-body no-pointer">
+						<div class="h5">قسم الحجامة</div>
+						<div class="text-02">(4) جلسات</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#allDistributorsContainer');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination1 = page_container.find('#pagination1');
+var tableElement1 = page_container.find('#tableElement1');
+
+var search_input = page_container.find('#search_input')
+var search_btn = page_container.find('#search_btn')
+var date_start_input = page_container.find('#date_start_input')
+var date_end_input = page_container.find('#date_end_input')
+
+var distributors_total = page_container.find('#distributors_total');
+var distributors_extra_data_list = page_container.find('#distributors_extra_data_list');
+
+var EmployeeObject = {};
+// tableElement1 click
+tableElement1.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var parent = target.closest('[data-role="EMPLOYEE"]')
+        var employee_id = target.data('employeeid');
+        goToPage('create-distributors', {
+            employee_id: employee_id
+        })
+    }
+
+});
+// delete selected
+deleteSelectedBTN.off('click');
+deleteSelectedBTN.on('click', async e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("حذف البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Suprimmer les données...");
+
+        var response = await EMPLOYEE_MODEL.batchDelete(selectedRows());
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        search_input.trigger('keyup')
+    });
+});
+// search
+search_btn.on('click', async e =>
+{
+    search_input.trigger('keyup')
+});
+
+detectTypingEnd(search_input, val =>
+{
+    displayAll({
+        method_type: 'advancedSearch',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            administration_id: USER_CONFIG.administration.clinicId,
+            employee_type_code: EMP_TYPE_DISTRIBUTOR,
+        }
+    })
+})
+// display all 
+search_input.trigger('keyup')
+async function displayAll(params)
+{
+    // total
+    distributors_total.text(0)
+
+    distributors_extra_data_list.html('')
+    tableElement1.html('');
+    SectionLoader(tableElement1)
+
+    if ( params.method_type == 'advancedSearch' ) var res = await EMPLOYEE_MODEL.advancedSearch(params) 
+
+    SectionLoader(tableElement1, '')
+    
+    if ( res.code == 404 ) return;
+
+    var data = res.data;
+    var html = '';
+    // total
+    $.each(data, (k,v) =>
+    {
+        var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+        html += `<div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card hover-shadow">
+                        
+                        <div class=" js_go_to_distributor_profile" data-role="EMPLOYEE" data-distributor-id="${v.employee_id}" data-employeeid="${v.employee_id}" data-object="${data}" style="cursor: pointer;">
+                            <div class="no-pointer">
+                                <div class="form-check border-bottom p-1">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault_${v.employee_id}" data-role="CHECK" data-employeeid="${v.employee_id}">
+                                    <label class="form-check-label" for="flexCheckDefault_${v.employee_id}">
+                                        ${FUI_DISPLAY_LANG.views.pages.global.select}
+                                    </label>
+                                </div>
+                                <div class="card-body no-pointer">
+                                    <div class="h5">${v.employee_name}</div>
+                                    <span class="text-02">${v.employee_phone}</span>
+                                    <span class="text-04 text-muted">(${v.employee_state})</span>
+                                    <div>${FUI_DISPLAY_LANG.views.pages.global.text21}: <span class="text-success">${moneyFormat(v.total_depts)}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <a href="#" data-role="UPDATE" data-perm="update_distributor" class="mx-2 text-dark" data-employeeid="${v.employee_id}">
+                                <i class="fas fa-edit no-pointer"></i>
+                            </a>
+                        </div> 
+
+                    </div>
+                </div>PAG_SEP`;	
+    });
+
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination1, tableElement1, options);
+    //
+    distributors_total.text(tableElement1.find('[data-role="EMPLOYEE"]').length)
+    var last_data = checkJSON( decodeURIComponent( atob( tableElement1.find('[data-role="EMPLOYEE"]').first().data('object') ) ) )
+    // extra data
+    distributors_extra_data_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+            <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+            <span>${last_data.employee_name}, </span>
+            <span class="text-primary">${last_data.employee_date} ${last_data.employee_time}</span> 
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text43 }: </span>
+            <span>${last_data.employee_state} </span>
+        </li>
+		<li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text45 }: </span>
+            <span>${last_data.employee_address} </span>
+        </li>
+    `)
+}
+
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement1.find('[data-role="CHECK"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var check = $(items[i]);
+        EmployeeObject = {
+            employee_id: check.data('employeeid')
+        };
+        if ( check.is(':checked') )
+            list.push(EmployeeObject);
+    }
+
+    return list;
+}
+
+})
+
+</script>

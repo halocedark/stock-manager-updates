@@ -1,0 +1,167 @@
+<div class="container-fluid" id="transfer_funds_to_wallets_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_clinics.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-3 app-block">
+
+        <div class="mb-4 pt-5">
+            <h3 class="h3"><%= UI_DISPLAY_LANG.views.pages.global.text16 %></h3>
+            <p class="text-muted"><%= UI_DISPLAY_LANG.views.pages.global.text17 %></p>
+        </div>
+
+        <form action="" id="create_form">
+
+            <div class="mb-3">
+                <span><%= UI_DISPLAY_LANG.views.pages.global.text68 %>: </span>
+                <span id="fundbox_total" class="text-success">0</span>
+            </div>
+
+            <div class="mb-2">
+                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-employees.template.ejs', {
+                    selectId: 'employee_select',
+                    options: {
+                        showAdministration: false,
+                        search: {
+                            currentAdministrationOnly: true,
+                        }
+                    }
+                }) -%>
+            </div>
+
+            <div class="mb-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label49 %></label>
+                <input type="number" step="any" min="0" class="input-text input-text-outline" id="amount_input">
+            </div>
+            
+            <div class="mb-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label48 %></label>
+                <input type="text" class="input-text input-text-outline" id="reason_input">
+            </div>
+
+            <div class="mb-4">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label27 %></label>
+                <textarea name="" class="input-text input-text-outline" id="note_input" rows="4"></textarea>
+            </div>
+
+            <div class="mt-4">
+                <a href="#" class="js_panel_toggler_button" data-target="#wallet_transfer_more_data_panel">
+                    <%= UI_DISPLAY_LANG.views.pages.global.view_more %>
+                </a>
+            </div>
+
+            <div class="d-none bg-white border py-3 px-2 rounded mt-4" id="wallet_transfer_more_data_panel">
+
+                <div class="has-text-aligned-locale-inverted">
+                    <div class="close-button-sm js_panel_close_button" data-target="#wallet_transfer_more_data_panel">
+                        <i class="xfb xfb-close-sm-thin"></i>
+                    </div>
+                </div>
+
+                <div class="">
+
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-wallet-action.template.ejs', {
+                        selectId: 'action_select',
+                    }) -%>
+
+                </div>
+                
+            </div>
+
+            <div class="mb-2 mt-2">
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_file %></label>
+                <input type="file" class="input-text" id="document_input">
+            </div>
+
+            <div class="">
+                <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+            </div>
+
+        </form>
+        
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#transfer_funds_to_wallets_container')
+
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var create_form = page_container.find('#create_form')
+var fundbox_total = page_container.find('#fundbox_total')
+var employee_select = page_container.find('#employee_select')
+var action_select = page_container.find('#action_select')
+var amount_input = page_container.find('#amount_input')
+var reason_input = page_container.find('#reason_input')
+var note_input = page_container.find('#note_input')
+
+// submit
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+    create_form.find(':submit').addClass('disabled')
+
+    const params = new FormData()
+
+    const employeeData = checkJSON( decodeURIComponent( atob( employee_select.find(':selected').data('object') ) ) )
+
+    params.append('sender_id', USER_CONFIG.employee_id)
+    params.append('sender_name', USER_CONFIG.employee_name)
+    params.append('sender_type', 'employees')
+    params.append('sender_type_id', USER_CONFIG.employee_type_id)
+    params.append('sender_type_code', USER_CONFIG.employee_type_code)
+    params.append('receiver_id', employeeData.employee_id)
+    params.append('receiver_name', employeeData.employee_name)
+    params.append('receiver_type', 'employees')
+    params.append('receiver_type_id', employeeData.employee_type_id)
+    params.append('receiver_type_code', employeeData.employee_type_code)
+    params.append('amount', amount_input.val())
+    params.append('reason', reason_input.val())
+    params.append('action', action_select.find(':selected').val())
+    params.append('note', note_input.val())
+    params.append('isConfirmed', true)
+
+    var res = await WALLET_MODEL.actions_funds_transfer(params)
+
+    create_form.find(':submit').removeClass('disabled')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    CreateToast('PS', res.message, '')
+
+    if ( res.code == 404 ) return
+
+    create_form[0].reset()
+    sender_displayFundboxTotal()
+})
+
+// sender_displayFundboxTotal 
+sender_displayFundboxTotal()
+async function sender_displayFundboxTotal()
+{
+    fundbox_total.text('0.00')
+    var res = await FUNDBOX_MODEL.actions_owner_show({
+        owner_id: USER_CONFIG.employee_id,
+        owner_type: 'employees',
+    })
+
+    if ( res.code == 404 ) return
+
+    fundbox_total.text( moneyFormat(res.data.total) )
+}
+
+})
+
+</script>

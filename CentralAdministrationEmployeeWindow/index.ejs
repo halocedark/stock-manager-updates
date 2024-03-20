@@ -1,0 +1,82 @@
+<%- include('../views/partials/central_admin/header') -%>
+<%- include('../views/partials/central_admin/navbar') -%>
+<%- include('../views/partials/central_admin/top-navbar') -%>
+<%- include('../views/dialogs/select-employee-dialog') -%>
+<%- include('../views/dialogs/dialog-box') -%>
+<%- include('../views/dialogs/prompt-input-dialog') -%>
+<%- include('../views/dialogs/prompt-confirm-dialog') -%>
+<%- include('../views/dialogs/add-appointement-patients-dialog') -%>
+<%- include('../views/dialogs/order-cart-dialog') -%>
+<%- include('../views/dialogs/orders-cart-dialog') -%>
+<%- include('../views/dialogs/preview-file-dialog') -%>
+<%- include('../views/dialogs/add-consommables-to-patient-dialog') -%>
+<%- include('../views/addons/top-loader') -%>
+<%- include('../views/addons/user-auth') -%>
+<%- include('../views/addons/toast') -%>
+<%- include('../views/addons/top-progress-bar') -%>
+<%- include('../views/addons/page-loader') -%>
+
+<div class="main-content-container position-relative" id="MainContentContainer">
+
+    <!-- <div class="mb-2">
+        <input type="number" id="chunk_size_input" class="form-control" value="7000000">
+    </div>
+    <div class="mb-2">
+        <input type="file" id="file_input" class="form-control">
+    </div>
+    <div class="progress">
+        <div class="progress-bar bg-success" id="progress_bar" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="btn-group">
+        <button id="upload_button" class="btn btn-success">Upload</button>
+    </div> -->
+
+    <!-- <input type="file" class="input-text" id="file_input" accept=".xlsx"> -->
+
+</div>
+
+<!-- <script>
+
+    $(function()
+    {
+
+        $('#file_input').on('change', e =>
+        {
+            console.log(e)
+            xlsxToJson($('#file_input')[0].files[0], async results =>
+            {
+                // add categories and families
+                const data = results.json.map( (v, i) =>
+                {
+                    const index = i+1
+                    // category
+                    v['category_id'] = 4
+                    v['category_name'] = 'Produits'
+                    // family
+                    v['family_id'] = 5
+                    v['family_name'] = 'Product final'
+                    // sell price
+                    v['productPrice'] = v.price
+                    v['productWholesalePrice'] = v.price
+                    v['productHalfWholesalePrice'] = v.price
+
+                    return v
+                } )
+
+                console.log(data)
+
+                var res = await PRODUCT_MODEL.center_administration_import({
+                    collection: data
+                })
+            })
+        })
+
+
+    })
+
+</script> -->
+
+
+
+<!-- End Main Container -->
+<%- include('../views/partials/central_admin/footer') -%>

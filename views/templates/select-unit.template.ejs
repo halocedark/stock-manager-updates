@@ -1,0 +1,7 @@
+<div class="<%= locals.componentId %>">
+    <select class="input-text" id="<%= locals.selectId ? locals.selectId : 'unit_select' %>" name="<%= locals.name ? locals.name : 'unit' %>">
+        <% for (const key in UI_DISPLAY_LANG.views.pages.global.units) { %>
+            <option value="<%= key %>"><%= UI_DISPLAY_LANG.views.pages.global.units[key] %></option>
+        <% } %>
+    </select>
+</div>

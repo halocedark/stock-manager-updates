@@ -1,0 +1,742 @@
+<div class="container-fluid" id="trackDistributorsStatsContainer">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.track_distributors_stats.sectionTitle %></h1>
+	</div>
+
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+	</div>
+
+	<div class="app-block mt-2">
+		<div class="row gx-4 gy-2">
+			<div class="col-lg-7 col-md-6 col-sm-12">
+				<div class="d-inline-flex flex-center w-100 h-100 section" style="max-height: 100%;">
+					<canvas id="chartEl01" class="" style="max-height:100%;"></canvas>
+				</div>
+			</div>
+			<div class="col-lg col-md col-sm-12">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<div class="w-100">
+						<h4 class="h4 mb-2"><%= UI_DISPLAY_LANG.views.pages.track_distributors_stats.text01 %></h4>
+						<div id="pagination1" class="flex flex-center mb-2"></div>
+						<div class="list-group" id="distributorsList">
+							<!-- <button type="button" class="list-group-item list-group-item-action">A second item</button>
+							<button type="button" class="list-group-item list-group-item-action">A third button item</button>
+							<button type="button" class="list-group-item list-group-item-action">A fourth button item</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="app-block mt-2 WRAPPER">
+		<div class="row gx-4 gy-2">
+			<div class="col-lg col-md col-sm-12">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<div class="w-100">
+						<h4 class="h4 mb-2" id="distributorClientsListTitle"></h4>
+						<div id="pagination2" class="flex flex-center mb-2"></div>
+						<div class="list-group" id="clientsList">
+							<!-- <button type="button" class="list-group-item list-group-item-action">A second item</button>
+							<button type="button" class="list-group-item list-group-item-action">A third button item</button>
+							<button type="button" class="list-group-item list-group-item-action">A fourth button item</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-7 col-md-6 col-sm-12">
+				<div class="d-inline-flex flex-center w-100 h-100 section" style="max-height: 100%;">
+					<div class="w-100">
+						<h4 class="h4 mb-2" id="clientItemsListTitle"></h4>
+						<div id="pagination3" class="flex flex-center mb-2"></div>
+						<div class="list-group" id="clientItemsList">
+							<!-- <button type="button" class="list-group-item list-group-item-action">A second item</button>
+							<button type="button" class="list-group-item list-group-item-action">A third button item</button>
+							<button type="button" class="list-group-item list-group-item-action">A fourth button item</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="app-block mt-2 WRAPPER">
+		<h4 class="h4 mb-2" id="distributorInvoicesTitle"></h4>
+		<div class="py-4 px-3 mb-3 bg-white border rounded">
+			<div class="row gx-4 gy-3">
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/searchbox.template.ejs', {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/start-end-date.template.ejs', {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                    }) -%>
+				</div>
+			</div>
+		</div>
+		<div id="pagination4" class="flex flex-center my-3"></div>
+		<div class="table-div bg-white border rounded">
+			<table class="table-01" id="invoicesTable">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th><%= UI_DISPLAY_LANG.views.pages.all_products_billings.th01 %></th>
+						<th><%= UI_DISPLAY_LANG.views.pages.all_products_billings.th02 %></th>
+						<th><%= UI_DISPLAY_LANG.views.pages.all_products_billings.th04 %></th>
+						<th><%= UI_DISPLAY_LANG.views.pages.all_products_billings.th06 %></th>
+						<th><%= UI_DISPLAY_LANG.views.pages.all_products_billings.th05 %></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<!--
+					<tr class="expand-row">
+						<td>
+							<input type="checkbox" class="form-check-input" data-role="CHECK" data-orderid="">
+						</td>
+						<td> HG38020496 </td>
+						<td> 2022-06-17 </td>
+						<td> - </td>
+						<td> $11.99 </td>
+						<td style="width:20px">
+							<svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+						</td>
+					</tr>
+					<tr class="expand-row__row" style="display:none;">
+						<td colspan="10">
+							<table class="table-01">
+								<thead>
+									<tr>
+										<th>Product</th>
+										<th>Quantity</th>
+										<th>Unit Price</th>
+										<th>Dept (DA)</th>
+										<th>Dept (%)</th>
+										<th>Total Price</th>
+									</tr>
+								</thead>
+								<tbody>
+									<td>Renew Premium Web Hosting (crstra-saffromfood.com)</td>
+									<td>3</td>
+									<td>1880.00</td>
+									<td>880.00</td>
+									<td>32.12%</td>
+									<td>1880.00</td>
+								</tbody>
+							</table>
+							<div class="order-price-table">
+								<div class="order-price-table-contents">
+									<div>
+										<strong>product price</strong>
+										<span>11.25$</span>
+									</div>
+									<div>
+										<strong>dept (%)</strong>
+										<span>0.00%</span>
+									</div>
+									<div>
+										<strong>sell price</strong>
+										<span>11.25</span>
+									</div>
+									<div class="border-top my-1"></div>
+									<div>
+										<strong>total</strong>
+										<span>11.25</span>
+									</div>	
+								</div>
+							</div>
+						</td>
+					</tr>
+					-->
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+<script>
+
+$(async function()
+{
+
+	var page_container = $('#trackDistributorsStatsContainer');
+	if ( !page_container[0] )
+		return;
+
+	var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+	var pagination1 = page_container.find('#pagination1');
+	var distributorsList = page_container.find('#distributorsList');
+
+	var distributorClientsListTitle = page_container.find('#distributorClientsListTitle');
+	var pagination2 = page_container.find('#pagination2');
+	var clientsList = page_container.find('#clientsList');
+
+	var clientItemsListTitle = page_container.find('#clientItemsListTitle');
+	var pagination3 = page_container.find('#pagination3');
+	var clientItemsList = page_container.find('#clientItemsList');
+
+	var distributorInvoicesTitle = page_container.find('#distributorInvoicesTitle');
+	var search_btn = page_container.find('#search_btn');
+	var search_input = page_container.find('#search_input');
+	var date_start_input = page_container.find('#date_start_input');
+	var date_end_input = page_container.find('#date_end_input');
+	var pagination4 = page_container.find('#pagination4');
+	var invoicesTable = page_container.find('#invoicesTable');
+
+	date_start_input.val('2019-01-01');
+	date_end_input.val(CURRENT_DATE);
+
+	var chartEl01 = page_container.find('#chartEl01');
+	var chartEl02 = page_container.find('#chartEl02');
+
+
+	var chart01 = null;
+	var chart02 = null;
+
+	var currency = (FUI_DISPLAY_LANG.lang == 'ar') ? CURRENCY.ar : CURRENCY.fr;
+	var EmployeeObject = {
+		employee_id: null,
+		employee_name: null
+	};
+	invoicesTable.closest('.WRAPPER').slideUp(200);
+	// distributorsList
+	distributorsList.off('click');
+	distributorsList.on('click', async e =>
+	{
+		var target = $(e.target);
+		if ( target[0].nodeName == 'BUTTON' )
+		{
+			EmployeeObject.employee_id = target.data('id');
+			EmployeeObject.employee_name = target.data('name');
+			// orders
+			displayOrders();
+			// clients
+			displayClients();
+			// Invoices
+			displayInvoices();
+
+		}
+	});
+	// clientsList
+	clientsList.off('click');
+	clientsList.on('click', async e =>
+	{
+		var target = $(e.target);
+		if ( target[0].nodeName == 'BUTTON' )
+		{
+			var pharmacy_id = target.data('id');
+			var pharmacy_name = target.data('name');
+			SectionLoader(clientItemsList.parent());
+			var pharmacy = await getPharmacy(pharmacy_id);
+
+			SectionLoader(clientItemsList.parent(), '');
+			clientItemsList.html('');
+			if ( pharmacy.code == 200 )
+			{
+				var data = pharmacy.data;
+				var html = '';
+				if ( data.orders.length == 0 )
+				{
+					clientItemsList.parent().slideUp(200);
+					return;
+				}
+				clientItemsList.parent().slideDown(200);
+				var total_items = 0;
+				for (let i = 0; i < data.orders.current_year.length; i++) 
+				{
+					const order = data.orders.current_year[i];
+					for (let j = 0; j < order.items.length; j++) 
+					{
+						const item = order.items[j];
+						html += `<button type="button" class="list-group-item list-group-item-action">
+									<span>${item.item_name}  (${item.order_item_price} * ${parseInt(item.order_item_quantity)})   ${currency}</span>
+								</button>PAG_SEP`;
+						total_items ++;
+					}
+				}
+
+				if ( FUI_DISPLAY_LANG.lang == 'ar' )
+					clientItemsListTitle.html(`
+						المشتريات الخاصة ب
+						<span class="text-02"> ${pharmacy_name}</span> 
+						<div class="text-muted text-04">
+							<span class="text-04">(${total_items}) كمجموع كلي</span>
+						</div>
+					`);
+				else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+					clientItemsListTitle.html(`
+						Les achats
+						<span class="text-02"> ${pharmacy_name}</span> 
+						<div class="text-muted text-04">
+							<span class="text-04">(${total_items}) en tant qu'agrégat</span>
+						</div>
+					`);
+
+				var options = {
+					data: html.split('PAG_SEP'),
+					resultsPerPage: 5
+				};
+				new SmoothPagination(pagination3, clientItemsList, options);
+			}
+		}
+	});
+	// invoicesTable click
+	invoicesTable.off('click');
+	invoicesTable.on('click', async e =>
+	{
+		var target = $(e.target);
+		if ( target[0].nodeName == 'TD' )
+		{
+			var parent = target.closest('tr');
+			var nextTR = parent.next();
+			nextTR.slideToggle(200)
+			parent.toggleClass('expanded');
+		}
+	});
+	// search_btn invoices
+	search_btn.off('click');
+	search_btn.on('click', e =>
+	{
+		displayInvoices();
+	});
+	// display stats
+	displayStats();
+	async function displayStats()
+	{
+		// Distributors
+		SectionLoader(distributorsList);
+		var distributors = await searchClinicEmployees({
+			query: '',
+			administration_id: 0,
+			employee_administration: 'CENTRAL_ADMINISTRATION'
+		});
+		SectionLoader(distributorsList, '');
+		if ( distributors.code == 200 )
+		{
+			var data = distributors.data;
+			var html = '';
+			$.each(data, (k,v) =>
+			{
+				if ( v.type.employee_type_code == EMP_TYPE_DISTRIBUTOR )
+				{
+					if ( FUI_DISPLAY_LANG.lang == 'ar' )
+					{
+						html += `<button type="button" class="list-group-item list-group-item-action" data-id="${v.employee_id}" data-name="${v.employee_name}">
+									${v.employee_name} <span class="text-02">(${v.pharmacies_sold_amount} ${currency}) + (${v.current_year_pharmacies_depts}) ديون للزبائن</span>
+									<span class="text-02">و (${v.pharmacies.length}) زبائن</span>
+								</button>PAG_SEP`;
+					}
+					else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+					{
+						html += `<button type="button" class="list-group-item list-group-item-action" data-id="${v.employee_id}" data-name="${v.employee_name}">
+									${v.employee_name} <span class="text-02">(${v.pharmacies_sold_amount} ${currency}) + (${v.current_year_pharmacies_depts}) dettes envers les clients ${currency}</span>
+									<span class="text-02">et (${v.pharmacies.length}) clients</span>
+								</button>PAG_SEP`;
+					}
+				}
+			});
+			var options = {
+				data: html.split('PAG_SEP'),
+				resultsPerPage: 5
+			};
+			new SmoothPagination(pagination1, distributorsList, options);
+			distributorsList.children().first()[0].click();
+		}
+	}
+	// display orders
+	async function displayOrders()
+	{
+		SectionLoader(chartEl01.closest('.section'));
+		var orders = await listOrders({
+			distributor_id: EmployeeObject.employee_id
+		});
+		SectionLoader(chartEl01.closest('.section'), '');
+		if ( orders.code == 200 )
+		{
+			var data = orders.data;
+			// loop data
+			var labels = [];
+			var fdata = [];
+			for (var i = 0; i < data.charts.distributor_sales_current_year.length; i++) 
+			{
+				var v = data.charts.distributor_sales_current_year[i];
+				// add months
+				labels.push( translateMonthName(v.date) );
+				// add data
+				fdata.push(v.total);
+			}
+			if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			{
+				const ctx = chartEl01[0].getContext('2d');
+				if ( chart01 )
+					chart01.destroy();
+				chart01 = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							barPercentage: 0.5,
+							barThickness: 50,
+							//maxBarThickness: 8,
+							minBarLength: 2,
+							label: "عدد الاموال",
+							data: fdata,
+							backgroundColor: [
+								'rgba(109, 157, 255, 0.2)'
+							],
+							borderColor: [
+								'rgba(109, 157, 255, 1)'
+							],
+							borderWidth: 1,
+							borderRadius: 10,
+							hoverOffset: 4
+						}]
+					},
+					options: {
+						scales: {
+						y: {
+							beginAtZero: true
+						}
+						},
+						plugins: {
+							legend: {
+								position: 'top',
+								rtl: true,
+								textDirection: 'rtl'
+							},
+							title: {
+								text: `احصائيات صفقات ${EmployeeObject.employee_name}`,
+								font: {
+									weight: 'bold',
+									size: "16px"
+								},
+								display:true,
+								position: "top"
+							}
+						},
+						onResize: function(e)
+						{
+							// set canvas width
+							//chartEl01.css('width', '100%');
+						}
+					}
+				});	
+				// set canvas width
+				//chartEl02.css('width', '100%');
+			}
+			else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			{
+				const ctx = chartEl01[0].getContext('2d');
+				if ( chart01 )
+					chart01.destroy();
+				chart01 = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							barPercentage: 0.5,
+							barThickness: 50,
+							//maxBarThickness: 8,
+							minBarLength: 2,
+							label: "nombre d'argent",
+							data: fdata,
+							backgroundColor: [
+								'rgba(109, 157, 255, 0.2)'
+							],
+							borderColor: [
+								'rgba(109, 157, 255, 1)'
+							],
+							borderWidth: 1,
+							borderRadius: 10,
+							hoverOffset: 4
+						}]
+					},
+					options: {
+						scales: {
+						y: {
+							beginAtZero: true
+						}
+						},
+						plugins: {
+							legend: {
+								position: 'top',
+								rtl: false,
+								textDirection: 'ltr'
+							},
+							title: {
+								text: `Statistiques sur les transactions ${EmployeeObject.employee_name}`,
+								font: {
+									weight: 'bold',
+									size: "16px"
+								},
+								display:true,
+								position: "top"
+							}
+						},
+						onResize: function(e)
+						{
+							// set canvas width
+							//chartEl01.css('width', '100%');
+						}
+					}
+				});	
+				// set canvas width
+				//chartEl02.css('width', '100%');
+			}
+		}
+	}
+	// display clients
+	async function displayClients()
+	{
+		SectionLoader(clientsList.parent());
+		var employee = await getEmployee(EmployeeObject.employee_id);
+		SectionLoader(clientsList.parent(), '');
+		clientsList.html('');
+		if ( employee.code == 200 )
+		{
+			var data = employee.data;
+			var html = '';
+			if ( data.pharmacies.length == 0 )
+			{
+				clientsList.closest('.WRAPPER').slideUp(200);
+				return;
+			}
+			clientsList.closest('.WRAPPER').slideDown(200);
+			var totalDepts = 0;
+			$.each(data.pharmacies, (k,v) =>
+			{
+				if ( FUI_DISPLAY_LANG.lang == 'ar' )
+				{
+					html += `<button type="button" class="list-group-item list-group-item-action" data-id="${v.pharmacy_id}" data-name="${v.name}">
+								${v.name} لديه (${v.dept_amount} ${currency}) دين 
+							</button>PAG_SEP`;
+				}
+				else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+				{
+					html += `<button type="button" class="list-group-item list-group-item-action" data-id="${v.pharmacy_id}" data-name="${v.name}">
+								${v.name} Il a (${v.dept_amount} ${currency}) dettes 
+							</button>PAG_SEP`;
+				}
+				totalDepts+= parseFloat(v.dept_amount);
+			});
+
+			if ( FUI_DISPLAY_LANG.lang == 'ar' )
+				distributorClientsListTitle.html(`
+					زبائن الخاصين ب 
+					<span class="text-02">${EmployeeObject.employee_name}</span> 
+					<div class="text-muted text-04">
+						<span class="text-04">(${data.pharmacies.length}) زبون</span>
+						<span class="text-04">مع (${totalDepts} ${currency}) ديون</span>
+					</div>
+				`);
+			else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+				distributorClientsListTitle.html(`
+					Les clients de 
+					<span class="text-02">${EmployeeObject.employee_name}</span> 
+					<div class="text-muted text-04 mt-2">
+						<span class="text-04">(${data.pharmacies.length}) client</span>
+						<span class="text-04">avec (${totalDepts} ${currency}) dettes</span>
+					</div>
+				`);
+
+			var options = {
+				data: html.split('PAG_SEP'),
+				resultsPerPage: 5
+			};
+			new SmoothPagination(pagination2, clientsList, options);
+		}
+	}
+	// display iinvoices
+	async function displayInvoices()
+	{
+		SectionLoader(invoicesTable);
+		var response = await searchDistributorOrdersBetweenDates({
+			query: search_input.val(),
+			distributor_id: EmployeeObject.employee_id,
+			from: date_start_input.val(),
+			to: date_end_input.val(),
+		});
+		SectionLoader(invoicesTable, '');
+		invoicesTable.find('tbody').html('');
+		if ( response.code == 404 )
+			return;
+
+		invoicesTable.closest('.WRAPPER').slideDown(200);
+
+		var data = response.data;
+		var html = '';
+
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		{
+			distributorInvoicesTitle.html(`
+				فواتير الصفقات الخاصة ب 
+				<span class="text-02">${EmployeeObject.employee_name}</span> 
+				<div class="text-muted text-04 mt-1">
+					<span class="text-04">(${data.length}) صفقات</span>
+				</div>
+			`);
+		}
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		{
+			distributorInvoicesTitle.html(`
+				Factures de transaction pour 
+				<span class="text-02">${EmployeeObject.employee_name}</span> 
+				<div class="text-muted text-04">
+					<span class="text-04">(${data.length}) صفقة</span>
+				</div>
+			`);
+		}
+
+		for (var i = 0; i < data.length; i++) 
+		{
+			var order = data[i];
+			// loop items
+			if ( order.order_items )
+			{
+				var itemsHTML = '<ul class="list-group list-group-flush list-group-numbered">';
+				var itemsHTML2 = '';
+				var order_item_dept_rate = 0.00;
+				var order_item_price = 0.00;
+				for (var j = 0; j < order.order_items.length; j++) 
+				{
+					var item = order.order_items[j];
+					order_item_dept_rate += parseFloat(item.item_dept.order_item_dept_rate);
+					order_item_price += parseFloat(item.order_item_price);
+					itemsHTML += `<li class="list-group-item text-04">${item.item_name}</li>`;
+					itemsHTML2 += `<tr>
+									<td>${item.item_name}</td>
+									<td>${item.order_item_quantity}</td>
+									<td>${item.order_item_price}</td>
+									<td>${item.order_item_final_amount}</td>
+									</tr>`;
+				}
+				itemsHTML += '</ul>';
+			}
+			if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			{
+				html += `<tr class="expand-row">
+							<td>
+								<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-orderid="${order.order_id}">
+							</td>
+							<td>${order.order_hash}</td>
+							<td>${order.order_date}|${order.order_time}</td>
+							<td>${order.order_total_amount}</td>
+							<td>${order.order_amount_paid}</td>
+							<td>${order.order_receiver_name}</td>
+							<td style="width:15px">
+								<svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+							</td>
+						</tr>PAG_SEP
+						<tr class="expand-row__row" style="display:none;">
+							<td colspan="10">
+								<table class="table-01">
+									<thead>
+										<tr>
+											<th>المنتج</th>
+											<th>الكمية</th>
+											<th>سعر الوحدة</th>
+											<th>السعر الكلي</th>
+										</tr>
+									</thead>
+									<tbody>
+										${itemsHTML2}
+									</tbody>
+								</table>
+								<div class="order-price-table">
+									<div class="order-price-table-contents">
+										${itemsHTML}	
+									</div>
+									<div class="order-price-table-contents">
+										<div class="order-price-table-td">
+											<strong>المبلغ الاجمالي</strong>
+											<span>${parseFloat(order.order_total_amount).toFixed(2)}</span>
+										</div>
+										<div class="order-price-table-td">
+											<strong>مبلغ الدين</strong>
+											<span>${parseFloat(order.order_dept_amount).toFixed(2)}</span>
+										</div>
+										<div class="border-top my-1"></div>
+										<div class="order-price-table-td">
+											<strong>المبلغ المدفوع</strong>
+											<span>${parseFloat(order.order_amount_paid).toFixed(2)}</span>
+										</div>	
+									</div>
+								</div>
+							</td>
+						</tr>PAG_SEP`;	
+			}
+			else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			{
+				html += `<tr class="expand-row">
+							<td>
+								<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-orderid="${order.order_id}">
+							</td>
+							<td>${order.order_hash}</td>
+							<td>${order.order_date}|${order.order_time}</td>
+							<td>${order.order_total_amount}</td>
+							<td>${order.order_amount_paid}</td>
+							<td>${order.order_receiver_name}</td>
+							<td style="width:15px">
+								<svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+							</td>
+						</tr>PAG_SEP
+						<tr class="expand-row__row" style="display:none;">
+							<td colspan="10">
+								<table class="table-01">
+									<thead>
+										<tr>
+											<th>le produit</th>
+											<th>Quantité</th>
+											<th>prix d'Unité</th>
+											<th>prix total</th>
+										</tr>
+									</thead>
+									<tbody>
+										${itemsHTML2}
+									</tbody>
+								</table>
+								<div class="order-price-table">
+									<div class="order-price-table-contents">
+										${itemsHTML}	
+									</div>
+									<div class="order-price-table-contents">
+										<div class="order-price-table-td">
+											<strong>Montant total</strong>
+											<span>${parseFloat(order.order_total_amount).toFixed(2)}</span>
+										</div>
+										<div class="order-price-table-td">
+											<strong>Montant de la dette</strong>
+											<span>${parseFloat(order.order_dept_amount).toFixed(2)}</span>
+										</div>
+										<div class="border-top my-1"></div>
+										<div class="order-price-table-td">
+											<strong>Le montant payé</strong>
+											<span>${parseFloat(order.order_amount_paid).toFixed(2)}</span>
+										</div>	
+									</div>
+								</div>
+							</td>
+						</tr>PAG_SEP`;	
+			}	
+		}
+		// add html
+		var options = {
+			data: html.split('PAG_SEP'),
+			resultsPerPage: 12
+		};
+		new SmoothPagination(pagination4, invoicesTable.find('tbody'), options);
+	}
+
+})
+
+</script>

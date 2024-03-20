@@ -1,0 +1,331 @@
+<div class="container-fluid" id="allPatientMedicalAnalysisContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_prescriptions.sectionTitle %></h1>
+	</div>
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-3 WRAPPER" id="wrapper01">
+
+		<div class="table-nav">
+
+			<div class="row gx-4 gy-3 mb-2">
+
+                <div class="col-lg-12 col-md-12 col-sm-12" data-perm="delete_patient_medical_analysis">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN">
+						<%= UI_DISPLAY_LANG.views.pages.global.delete_selected_button %>
+					</button>
+				</div>
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                        dataIgnoreDefaultValue: true,
+                    }) -%>
+				</div>
+                <div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="analysis_total">0</span>
+                    </div>
+                    <ul class="list-group list-group-flush" id="analysis_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+                </div> 
+
+			</div>
+
+            <div class="row gy-3">
+                
+                <div class="col-md-6">
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers-with-clients.template.ejs', {
+                        componentId: 'select_centers_with_clients_component',
+                        centerSelectId: 'center_select',
+                        clientSelectId: 'patient_select',
+                        columnsClass: 'col-md-6',
+                    }) -%>
+                </div>
+
+            </div>
+
+		</div>
+		<div id="pagination1" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card hover-shadow" data-role="APT" data-aptid="" style="cursor: pointer;">
+					<div class="card-body no-pointer">
+						<div class="h5">قسم الحجامة</div>
+						<div class="text-02">(4) جلسات</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#allPatientMedicalAnalysisContainer');
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination = page_container.find('#pagination');
+var tableElement = page_container.find('#tableElement');
+
+var search_btn = page_container.find('#search_btn');
+var search_input = page_container.find('#search_input');
+var date_start_input = page_container.find('#date_start_input');
+var date_end_input = page_container.find('#date_end_input');
+
+var analysis_total = page_container.find('#analysis_total');
+var analysis_extra_data_list = page_container.find('#analysis_extra_data_list');
+
+var center_select = page_container.find('#center_select');
+var patient_select = page_container.find('#patient_select');
+
+var contentsWrapper = page_container.find('#contentsWrapper');
+var changedSettingsWrapper = page_container.find('#changedSettingsWrapper');
+var backBTN = changedSettingsWrapper.find('#backBTN');
+
+var BACK_TO_MAIN_UI_BTN = page_container.find('[data-role="BACK_TO_MAIN_UI_BTN"]');
+
+var wrapper01 = page_container.find('#wrapper01');
+
+var PrescObject = {
+    prescriptionId: null,
+    query: sessionData().query
+}
+// clear session data
+sessionData(true)
+
+// back to main ui
+BACK_TO_MAIN_UI_BTN.on('click', e =>
+{
+    wrapper01.slideDown(200).siblings('.WRAPPER').slideUp(200);
+});
+// tableElement click
+tableElement.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        var id = parent.data('id');
+
+        parent.addClass('disabled')
+        var res = await PATIENT_MEDICAL_ANALYSIS_MODEL.show({
+            id: id
+        })
+        parent.removeClass('disabled')
+        if ( res.code == 404 ) return
+        goToPage('create-patient-medical-analysis', res.data)
+        
+        //rebindEvents();
+    }
+    else if ( target.data('role') == 'PRINT' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        var id = parent.data('id');
+
+        SectionLoader(target.closest('.card'))
+
+        var res = await PATIENT_MEDICAL_ANALYSIS_MODEL.show({
+            id: id
+        })
+        
+        if ( res.code == 404 ) return
+        
+        var data = res.data
+
+        var centerData = (await CLINIC_MODEL.show(data.clinicId)).data
+       
+        SectionLoader(target.closest('.card'), '')
+
+        data['centerData'] = centerData
+
+        printMedicalAnalysis(data)
+    }
+    else if ( target.data('role') == 'PREVIEW' || target.data('role') == 'row' )
+    {
+        var perm = target.data('check-perm')
+
+        // check perm if clicked on parent
+        if ( !isNull(perm) && !checkPermission(perm) )
+        {
+            
+            CreateToast('PS', FUI_DISPLAY_LANG.views.messages.permission_denied, '')
+            return
+        }
+
+        var id = target.data('id')
+
+        SectionLoader(target.closest('.card'))
+
+        var res = await PATIENT_MEDICAL_ANALYSIS_MODEL.show({
+            id: id
+        })
+       
+        if ( res.code == 404 ) return
+        
+        var data = res.data
+        
+        var centerData = (await CLINIC_MODEL.show(data.clinicId)).data
+
+        SectionLoader(target.closest('.card'), '')
+
+        data['centerData'] = centerData
+        
+        previewMedicalAnalysis(data)
+    }
+    
+});
+// delete selected
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        deleteSelectedBTN.addClass('disabled')
+        var res = await PATIENT_MEDICAL_ANALYSIS_MODEL.batchDelete( {
+            list: getSelectedRows()
+        } )
+        deleteSelectedBTN.removeClass('disabled')
+
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+        CreateToast('PS', res.message, '')
+        if ( res.code == 404 ) return
+        
+        //
+        search_input.trigger('keyup')
+    });
+})
+
+// search
+search_btn.on('click', e =>
+{
+    search_input.trigger('keyup')
+})
+detectTypingEnd(search_input, val =>
+{
+    displayAll({
+        method_type: 'search',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            clinicId: center_select.find(':selected').val(),
+            patientId: patient_select.find(':selected').val(),
+            orderBy: 'id',
+            order: 'desc',
+        }
+    })
+})
+
+// display all
+search_input.trigger('keyup')
+async function displayAll(params)
+{
+    analysis_total.text('0')
+    analysis_extra_data_list.html('')
+    tableElement.html('')
+    SectionLoader(tableElement)
+
+    if ( params.method_type == 'search' ) var res = await PATIENT_MEDICAL_ANALYSIS_MODEL.search(params)
+
+    SectionLoader(tableElement, '')
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+    var last_data = firstArrayElement(data)
+
+    analysis_total.text(data.length)
+
+    $.each(data, (k,v) =>
+    {
+        html+= `<div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card hover-shadow" data-role="row" data-id="${v.id}" data-check-perm="preview_patient_medical_analysis" style="cursor: pointer;">
+                        <div class="pt-2 px-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" data-role="CHECK" value="" id="flexCheckDefault_${v.id}">
+                                <label class="form-check-label" for="flexCheckDefault_${v.id}">
+                                    ${FUI_DISPLAY_LANG.views.pages.global.select}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-body no-pointer">
+                            <div class="h5">${FUI_DISPLAY_LANG.views.pages.global.created_by}: ${v.employee.employee_name}</div>
+                            <div class="mb-2">${FUI_DISPLAY_LANG.views.pages.global.attributes.center}: ${v.clinicName}</div>
+                            <span class="text-02">${FUI_DISPLAY_LANG.views.pages.global.for_}:  ${v.patientName}</span>
+                            <div class="text-muted mt-2">${FUI_DISPLAY_LANG.views.pages.global.in_date}: ${v.created_at_date} | ${v.created_at_time}</div>
+                        </div>
+                        <div class="py-2 px-2">
+                            <a class="d-inline-block mx-2 text-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                ${FUI_DISPLAY_LANG.views.pages.global.more}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" class="dropdown-item" data-role="PRINT" data-perm="print_patient_medical_analysis">
+                                        ${FUI_DISPLAY_LANG.views.pages.global.print_}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item" data-role="PREVIEW" data-perm="preview_patient_medical_analysis" data-patientid="${v.patientId}" data-id="${v.id}">${FUI_DISPLAY_LANG.views.pages.global.preview}</a>
+                                </li>
+                            </ul>
+                            <a href="#" class="d-inline-block text-dark" data-role="UPDATE" data-perm="update_patient_medical_analysis">
+                                <i class="fas fa-edit no-pointer"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>PAG_SEP`
+    });
+    // add html
+    new SmoothPagination(pagination, tableElement, {
+        data: html.split('PAG_SEP'),
+        resultsPerPage: 9
+    })
+
+    // extra data
+    analysis_extra_data_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+            <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+            <span>${last_data.patientName}, </span>
+            <span class="text-primary">${last_data.created_at_date} ${last_data.created_at_time}</span> 
+        </li>
+    `)
+}
+
+// get selected
+function getSelectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="row"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i]);
+        var check = parent.find('[data-role="CHECK"]')
+        if ( check.is(':checked') )
+            list.push({ id: parent.data('id') });
+    }
+
+    return list;
+}
+
+})
+
+</script>

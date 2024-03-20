@@ -1,0 +1,642 @@
+<div class="container-fluid" id="private_appointments_archives_container">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_appointements.sectionTitle %></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="table-nav">
+
+            <div class="row gx-2 gy-5 mb-2">
+
+				<!-- <div class="col-lg-12 col-md-12 col-sm-12">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN"><%= UI_DISPLAY_LANG.views.pages.all_appointements.btn01 %></button>
+				</div> -->
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                        dataIgnoreDefaultValue: true,
+                    }) -%>
+				</div>
+                <div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="appointments_total">0</span>
+                    </div>
+                    <ul class="list-group list-group-flush" id="appointments_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+                </div>  
+
+			</div>
+
+			<div class="row gx-2 gy-5">
+
+                <div class="col-lg-2 col-md-3 col-sm-12">
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers.template.ejs', {
+                        componentId: 'filter',
+                        selectId: 'center_select',
+                        eventsReceiverId: 'private_appointments_archives_container',
+                    }) -%>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-12">
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-departments.template.ejs', {
+                        componentId: 'filter',
+                        selectId: 'department_select',
+                        eventsReceiverId: 'private_appointments_archives_container',
+                    }) -%>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-12">
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-contact-status.template.ejs', {
+                        componentId: 'filter',
+                        selectId: 'contact_status_select',
+                        eventsReceiverId: 'private_appointments_archives_container',
+                    }) -%>
+                </div>
+
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					
+                    <div class="btn-group btn-group-sm">
+                        
+                        <button class="btn btn-primary btn-sm" id="create_new_apt_button" data-target="#create_new_apt_form_div" data-perm="batch_create_private_appointments"><%= UI_DISPLAY_LANG.views.pages.all_appointements.btn05 %></button>
+
+                        <button class="btn btn-warning" id="transform_patients_button" data-target="#transfer_patients_to_another_center_form_div" data-perm="transfer_patients_records_to_another_center"><%= UI_DISPLAY_LANG.views.pages.global.btn1 %></button>
+
+                    </div>
+
+                    <div class="row mt-2">
+
+                        <div class="col-lg-3 col-md-6 d-none" id="create_new_apt_form_div">
+
+                            <div class=" py-2 px-2 border rounded">
+
+                                <h4 class="h4" id="title"></h4>
+
+                                <form action="#" id="create_new_apt_form">
+
+                                    <div class="mb-2">
+                                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label27 %></label>
+                                        <input type="text" class="input-text input-text-outline" id="create_naf_aptNote_input">
+                                    </div>
+    
+                                    <div class="mb-2">
+                                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_date %></label>
+                                        <input type="date" id="create_naf_aptDate_input" class="input-text input-text-outline">
+                                    </div>
+        
+                                    <div class="mb-2">
+                                        <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_time %></label>
+                                        <input type="time" step="any" id="create_naf_aptTime_input" class="input-text input-text-outline">
+                                    </div>
+        
+                                    <div class="">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+                                        </button>
+                                    </div>
+        
+                                </form>
+
+                            </div>
+    
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 d-none" id="transfer_patients_to_another_center_form_div">
+
+                            <div class=" py-2 px-2 border rounded">
+
+                                <h4 class="h4" id="title"></h4>
+                                
+                                <form action="" id="transfer_patients_to_another_center_form">
+        
+                                    <div class="mb-2">
+                                        <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers.template.ejs', {
+                                            componentId: 'transfer_patients_',
+                                            selectId: 'transfer_patients_center_select',
+                                            eventsReceiverId: 'private_appointments_archives_container',
+                                        }) -%>
+                                    </div>
+        
+                                    <div class="">
+                                        <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.transfer_records_button %>">
+                                    </div>
+            
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+				</div>
+
+			</div>
+            
+		</div>
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="utable shadowed" id="tableElement">
+			<div class="thead">
+				<div class="td">#</div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th07 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th02 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th06 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th03 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th04 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th05 %></div>
+                <div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th10 %></div>
+                <div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th08 %></div>
+                <div class="td"><%= UI_DISPLAY_LANG.views.pages.all_appointements.th09 %></div>
+			</div>
+			<div class="tbody">
+				<!--
+				<div class="tr">
+					<div class="td">
+						<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+					</div>
+					<div class="td">clinicname</div>
+					<div class="td">classname</div>
+					<div class="td">classdesc</div>
+					<div class="td">date</div>
+					<div class="td">
+						<button class="btn btn-primary btn-sm pointer" data-role="UPDATE" data-aptid="">
+							<span class="no-pointer"><i class="fas fa-edit"></i></span>
+						</button>		
+					</div>
+				</div>
+				-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#private_appointments_archives_container');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination = page_container.find('#pagination');
+var tableElement = page_container.find('#tableElement');
+
+var search_input = page_container.find('#search_input');
+var search_btn = page_container.find('#search_btn');
+var date_start_input = page_container.find('#date_start_input');
+var date_end_input = page_container.find('#date_end_input');
+
+var center_select = page_container.find('#center_select');
+var department_select = page_container.find('#department_select');
+var contact_status_select = page_container.find('#contact_status_select')
+
+var appointments_total = page_container.find('#appointments_total');
+var appointments_extra_data_list = page_container.find('#appointments_extra_data_list');
+
+var create_new_apt_button = page_container.find('#create_new_apt_button');
+var create_new_apt_form = page_container.find('#create_new_apt_form');
+var create_new_apt_form_submit = create_new_apt_form.find('button[type="submit"]')
+var create_naf_aptNote_input = create_new_apt_form.find('#create_naf_aptNote_input')
+var create_naf_aptDate_input = create_new_apt_form.find('#create_naf_aptDate_input')
+var create_naf_aptTime_input = create_new_apt_form.find('#create_naf_aptTime_input')
+
+var transform_patients_button = page_container.find('#transform_patients_button')
+var transfer_patients_to_another_center_form = page_container.find('#transfer_patients_to_another_center_form')
+var transfer_patients_to_another_center_form_submit = transfer_patients_to_another_center_form.find(':submit')
+var transfer_patients_center_select = transfer_patients_to_another_center_form.find('#transfer_patients_center_select')
+
+// list appointment special cases
+var APT_SPECIAL_CASES = []
+var res = await APPOINTMENT_MODEL.specialCase_args_index()
+if ( res.code == 200 )
+{
+    var data = res.data
+    $.each(data, (k,v) =>
+    {
+        var name = (FUI_DISPLAY_LANG.lang == 'ar') ? v.name_ar : v.name_fr
+        APT_SPECIAL_CASES.push({
+            id: v.id,
+            name: name,
+            code: v.code
+        })
+    })
+}
+
+
+// delete selected
+deleteSelectedBTN.off('click');
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("حذف البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Suprimmer les données...");
+
+        var response = await APPOINTMENT_MODEL.batchDelete(selectedRows());
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        search_input.trigger('keyup')
+    });
+})
+// create new apt
+create_new_apt_button.on('click', e =>
+{
+    page_container.find( create_new_apt_button.data('target') ).toggleClass('d-none')
+    .find('#title').text( create_new_apt_button.text() )
+})
+create_new_apt_form.on('submit', e =>
+{
+    e.preventDefault()
+
+    PromptConfirmDialog().then(async c =>
+    {
+        create_new_apt_form_submit.addClass('disabled')
+        var res = await APPOINTMENT_MODEL.batchStore({
+            list: selectedPatients(),
+            aptNote: create_naf_aptNote_input.val(),
+            aptDate: create_naf_aptDate_input.val(),
+            aptTime: create_naf_aptTime_input.val(),
+        })
+        create_new_apt_form_submit.removeClass('disabled')
+
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message);
+        if ( res.code == 404 ) return
+        //
+        search_input.trigger('keyup')
+    });
+})
+// transfer patients
+transform_patients_button.on('click', e =>
+{
+    page_container.find( transform_patients_button.data('target') ).toggleClass('d-none')
+    .find('#title').text( transform_patients_button.text() )
+})
+// transfer patients form
+transfer_patients_to_another_center_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    PromptConfirmDialog().then(async c =>
+    {
+        transfer_patients_to_another_center_form_submit.addClass('disabled')
+        var res = await CLINIC_MODEL.transferPatients({
+            clinicId: transfer_patients_center_select.find(':selected').val(),
+            patients: selectedPatients()
+        })
+        
+        transfer_patients_to_another_center_form_submit.removeClass('disabled')
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)    
+    })
+})
+
+// tableElement click
+tableElement.off('click');
+tableElement.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var aptId = target.data('aptid');
+        var res =await APPOINTMENT_MODEL.show({
+            aptId: aptId
+        })
+        
+        CreateAppointmentDialog__CentralAdmin(res.data)
+    }
+    else if ( target.data('role') == 'SET_PAID' )
+    {
+        PromptConfirmDialog().then(async c =>
+        {
+            var aptId = target.data('aptid');
+            SectionLoader(tableElement);
+            var response = await APPOINTMENT_MODEL.private_setPaid({
+                aptId: aptId,
+                status: ST_YES
+            });
+            SectionLoader(tableElement, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            search_input.trigger('keyup')
+        });
+    }
+    else if ( target.data('role') == 'SET_ATTENDANCE' )
+    {
+        PromptConfirmDialog().then(async c =>
+        {
+            var aptId = target.data('aptid');
+            SectionLoader(tableElement);
+            var response = await APPOINTMENT_MODEL.private_setAttendance({
+                aptId: aptId,
+                status: ATT_PRESENT
+            });
+            SectionLoader(tableElement, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            search_input.trigger('keyup')
+        });
+    }
+    else if ( target.data('role') == 'SET_TREATED' )
+    {
+        PromptConfirmDialog().then(async c =>
+        {
+            var aptId = target.data('aptid');
+            SectionLoader(tableElement);
+            var response = await APPOINTMENT_MODEL.private_setTreated({
+                aptId: aptId,
+                status: ST_YES
+            });
+            SectionLoader(tableElement, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            search_input.trigger('keyup')
+        });
+    }
+    else if ( target.data('role') == 'ADD_CONSOMMABLES' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        AddConsommablesToPatientDialog({
+            administration_id: center_select.find(':selected').val(),
+            administration_name: center_select.find(':selected').text(),
+            patientId: parent.data('patient-id'),
+            patientName: parent.data('patient-name')
+        }, callback =>
+        {
+            search_input.trigger('keyup')
+        });
+    }
+})
+.on('change', e =>
+{
+    var target = $(e.target)
+    if ( target.data('role') == 'SET_SPECIAL_CASE' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        var selected = target.find(':selected')
+        var note_input = target.next()
+        var aptId = parent.data('aptid')
+        var patientId = parent.data('patient-id')
+        var special_case_id = selected.val()
+        var employee_id = parent.data('employee_id')
+
+        if ( !selected.val() )
+        {
+            note_input.addClass('d-none')
+            return
+        }
+
+        setTimeout(() => {
+            note_input.focus()
+        }, 200);
+        note_input.removeClass('d-none')
+        note_input.off('keydown').on('keydown', e =>
+        {
+            if ( e.key != 'Enter' ) return
+            PromptConfirmDialog().then(async c =>
+            {
+                parent.addClass('disabled')
+                var res = await APPOINTMENT_MODEL.specialCase_store({
+                    aptId: aptId,
+                    patientId: patientId,
+                    special_case_id: special_case_id,
+                    employee_id: employee_id,
+                    note: note_input.val(),
+                    postponed_at: '/'
+                })
+                
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+                parent.removeClass('disabled')
+                if ( res.code == 404 ) return
+                displayAll({
+                    method_type: 'private_archive_search',
+                    query: search_input.val(),
+                    clinicId: center_select.find(':selected').val(),
+                })
+            })
+        })
+    }
+})
+// search
+search_btn.on('click', e =>
+{
+    search_input.trigger('keyup')
+});
+
+detectTypingEnd(search_input, val =>
+{
+    displayAll({
+        method_type: 'private_archive_search',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            classId: department_select.find(':selected').val(),
+            clinicId: center_select.find(':selected').val(),
+            special_case_id: contact_status_select.find(':selected').val(),
+            orderBy: 'id',
+            order: 'desc',
+            type: 'private',
+        }
+    })
+})
+// display all
+search_input.trigger('keyup')
+async function displayAll(params)
+{
+    // total
+    appointments_total.text(0)
+
+    appointments_extra_data_list.html('')
+    SectionLoader(tableElement)
+    // clear html
+    tableElement.find('.tbody').html('')
+    if ( params.method_type == 'private_archive_search' )
+        var res = await APPOINTMENT_MODEL.private_archive_search(params)
+    
+    SectionLoader(tableElement, '')
+
+    if ( res.code == 404 )
+        return;
+
+    var data = res.data;
+    var html = '';
+    var last_data = firstArrayElement(data)
+    // total
+    appointments_total.text(data.length)
+    $.each(data, (k,v) =>
+    {
+        var SET_PAID_BTN = `<button class="btn ${(v.isPaid == ST_NO) ? 'btn-warning' : 'btn-success'}" data-role="SET_PAID" data-aptid="${v.aptId}">
+                                ${(v.isPaid == ST_NO) ? 'لا' : 'نعم'}
+                            </button>`;
+        var SET_ATTENDANCE_BTN = `<button class="btn ${(v.attendance == ATT_ABSENT) ? 'btn-warning' : 'btn-success'}" data-role="SET_ATTENDANCE" data-aptid="${v.aptId}">
+                                    ${(v.attendance == ATT_ABSENT) ? 'غائب' : 'حاضر'}
+                                </button>`;
+        var SET_TREATED_BTN = `<button class="btn ${(v.isTreated == ST_NONE) ? 'btn-warning' : 'btn-success'}" data-role="SET_TREATED" data-aptid="${v.aptId}" data-patient_id="${v.patientId}">
+                                    ${(v.isTreated == ST_NONE) ? 'لا' : 'نعم'}
+                                </button>`;
+        var aptDateFormat = (v.aptDateFormat == 0) ? 'اليوم' : `${v.aptDateFormat} أيام`;
+        var registeredByCentAdminMessage = (v.isPreRegistered == ST_YES) ? `<div class="alert alert-warning alert-1">مسجل مسبقا</div>` : '';
+        if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            SET_PAID_BTN = `<button class="btn ${(v.isPaid == ST_NO) ? 'btn-warning' : 'btn-success'}" data-role="SET_PAID" data-aptid="${v.aptId}">
+                                ${(v.isPaid == ST_NO) ? 'non' : 'oui'}
+                            </button>`;
+            SET_ATTENDANCE_BTN = `<button class="btn ${(v.attendance == ATT_ABSENT) ? 'btn-warning' : 'btn-success'}" data-role="SET_ATTENDANCE" data-aptid="${v.aptId}">
+                                    ${(v.attendance == ATT_ABSENT) ? 'absent' : 'present'}
+                                </button>`;
+            SET_TREATED_BTN = `<button class="btn ${(v.isTreated == ST_NONE) ? 'btn-warning' : 'btn-success'}" data-role="SET_TREATED" data-aptid="${v.aptId}" data-patient_id="${v.patientId}">
+                                    ${(v.isTreated == ST_NONE) ? 'non' : 'oui'}
+                                </button>`;
+            registeredByCentAdminMessage = (v.isPreRegistered == ST_YES) ? `<div class="alert alert-warning alert-1">pré-inscrit</div>` : '';
+        }
+        if ( v.attendance != ATT_ABSENT )
+            registeredByCentAdminMessage = '';
+
+        html += `<div class="tr" data-role="row" data-aptid="${v.aptId}" data-name="${v.aptName}" data-patient-id="${v.patientId}" data-patient-name="${v.patientName}" data-special_case_id="${v.special_case_id}" data-employee_id="${v.employee_id}" data-price="${v.aptPrice}" data-clinic-id="${v.clinicId}" data-clinic-name="${v.clinicName}" data-class-id="${v.classId}" data-class-name="${v.className}">
+                    <div class="td">
+                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-aptid="${v.aptId}">
+                    </div>
+                    <div class="td">
+                        <div>${v.aptName}</div>
+                        ${registeredByCentAdminMessage}
+                    </div>
+                    <div class="td">
+                        <div class="mb-2">${v.className}</div>
+                        <div class="alert alert-info alert-1">${FUI_DISPLAY_LANG.views.pages.global.status[v.special_case_code]}</div>
+                    </div>
+                    <div class="td">${v.aptPrice}</div>
+                    <div class="td">
+                        <a href="#" class="js_go_to_create_patient_medical_data" data-patient-id="${v.patientId}">${v.patientName}</a> 
+                        <div class="text-muted text-04">(${v.patientPhone})</div>
+                    </div>
+                    <div class="td">${v.aptNote}</div>
+                    <div class="td">
+                        <div>${v.created_at}</div>
+                    </div>
+                    <div class="td">
+                        ${SET_ATTENDANCE_BTN}
+                    </div>
+                    <div class="td">
+						${SET_TREATED_BTN}
+					</div>
+                    <div class="td">
+                        ${
+                            (v.isPaid == ST_YES)
+                            ? `<div class="py-2 px-2 js_print_private_appointment_list">
+                                    <a class="d-inline-block mx-2 text-dark pointer" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${FUI_DISPLAY_LANG.views.pages.global.more}
+                                    </a>
+                                    <ul class="dropdown-menu px-2">
+                                        <li>
+                                            <a href="#" class="no-link pointer" data-role="print_invoice" data-print-class="RECEIPT_7_5_CM_PRINT" data-apt-id="${v.aptId}" data-perm="receipt_7_5_cm_private_appointment_print">${ FUI_DISPLAY_LANG.views.pages.global.print_sizes.RECEIPT_7_5_CM_PRINT }</a>
+                                        </li>
+                                    </ul>
+                                </div>`
+                            : SET_PAID_BTN
+                        }
+					</div>
+                </div>PAG_SEP`;
+    })
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination, tableElement.find('.tbody'), options);
+    // extra data
+    appointments_extra_data_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+            <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+            <span>${last_data.patientName}, </span>
+            <span class="text-primary">${last_data.created_at}</span> 
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text39 }: </span>
+            <span>${last_data.aptNote} </span>
+        </li>
+    `)
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="CHECK"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var check = $(items[i]);
+        if ( check.is(':checked') )
+            list.push({ aptId: check.data('aptid') });
+    }
+
+    return list;
+}
+//
+// selected rows
+function selectedPatients()
+{
+    var list = []
+    var items = tableElement.find('[data-role="row"]')
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]')
+
+        if ( check.is(':checked') )
+        {
+            list.push({ 
+                aptId: parent.data('aptid'),
+                patientId: parent.data('patient-id'),
+                clinicId: parent.data('clinic-id'),
+                clinicName: parent.data('clinic-name'),
+                classId: parent.data('class-id'),
+                className: parent.data('clinic-name'),
+                aptName: parent.data('name'),
+                aptNote: create_naf_aptNote_input.val(),
+                aptPrice: parent.data('price'),
+                aptDate: create_naf_aptDate_input.val(),
+                aptTime: create_naf_aptTime_input.val(),
+            })
+        }
+    }
+
+    return list
+}
+
+})
+
+</script>

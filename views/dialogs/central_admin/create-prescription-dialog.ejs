@@ -1,0 +1,175 @@
+<div class="has-direction-locale px-3 py-3 h-100 overflow-x-hidden overflow-y-auto max-height-100">
+
+    <div id="create_prescription_dialog__central_admin__create_form">
+
+        <div class="row gy-3">
+
+            <div class="col-lg-12 col-md-12">
+
+                <div class="row gy-3 mb-3">
+
+                    <div class="col-md-6">
+
+                        <div class="">
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers-with-clients.template.ejs', {
+                                componentId: 'create_prescription_dialog__central_admin__center_select_with_clients_component',
+                                centerSelectId: 'create_prescription_dialog__central_admin__center_select_with_clients__center_select',
+                                clientSelectId: 'create_prescription_dialog__central_admin__center_select_with_clients__client_select',
+                                centerSelectionEventName: 'create_appointment_dialog__central_admin:center-selected',
+                                clientSelectionEventName: 'create_appointment_dialog__central_admin:client-selected',
+                                options: {
+                                    canCreateClient: false,
+                                }
+                            }) -%>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 has-text-centered d-flex align-items-center justify-content-center">
+                        <img src="../assets/img/utils/qr.png" alt="" class="width-150px height-150px js_generatable_qrcode" id="create_prescription_dialog__central_admin__create_form__qrcode_image">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+
+                <ul class="list-h js_list_tabs_navs mb-4">
+                    <li class="list-item list-item-solid flex flex-center active js_list_tab_nav" data-target="#create_prescription_dialog__central_admin__internal_prescription_tab" id="create_prescription_dialog__central_admin__internal_prescription_tab_trigger">
+                        <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab22 %>
+                    </li>
+                    <li class="list-item list-item-solid flex flex-center js_list_tab_nav" data-target="#create_prescription_dialog__central_admin__external_prescription_tab" id="create_prescription_dialog__central_admin__external_prescription_tab_trigger">
+                        <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab23 %>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+
+                <div class="row gy-3" id="create_prescription_dialog__central_admin__internal_prescription_tab" data-role="tab_content">
+                    
+                    <div class="col-md-12">
+
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_product %></label>
+
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-suggestions-box.template.ejs`, {
+                                componentId: '1',
+                                eventsReceiverId: 'create_prescription_dialog__central_admin__create_form',
+                                selectionEventName: 'create_prescription_dialog__central_admin__internal:product-selected',
+                                searchInputId: 'create_prescription_dialog__central_admin__internal__product_select',
+                                searchInputPlaceholder: UI_DISPLAY_LANG.views.pages.global.placeholder19,
+                                suggestions: {
+                                    api: {
+                                        model: "PRODUCT_MODEL",
+                                    },
+                                    selections: {
+                                        name: 'productName',
+                                        value: 'productCode',
+                                    }
+                                }
+                            }) -%>
+                        </div>
+
+                        <!-- <div class="d-flex px-2 py-2 mb-3 rounded bg-color-15 text-white bg-color-hover-ebebeb cursor-pointer transition-all-0_3s-ease-in-out" id="create_prescription_dialog__central_admin__internal_prescription_tab__add_medicine_button">
+                            <div class="fs-17 d-flex align-items-center justify-content-center">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="width-10px"></div>
+                            <div class="fs-20">
+                                <%= UI_DISPLAY_LANG.views.pages.global.add_medicines_button %>
+                            </div>
+                        </div> -->
+
+                        <div id="create_prescription_dialog__central_admin__internal_prescription_tab__medicines_list" class="js_deletable_list overflow-x-hidden overflow-y-auto max-height-200px">
+                            
+                            <!-- <div class="form-field-01 js_deletable_list_item" data-role="row">
+                                <div class="form-field-icon-holder text-color-27 width-50px">
+                                    <i class="fas fa-medkit"></i>
+                                </div>
+                                <div class="form-field-input-holder">
+                                    <input type="text" class="form-field-input" data-role="MED_NAME" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.medicine_name %>" value="">
+                                    <input type="text" class="form-field-input" data-role="MED_DOSE" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.dose %>" value="">
+                                    <input type="text" class="form-field-input" data-role="MED_DURATION" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.note %>" value="">
+                                    <input type="number" step="any" min="1" class="form-field-input width-50px" data-role="MED_QUANTITY" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.text10 %>" value="1">
+                                    <div class="d-flex flex-shrink-0 justify-content-center align-items-center width-50px h-100 js_deletable_list_item__delete_button cursor-pointer rounded">
+                                        <span class="no-pointer"><i class="fas fa-times"></i></span>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row gy-3" id="create_prescription_dialog__central_admin__external_prescription_tab" data-role="tab_content" style="display: none;">
+
+                    <div class="col-md-12">
+
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_product %></label>
+
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-suggestions-box.template.ejs`, {
+                                componentId: '2',
+                                eventsReceiverId: 'create_prescription_dialog__central_admin__create_form',
+                                selectionEventName: 'create_prescription_dialog__central_admin__external:product-selected',
+                                searchInputId: 'create_prescription_dialog__central_admin__external__product_select',
+                                searchInputPlaceholder: UI_DISPLAY_LANG.views.pages.global.placeholder19,
+                                suggestions: {
+                                    api: {
+                                        model: "PRESCRIPTION_MODEL",
+                                        method: 'product_search',
+                                    },
+                                    selections: {
+                                        name: 'name',
+                                        value: 'code',
+                                    }
+                                }
+                            }) -%>
+                        </div>
+
+                        <div id="create_prescription_dialog__central_admin__external_prescription_tab__medicines_list" class="js_deletable_list overflow-x-hidden overflow-y-auto max-height-200px">
+                            
+                            <!-- <div class="form-field-01 js_deletable_list_item" data-role="row">
+                                <div class="form-field-icon-holder text-color-27 width-50px">
+                                    <i class="fas fa-medkit"></i>
+                                </div>
+                                <div class="form-field-input-holder">
+                                    <input type="text" class="form-field-input" data-role="MED_NAME" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.medicine_name %>" value="">
+                                    <input type="text" class="form-field-input" data-role="MED_DOSE" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.dose %>" value="">
+                                    <input type="text" class="form-field-input" data-role="MED_DURATION" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.note %>" value="">
+                                    <input type="number" step="any" min="1" class="form-field-input width-50px" data-role="MED_QUANTITY" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.text10 %>" value="1">
+                                    <div class="d-flex flex-shrink-0 justify-content-center align-items-center width-50px h-100 js_deletable_list_item__delete_button cursor-pointer rounded">
+                                        <span class="no-pointer"><i class="fas fa-times"></i></span>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mt-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label27 %></label>
+                    <textarea class="input-text input-text-outline" rows="4" id="create_prescription_dialog__central_admin__note_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder7 %>"></textarea>
+				</div>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12 mt-5">
+                <button type="submit" class="btn btn-success d-block w-100 rounded-0" id="create_prescription_dialog__central_admin__submit_button">
+                    <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

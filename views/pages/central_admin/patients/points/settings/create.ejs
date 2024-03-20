@@ -1,0 +1,402 @@
+<div class="container-fluid" id="update_patient_point_settings_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_clinics.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-5">
+
+        <form action="" id="create_form">
+
+            <div class="row gy-3 mb-5">
+
+                <div class="col-md-4 border rounded px-4 py-5">
+
+                    <p class="fs-22 fw-300 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text99 %></p>
+
+                    <div class="mb-4">
+
+                        <div class="">
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers-with-clients.template.ejs', {
+                                componentId: 'select_center_with_clients_component',
+                                centerSelectId: 'center_select',
+                                clientSelectId: 'client_select',
+                            }) -%>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        
+                        <div class="fs-22 width-50px flex justify-content-center align-items-center text-color-27 cursor-pointer" id="add_attribute_button">
+                            <i class="far fa-plus-square"></i>
+                        </div>
+                        <div class=""></div>
+                        <div class="">
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-patient-point-attributes.template.ejs', {
+                                componentId: 'attribute_select_component',
+                                selectId: 'attribute_select',
+                            }) -%>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="">
+                            <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+                        </div>
+
+                        <div class="width-10px"></div>
+                        
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="js_panel_toggler_button" data-target="#tableElement_panel">
+                                <%= UI_DISPLAY_LANG.views.pages.global.show_detailed_table %>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md">
+
+                    <div class="row gy-3" id="editable_attributes_list">
+
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+        
+	</div>
+
+    <div class="mt-5 border-radius-10 border py-3 px-3 d-none" id="tableElement_panel">
+
+        <div class="has-text-aligned-locale-inverted">
+            <div class="close-button-sm js_panel_close_button" data-target="#tableElement_panel">
+                <i class="xfb xfb-close-sm-thin"></i>
+            </div>
+        </div>
+
+        <div class="">
+
+            <div class="d-flex mb-4 ">
+                <div class="fs-26 fw-300 text-capitalize"><%= UI_DISPLAY_LANG.views.pages.global.detailed_table %></div>
+                <div class="width-10px"></div>
+                <div class="fs-22 fw-300 d-flex align-items-center" id="tableElement_panel__patientName"></div>
+            </div>
+
+            <div class="row gy-3" id="tableElement">
+
+                <!-- <div class="col-md-4">
+
+                    <div class="border-radius-10 overflow-hidden">
+                        <table class="table-2">
+                            <thead>
+                                <tr>
+                                    <th><%= UI_DISPLAY_LANG.views.pages.global.th60 %></th>
+                                    <th><%= UI_DISPLAY_LANG.views.pages.global.th61 %></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>CRP</td>
+                                    <td>1.5</td>
+                                </tr>
+                                <tr>
+                                    <td>VS</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>FTE</td>
+                                    <td>5.4</td>
+                                </tr>
+                                <tr>
+                                    <td>FTE</td>
+                                    <td>5.4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div> -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#update_patient_point_settings_container')
+
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+const create_form = page_container.find('#create_form')
+
+const center_select = page_container.find('#center_select')
+const client_select = page_container.find('#client_select')
+
+const add_attribute_button = page_container.find('#add_attribute_button')
+const attribute_select = page_container.find('#attribute_select')
+
+const editable_attributes_list = page_container.find('#editable_attributes_list')
+
+const tableElement_panel = page_container.find('#tableElement_panel')
+const tableElement_panel__patientName = page_container.find('#tableElement_panel__patientName')
+const tableElement = page_container.find('#tableElement')
+
+// submit
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    if ( Object.keys(selectedAttributes()).length == 0 )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.invalid_attribute_selected, '')
+        return
+    }
+
+    if ( isNull(center_select.find(':selected').val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_center_not_selected, '')
+        return
+    }
+
+    if ( isNull(client_select.find(':selected').val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_client_not_selected, '')
+        return
+    }
+
+    const DEFAULT_OPTIONS = {
+        clinicId: center_select.find(':selected').val(),
+        clinicName: center_select.find(':selected').text(),
+        patientId: client_select.find(':selected').val(),
+        patientName: client_select.find(':selected').text(),
+    }
+
+    var PointsObject = {...DEFAULT_OPTIONS, ...selectedAttributes() }
+
+    console.log(PointsObject)
+
+    create_form.find(':submit').addClass('disabled')
+
+    var res = await PATIENT_MODEL.point_setting_store(PointsObject)
+
+    create_form.find(':submit').removeClass('disabled')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    CreateToast('PS', res.message, '')
+
+    if ( res.code == 404 ) return
+
+    // refresh
+    displayAll()
+})
+
+// add attribute
+add_attribute_button.on('click', e =>
+{
+    const selected = attribute_select.find(':selected')
+
+    if ( isNull(selected.val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.invalid_attribute_selected, '')
+        return
+    }
+    
+    appendAttribute({
+        id: selected.val(),
+        name: selected.text(),
+    })
+})
+
+// add attribute
+function appendAttribute(options)
+{
+    const panel = checkAttribute(options.id)
+    // check exists
+    if ( panel ) 
+    {
+        panel.removeClass('d-none')
+        panel.find('.js_panel_inner_wrapper').addClass('selected-box')
+
+        panel.off('mouseenter').on('mouseenter', e =>
+        {
+            panel.find('.js_panel_inner_wrapper').removeClass('selected-box')
+        })
+
+        return
+    }
+
+    html = `
+    <div class="col-md-6 " id="${options.id}__panel" data-role="row" data-id="${options.id}">
+
+        <div class="border-radius-10 bg-color-31 border-bottom py-3 px-3 js_panel_inner_wrapper">
+
+            <div class="has-text-aligned-locale-inverted">
+                <div class="close-button-sm js_panel_close_button" data-target="#${options.id}__panel">
+                    <i class="xfb xfb-close-sm-thin"></i>
+                </div>
+            </div>
+
+            <div class="fs-20 fw-300 mb-4 text-capitalize">${options.name}</div>
+
+            <div class="">
+
+                <div class="mb-2 flex align-items-center border-top border-bottom">
+                    <label for="" class="form-label width-150px"><%= UI_DISPLAY_LANG.views.pages.global.label118 %>:</label>
+                    <input type="number" step="any" class="input-text input-text-outline border-0 bg-transparent text-color-8 fw-500" min="0" value="" data-role="points">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>`
+
+    editable_attributes_list.append(html)
+    // dispatch_onNewAjaxContentLoaded
+    dispatch_onNewAjaxContentLoaded()
+}
+// check attribute
+function checkAttribute(id)
+{
+    const item = editable_attributes_list.find(`#${id}__panel`)
+
+    return (item[0]) ? item : false
+}
+// clear attributes
+function clearAttributes()
+{
+    editable_attributes_list.html('')
+}
+// selected attributes
+function selectedAttributes()
+{
+    var attributes = {}
+
+    var items = editable_attributes_list.find('[data-role="row"]')
+
+    for (let i = 0; i < items.length; i++) 
+    {
+        const item = $(items[i])
+        const id = item.data('id')
+        const value = parseFloat(item.find('[data-role="points"]').val())
+
+        if ( isNull(item.find('[data-role="points"]').val()) ) continue
+
+        attributes[id] = value
+    }
+
+    return attributes
+}
+
+// tableElement_panel panel:opened
+tableElement_panel.on('panel:opened', e =>
+{
+    displayAll()
+})
+// display all
+async function displayAll()
+{
+    if ( isNull(client_select.find(':selected').val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_client_not_selected, '')
+        return
+    }
+
+    // set patient name
+    tableElement_panel__patientName.text(`"${client_select.find(':selected').text()}"`)
+
+    SectionLoader(tableElement)
+
+    var res = await PATIENT_MODEL.point_setting_show({
+        patientId: client_select.find(':selected').val()
+    })
+
+    SectionLoader(tableElement, '')
+
+    if ( res.code == 404 ) 
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.no_data_found, '')
+        return
+    }
+
+    var data = res.data
+    var html = ''
+    var attributes = {}
+
+    // filter
+    for (const key in data) 
+    {
+        if ( !FUI_DISPLAY_LANG.views.pages.global.patient_point_attributes.hasOwnProperty(key) ) continue
+
+        attributes[key] = parseFloat(data[key])
+    }
+
+    var attributeSegments = splitObjectIntoSegments(attributes, 3)
+
+    for (let i = 0; i < attributeSegments.length; i++) 
+    {
+        const segment = attributeSegments[i]
+        
+        html += `
+        <div class="col-md-4">
+
+            <div class="border-radius-10 overflow-hidden">
+                <table class="table-2">
+                    <thead>
+                        <tr>
+                            <th><%= UI_DISPLAY_LANG.views.pages.global.th60 %></th>
+                            <th><%= UI_DISPLAY_LANG.views.pages.global.th61 %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `
+
+        //
+        for (const key in segment) 
+        {
+            html+= `
+            <tr>
+                <td class="text-uppercase">${ FUI_DISPLAY_LANG.views.pages.global.patient_point_attributes[key] }</td>
+                <td class="text-color-8 fw-500">${segment[key]}</td>
+            </tr>
+            `
+        }
+        //
+        html += `
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        `
+    }
+    // 
+    tableElement.html(html)
+}
+
+})
+
+</script>

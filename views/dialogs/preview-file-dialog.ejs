@@ -1,0 +1,35 @@
+<div class="overlay flex flex-center" id="previewFileDialog" style="transition: none; z-index: 2005;">
+	<div class="wrapper app-block overlay-content container block" id="wrapper01" style="width: 100%;height: 100%;">
+
+		<div class="block-header">
+			<span class="block-title-icon"></span>
+			<h1 class="block-title">
+				<%= UI_DISPLAY_LANG.views.dialogs.previewFileDialog.title %>
+			</h1>
+			<button class="btn-close block-btn-close" id="closeBTN"></button>
+		</div>
+
+		<div class="block-header position-relative d-flex justify-content-center align-items-center p-0 m-0 d-none js_image_editing_options" style="z-index: 5;">
+			<ul class="list-unstyled position-absolute top-5 w-100 has-text-centered  py-5 px-5 rounded shadow" style="background-color: rgba(0, 0, 0, .3);">
+				<li class="d-inline-flex fs-20 text-white cursor-pointer" id="rotate_button">
+					<i class="fas fa-undo"></i>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="block-body p-0 position-relative" id="bodyDiv" style="height: 95%;">
+
+			<div id="file_div" class="has-text-centered" style="overflow:auto; max-height: 100%;max-width: 100%;"></div>
+
+			<div class="js_image_editing_options">
+				<ul class="list-unstyled position-absolute bottom-0 w-100 has-text-centered  py-5 px-5 rounded shadow" style="background-color: rgba(0, 0, 0, .3);">
+					<li class="d-inline-flex fs-20 text-white cursor-pointer" id="confirm_button">
+						<i class="fas fa-check-double"></i>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		
+	</div>
+</div>

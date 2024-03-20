@@ -1,0 +1,282 @@
+<div class="container-fluid" id="allAdvertisementsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_advertisements.sectionTitle %></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="table-nav">
+			<div class="row gx-2 gy-2">
+				<div class="col-lg-6 col-md-6 col-sm-12">
+					<div class="form-field-01">
+						<div class="form-field-icon-holder" id="searchBTN">
+							<img src="assets/img/utils/search.svg" class="form-field-icon" alt="">	
+						</div>
+						<div class="form-field-input-holder">
+							<input type="text" id="searchInput" class="form-field-input" placeholder="<%= UI_DISPLAY_LANG.views.pages.all_advertisements.ph01 %>">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-12 d-none">
+					<div class="form-field-01">
+						<div class="form-field-input-holder">
+							<div class="form-field-label"><%= UI_DISPLAY_LANG.views.pages.all_advertisements.text01 %></div>
+							<input type="date" id="filterDateInput" class="form-field-input">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN"><%= UI_DISPLAY_LANG.views.pages.all_advertisements.btn01 %></button>
+				</div>
+			</div>
+		</div>
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card-02 hover-shadow h-100 w-100 inline-flex">
+					<div class="card-header" style="background-image: url('http://megastoretech.com/uploads/users/1/Products/Images/629b58739759f7.21976518.jpg');">
+						
+					</div>
+					<div class="text-21 py-0_5 px-1">NewAir, AC-12200E, Compact Portable Air Conditioner and Fan, 12,000 BTU, 425 Square Foot Effective Range, White</div>
+					<div class="card-body">
+						<div class="list-04">
+							<div href="#" class="list-item">
+								Desription: 
+								<span class="text-04">
+									We don't know when or if this item will be back in stock.
+								</span>
+							</div>
+							<div href="#" class="list-item">
+								Prix: <span class="text-04">517.00 DA</span>
+							</div>
+							<div class="list-item">
+								Quantity: <span class="text-04">(5)</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var allAdvertisementsContainer = $('#allAdvertisementsContainer');
+if ( allAdvertisementsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = allAdvertisementsContainer.find('#ERROR_BOX');
+var searchBTN = allAdvertisementsContainer.find('#searchBTN');
+var searchInput = allAdvertisementsContainer.find('#searchInput');
+var filterDateInput = allAdvertisementsContainer.find('#filterDateInput');
+var deleteSelectedBTN = allAdvertisementsContainer.find('#deleteSelectedBTN');
+var pagination = allAdvertisementsContainer.find('#pagination');
+var tableElement = allAdvertisementsContainer.find('#tableElement');
+
+// delete selected
+deleteSelectedBTN.off('click');
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        SectionLoader(tableElement);
+        var response = await ADVERTISEMENT_MODEL.batchDelete(selectedRows());
+        // hide loader
+        SectionLoader(tableElement, '');
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        displayAll();
+    });
+});
+// tableElement click
+tableElement.off('click');
+tableElement.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var ad_id = target.data('ad_id');
+        goToPage('create-advertisements', {
+            ad_id: ad_id
+        })
+    }
+});
+// filter by date
+filterDateInput.off('change');
+filterDateInput.on('change', async e =>
+{
+    SectionLoader(tableElement);
+    var response = await filterAdvertisementsByDate({
+        date: filterDateInput.val()
+    });
+    SectionLoader(tableElement, '');
+    tableElement.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+
+    $.each(data, (k,v) =>
+    {
+        var isActiveHTML = (v.isActive == ST_YES) ? '<span class="tag-1">نشيط</span>' : '<span class="tag-1 danger">معطل</span>';
+        var ad_image_url = (v.ad_image_object) ? JSON.parse(v.ad_image_object).url : 'assets/img/utils/placeholder.svg';
+
+        var selectCheck = 'أنقر للتحديد';
+        if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            isActiveHTML = (v.isActive == ST_YES) ? '<span class="tag-1">Activé</span>' : '<span class="tag-1 danger">Non activé</span>';
+            selectCheck = 'Cliquez pour sélectionner';
+        }
+        html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card-02 hover-shadow h-100 w-100 inline-flex">
+                        <div class="form-check border-bottom p-1">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault_${v.ad_id}" data-role="CHECK" data-ad_id="${v.ad_id}">
+                            <label class="form-check-label" for="flexCheckDefault_${v.ad_id}">
+                                ${selectCheck}
+                            </label>
+                        </div>
+                        <div class="card-header" style="background-image: url(${ad_image_url});">
+                            
+                        </div>
+                        <div class="text-21 py-2 px-1">
+                            ${v.ad_name}
+                            ${isActiveHTML}
+                        </div>
+                        <div class="card-body">
+                            <div class="list-04">
+                                <div class="list-item">
+                                    <span class="text-04">${v.ad_name}</span>
+                                </div>
+                                <div class="list-item">
+                                    <span class="text-04">${v.ad_date}</span>
+                                </div>
+                                <div class="list-item text-center">
+                                    <div class="btn-group btn-group-sm shadow">
+                                        <button class="btn btn-primary btn-sm rounded-0" data-role="UPDATE" data-perm="update_advertisement" data-ad_id="${v.ad_id}">
+                                            <i class="fas fa-edit no-pointer"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>PAG_SEP`;
+    });
+
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination, tableElement, options);
+});
+// search
+searchBTN.off('click');
+searchBTN.on('click', e =>
+{
+    displayAll();
+});
+searchInput.off('keyup');
+searchInput.on('keyup', async e =>
+{
+    SectionLoader(tableElement);
+    var response = await ADVERTISEMENT_MODEL.search({
+        query: searchInput.val()
+    });
+    SectionLoader(tableElement, '');
+    tableElement.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+
+    $.each(data, (k,v) =>
+    {
+        var isActiveHTML = (v.isActive == ST_YES) ? '<span class="tag-1">نشيط</span>' : '<span class="tag-1 danger">معطل</span>';
+        var ad_image_url = (v.ad_image_object) ? JSON.parse(v.ad_image_object).url : 'assets/img/utils/placeholder.svg';
+
+        var selectCheck = 'أنقر للتحديد';
+        if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            isActiveHTML = (v.isActive == ST_YES) ? '<span class="tag-1">Activé</span>' : '<span class="tag-1 danger">Non activé</span>';
+            selectCheck = 'Cliquez pour sélectionner';
+        }
+        html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card-02 hover-shadow h-100 w-100 inline-flex">
+                        <div class="form-check border-bottom p-1">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault_${v.ad_id}" data-role="CHECK" data-ad_id="${v.ad_id}">
+                            <label class="form-check-label" for="flexCheckDefault_${v.ad_id}">
+                                ${selectCheck}
+                            </label>
+                        </div>
+                        <div class="card-header" style="background-image: url(${ad_image_url});">
+                            
+                        </div>
+                        <div class="text-21 py-2 px-1">
+                            ${v.ad_name}
+                            ${isActiveHTML}
+                        </div>
+                        <div class="card-body">
+                            <div class="list-04">
+                                <div class="list-item">
+                                    <span class="text-04">${v.ad_name}</span>
+                                </div>
+                                <div class="list-item">
+                                    <span class="text-04">${v.ad_date}</span>
+                                </div>
+                                <div class="list-item text-center">
+                                    <div class="btn-group btn-group-sm shadow">
+                                        <button class="btn btn-primary btn-sm rounded-0" data-role="UPDATE" data-perm="update_advertisement" data-ad_id="${v.ad_id}">
+                                            <i class="fas fa-edit no-pointer"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>PAG_SEP`;
+    });
+
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination, tableElement, options);
+});
+// display all
+displayAll();
+function displayAll()
+{
+    searchInput.trigger('keyup');
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="CHECK"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var check = $(items[i]);
+        if ( check.is(':checked') )
+            list.push({ ad_id: check.data('ad_id') });
+    }
+
+    return list;
+}
+
+})
+
+</script>

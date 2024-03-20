@@ -1,0 +1,74 @@
+<span id="select_status_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label87 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_status_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'status_select' %>">
+        <option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder10 %></option>
+        <% Object.keys(UI_DISPLAY_LANG.views.pages.global.status).forEach(function(k) { %>
+            <option value="<%= k %>"><%= UI_DISPLAY_LANG.views.pages.global.status[k] %></option>
+        <% }) %>
+    </select>
+
+    <script>
+
+        $(function()
+        {
+
+            var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+            var componentId = `<%- locals.componentId %>`
+            var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'status_select' : `<%- locals.selectId %>`
+            var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'status-selected' : `<%- locals.selectionEventName %>`
+
+            var select_status_template = $('#select_status_template_'+componentId)
+            var select_status_template_search_input = select_status_template.find('#select_status_template_search_input')
+            var status_select = select_status_template.find(`#${selectId}`)
+
+            select_status_template_search_input.off('keyup').on('keyup', e =>
+            {
+                filter = select_status_template_search_input.val().toUpperCase()
+                var options = status_select.children()
+                for (i = 0; i < options.length; i++) 
+                {
+                    option = options[i];
+
+                    if (option.textContent.toUpperCase().indexOf(filter) > -1) {
+                        option.style.display = "";
+                    } 
+                    else {
+                        option.style.display = "none";
+                    }
+                }
+
+                var firstVisibleOption = $.map(options, (element, k) =>
+                {
+                    const option = $(element)
+
+                    if ( option.css('display') != 'none' )
+                    {
+                        return option
+                    }
+                })[0]
+
+                if (firstVisibleOption[0]) {
+                    firstVisibleOption.prop('selected', true)
+                }
+
+                // dispatch an event
+                var event = new CustomEvent(selectionEventName, { 
+                    detail: { 
+                        center: {
+                            id: status_select.find(':selected').val(),
+                            name: status_select.find(':selected').text(),
+                        },
+                        eventsReceiverId: eventsReceiverId 
+                    } 
+                });
+
+                document.dispatchEvent(event)
+            })
+
+        })
+
+    </script>
+
+</span>

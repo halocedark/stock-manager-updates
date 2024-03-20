@@ -1,0 +1,93 @@
+<span id="select_distributors_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label31 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_distributors_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'select_distributors_template_distributor_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_distributors_template_distributor_select' : `<%- locals.selectId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'distributor-selected' : `<%- locals.selectionEventName %>`
+
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+        const defaultOptions = {
+            search: {
+                currentAdministrationOnly: true
+            }
+        }
+
+        options = {...defaultOptions, ...options}
+
+        var select_distributors_template = $('#select_distributors_template_'+componentId)
+        var select_distributors_template_search_input = select_distributors_template.find('#select_distributors_template_search_input')
+
+        var select_distributors_template_distributor_select = select_distributors_template.find(`#${selectId}`)
+
+        detectTypingEnd(select_distributors_template_search_input, () =>
+        {
+            select_distributors_template_displayAll()
+        }, 500)
+        // select_distributors_template_search_input.on('keyup', select_distributors_template_displayAll)
+        // display all
+        select_distributors_template_displayAll()
+        async function select_distributors_template_displayAll()
+        {
+            // select_distributors_template_distributor_select.html(`<option value="">${FUI_DISPLAY_LANG.views.pages.global.label31}</option>`)
+            const params = {
+                query: select_distributors_template_search_input.val(),
+                advanced: {
+                    administration_id: (options.search.currentAdministrationOnly) ? USER_CONFIG.administration.clinicId : null,
+                    employee_type_code: EMP_TYPE_DISTRIBUTOR,
+                }
+            }
+
+            if ( options.search.hasOwnProperty('administration_id') )
+            {
+                params.advanced.administration_id = options.search.administration_id
+            }
+            else
+            {
+                params.advanced.administration_id = (options.search.currentAdministrationOnly) ? USER_CONFIG.administration.clinicId : null
+            }
+
+            var res = await EMPLOYEE_MODEL.advancedSearch(params)
+            
+            if ( res.code == 404 ) return
+
+            // dispatch event
+            
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                html += `<option value="${v.employee_id}" data-object="${data}">${v.employee_name}</option>`	
+            })
+            // add html
+            select_distributors_template_distributor_select.html(html)
+            // dispatch an event
+            var event = new CustomEvent(selectionEventName, { 
+                detail: { 
+                    distributor: {
+                        id: select_distributors_template_distributor_select.find(':selected').val(),
+                        name: select_distributors_template_distributor_select.find(':selected').text(),
+                        data: checkJSON( decodeURIComponent( atob( select_distributors_template_distributor_select.find(':selected').data('object') ) ) ),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                } 
+            });
+
+            document.dispatchEvent(event)
+        } 
+    })
+
+</script>

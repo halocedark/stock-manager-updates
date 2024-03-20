@@ -1,0 +1,27 @@
+<span class="pointer" id="<%= locals.componentId ? locals.componentId : 'select_timestamp_filter_component' %>">
+    <select class="select-2" id="<%= locals.selectId ? locals.selectId : 'select_timestamp_filter_select' %>">
+        <option value="all_time" data-perm="<%= locals.options.option5.permission %>"><%= UI_DISPLAY_LANG.views.pages.global.time.all_time %></option>
+        <option value="current_week" data-perm="<%= locals.options.option1.permission %>"><%= UI_DISPLAY_LANG.views.pages.global.time.current_week %></option>
+        <option value="current_month" data-perm="<%= locals.options.option2.permission %>"><%= UI_DISPLAY_LANG.views.pages.global.time.current_month %></option>
+        <option value="current_year" data-perm="<%= locals.options.option3.permission %>"><%= UI_DISPLAY_LANG.views.pages.global.time.current_year %></option>
+        <option value="today" data-perm="<%= locals.options.option4.permission %>" selected><%= UI_DISPLAY_LANG.views.pages.global.time.today %></option>
+    </select>
+</span>
+
+<script>
+
+    $(function()
+    {
+
+        const component = $(`#<%= locals.componentId %>`)
+
+        const select = component.find('select')
+        var selected = `<%- locals.selected %>`
+
+        // set selected
+        if ( selected != '' )
+            setOptionSelected(select, selected)
+        
+    })
+
+</script>

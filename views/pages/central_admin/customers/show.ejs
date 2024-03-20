@@ -1,0 +1,676 @@
+<div class="container-fluid" id="show_customer_profile_container">
+
+    <div class="wrapper d-none">
+        <h1 class="title-medium"></h1>
+    </div>
+
+    <div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+        <img src="assets/img/utils/info.png" class="alert-icon" alt="">
+        <div class="alert-text" id="text"></div>
+    </div>
+
+    <div class="mt-5">
+
+        <div class="row gy-3 mb-5">
+
+            <div class="col-lg-6 col-md-6">
+
+                <div class="bg-color-22 px-3 py-3 border-radius-15 max-width-340px mb-4">
+
+                    <div class="d-flex align-items-center mb-3">
+                        
+                        <div class="dropdown">
+                            <div class="bg-white d-inline-flex justify-content-center align-items-center border-radius-10 cursor-pointer text-color-10 px-2 py-1" type="button" id="customer_card_more_actions_menu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+        
+                            <ul class="dropdown-menu" id="customer_card_more_actions__menu" aria-labelledby="customer_card_more_actions_menu">
+                                <li data-perm="update_customers">
+                                    <a class="dropdown-item fs-14" href="#" data-role="UPDATE" >
+                                        <%= UI_DISPLAY_LANG.views.pages.global.edit_profile %>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+        
+                    </div>
+        
+                    <div class="d-flex">
+        
+                        <div class="flex-grow-1">
+                            <div class="mb-2">
+                                <div class="fs-14 text-color-17"><%= UI_DISPLAY_LANG.views.pages.global.text73 %> :</div>
+                            </div>
+        
+                            <div class="fs-17 fw-500" id="customerName_element">عبد النور عدواني</div>
+                            <div class="fs-14 text-color-17" id="customerPhone_element">(0673479803)</div>
+                        </div>
+        
+                        <!-- <div class="flex-grow-1 has-text-centered">
+                            <img src="../assets/img/utils/customer.png" id="customerAvatar_element" class="width-50px height-50px rounded-circle" alt="">
+                        </div> -->
+        
+                    </div>
+        
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+
+                <div class="mb-4 tabbed-list-1 d-flex js_list_tabs_navs" id="profile_list_tabs_navs">
+
+                    <div class="border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd active js_list_tab_nav"  data-target="#personal_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-info"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab1 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="d-none border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#contact_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-address-book"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab2 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="d-none border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#health_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab3 %>
+                            </div>
+                        </div>
+    
+                    </div>
+
+                    <div class="d-none border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#create_appointment_tab">
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab4 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row gy-3">
+
+            <div class="col-md-12">
+
+                <div class="row gy-3">
+
+                    <div class="col-md-12" id="personal_details_tab" data-role="tab_content">
+
+                        <div class="border rounded px-4 py-5">
+
+                            <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text74 %></h4>
+
+                            <div class="mb-2">
+                                <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label1 %>: </label>
+                                <span class="" id="personal_details_tab__customerName_element"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label2 %>: </label>
+                                <span class="" id="personal_details_tab__customerPhone_element"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label8 %>: </label>
+                                <span class="" id="personal_details_tab__customerEmail_element"></span>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label126 %>: </label>
+                                <span class="text-success" id="personal_details_tab__customerTotalDepst_element"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12" data-perm="view_central_administration_to_customer_invoices">
+
+                <a class="pb-4 d-inline-block fs-17 js_panel_toggler_button" href="#" data-target="#central_administration_to_customer_invoices_panel" >
+                    <%= UI_DISPLAY_LANG.views.pages.global.show_invoices_button %>
+                </a>
+
+                <div class="border rounded px-4 py-5 d-none" id="central_administration_to_customer_invoices_panel">
+
+                    <div class="has-text-aligned-locale-inverted">
+                        <div class="close-button-sm js_panel_close_button" data-target="#central_administration_to_customer_invoices_panel">
+                            <i class="xfb xfb-close-sm-thin"></i>
+                        </div>
+                    </div>
+
+                    <h4 class="h4 mb-3">
+                        <%= UI_DISPLAY_LANG.views.pages.global.navs.nav136 %>
+                    </h4>
+
+                    <div class="py-4 px-3 mb-3 border rounded">
+                        <div class="row gx-4 gy-3">
+                            <div class="col-lg col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`,
+                                    { searchBtnId: 'central_administration_to_customer_invoices_search_btn' ,
+                                    searchInputId: 'central_administration_to_customer_invoices_search_input' , }) -%>
+                            </div>
+                            <div class="col-lg col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`,
+                                    { dateStartId: 'central_administration_to_customer_invoices_date_start_input' ,
+                                    dateEndId: 'central_administration_to_customer_invoices_date_end_input' ,
+                                    dataIgnoreDefaultValue: true, }) -%>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="central_administration_to_customer_invoices_pagination" class="flex flex-center my-3"></div>
+
+                    <div class="table-div bg-white border rounded">
+
+                        <table class="table-01 js_invoice_table"
+                            id="central_administration_to_customer_invoices_tableElement">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>
+                                        <%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th01 %>
+                                    </th>
+                                    <th>
+                                        <%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th02 %>
+                                    </th>
+                                    <th>
+                                        <%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th04 %>
+                                    </th>
+                                    <th>
+                                        <%= UI_DISPLAY_LANG.views.pages.global.th32 %>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--
+                                <tr class="expand-row">
+                                    <td>
+                                        <input type="checkbox" class="form-check-input" data-role="CHECK" data-orderid="">
+                                    </td>
+                                    <td> HG38020496 </td>
+                                    <td> 2022-06-17 </td>
+                                    <td> - </td>
+                                    <td> $11.99 </td>
+                                    <td style="width:20px">
+                                        <svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+                                    </td>
+                                </tr>
+                                <tr class="expand-row__row" style="display:none;">
+                                    <td colspan="10">
+                                        <table class="table-01">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Dept (DA)</th>
+                                                    <th>Dept (%)</th>
+                                                    <th>Total Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td>Renew Premium Web Hosting (crstra-saffromfood.com)</td>
+                                                <td>3</td>
+                                                <td>1880.00</td>
+                                                <td>880.00</td>
+                                                <td>32.12%</td>
+                                                <td>1880.00</td>
+                                            </tbody>
+                                        </table>
+                                        <div class="order-price-table">
+                                            <div class="order-price-table-contents">
+                                                <div>
+                                                    <strong>product price</strong>
+                                                    <span>11.25$</span>
+                                                </div>
+                                                <div>
+                                                    <strong>dept (%)</strong>
+                                                    <span>0.00%</span>
+                                                </div>
+                                                <div>
+                                                    <strong>sell price</strong>
+                                                    <span>11.25</span>
+                                                </div>
+                                                <div class="border-top my-1"></div>
+                                                <div>
+                                                    <strong>total</strong>
+                                                    <span>11.25</span>
+                                                </div>	
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                -->
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12" data-perm="view_customer_dept_actions">
+
+                <a class="pb-4 d-inline-block fs-17 js_panel_toggler_button" href="#" data-target="#customer_dept_actions_panel" >
+                    <%= UI_DISPLAY_LANG.views.pages.global.show_dept_actions_button %>
+                </a>
+
+                <div class="border rounded px-4 py-5 d-none" id="customer_dept_actions_panel">
+
+                    <div class="has-text-aligned-locale-inverted">
+                        <div class="close-button-sm js_panel_close_button" data-target="#customer_dept_actions_panel">
+                            <i class="xfb xfb-close-sm-thin"></i>
+                        </div>
+                    </div>
+
+                    <h4 class="h4 mb-3">
+                        <%= UI_DISPLAY_LANG.views.pages.global.navs.nav137 %>
+                    </h4>
+
+                    <div class="py-4 px-3 mb-3 border rounded">
+                        <div class="row gx-4 gy-3">
+                            <div class="col-lg col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`,
+                                    { searchBtnId: 'customer_dept_actions_search_btn' ,
+                                    searchInputId: 'customer_dept_actions_search_input' , }) -%>
+                            </div>
+                            <div class="col-lg col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`,
+                                    { dateStartId: 'customer_dept_actions_date_start_input' ,
+                                    dateEndId: 'customer_dept_actions_date_end_input' ,
+                                    dataIgnoreDefaultValue: true, }) -%>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="customer_dept_actions_pagination" class="flex flex-center my-3"></div>
+
+                    <div class="table-div">
+
+                        <div class="utable shadowed" id="customer_dept_actions_tableElement">
+                            <div class="thead">
+                                <div class="td">#</div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th20 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th21 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th22 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th23 %></div>
+                                <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                            </div>
+                            <div class="tbody">
+                             
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $(function () {
+
+        const page_container = $('#show_customer_profile_container')
+
+        if (!page_container[0]) return
+
+        const ERROR_BOX = page_container.find('#ERROR_BOX')
+
+        let CustomerObject = sessionData(true)
+        // Card
+        const customer_card_more_actions__menu = page_container.find('#customer_card_more_actions__menu')
+        const customerName_element = page_container.find('#customerName_element')
+        const customerPhone_element = page_container.find('#customerPhone_element')
+        // Profile data
+        const personal_details_tab = page_container.find('#personal_details_tab')
+
+        personal_details_tab.on('tab:opened', e =>
+        {
+            const personal_details_tab__customerName_element = page_container.find('#personal_details_tab__customerName_element')
+            const personal_details_tab__customerPhone_element = page_container.find('#personal_details_tab__customerPhone_element')
+            const personal_details_tab__customerEmail_element = page_container.find('#personal_details_tab__customerEmail_element')
+            const personal_details_tab__customerTotalDepst_element = page_container.find('#personal_details_tab__customerTotalDepst_element')
+
+            personal_details_tab__customerName_element.text( CustomerObject.name )
+            personal_details_tab__customerPhone_element.text( CustomerObject.phone )
+            personal_details_tab__customerEmail_element.text( CustomerObject.email )
+            personal_details_tab__customerTotalDepst_element.text( moneyFormat(CustomerObject.total_depts) )
+        })
+        personal_details_tab.trigger('tab:opened')
+
+        // central_administration_to_customer_invoices_panel
+        const central_administration_to_customer_invoices_panel = page_container.find('#central_administration_to_customer_invoices_panel')
+        // customer_dept_actions_panel
+        const customer_dept_actions_panel = page_container.find('#customer_dept_actions_panel')
+
+        // setup card
+        setupCard()
+        function setupCard()
+        {
+            // display info
+            customerName_element.text(CustomerObject.name)
+            customerPhone_element.text(CustomerObject.phone)
+            // actions
+            customer_card_more_actions__menu.off('click').on('click', e =>
+            {
+                const target = $(e.target)
+
+                if ( target.data('role') == 'UPDATE' )
+                {
+                    CreateCustomerDialog__CentralAdmin(CustomerObject)
+                }
+            })
+        }
+
+        // Panels
+        central_administration_to_customer_invoices_panel.on('panel:opened', e =>
+        {
+            setupInvoices()
+        })
+
+        customer_dept_actions_panel.on('panel:opened', e =>
+        {
+            setupDeptActions()
+        })
+        // setup invoices
+        function setupInvoices()
+        {
+            const central_administration_to_customer_invoices_search_btn = page_container.find('#central_administration_to_customer_invoices_search_btn')
+            const central_administration_to_customer_invoices_search_input = page_container.find('#central_administration_to_customer_invoices_search_input')
+            const central_administration_to_customer_invoices_date_start_input = page_container.find('#central_administration_to_customer_invoices_date_start_input')
+            const central_administration_to_customer_invoices_date_end_input = page_container.find('#central_administration_to_customer_invoices_date_end_input')
+            const central_administration_to_customer_invoices_pagination = page_container.find('#central_administration_to_customer_invoices_pagination')
+            const central_administration_to_customer_invoices_tableElement = page_container.find('#central_administration_to_customer_invoices_tableElement')
+
+            // central_administration_to_customer_invoices_tableElement click
+            central_administration_to_customer_invoices_tableElement.on('click', async e => {
+                var target = $(e.target);
+                if (target[0].nodeName == 'TD') {
+                    var parent = target.closest('tr');
+                    var nextTR = parent.next();
+                    nextTR.slideToggle(200)
+                    parent.toggleClass('expanded');
+                }
+
+                if (target.data('role') == 'PRINT_INVOICE') {
+                    e.preventDefault()
+                    var parent = target.closest('[data-role="row"]')
+
+                    parent.addClass('disabled')
+                    var res = await ORDER_MODEL.show({
+                        order_id: parent.data('id')
+                    })
+                    parent.removeClass('disabled')
+
+                    if (res.code == 404) return
+
+                    printInvoice({
+                        data: res.data,
+                        class: target.data('print-class'),
+                    })
+                }
+            });
+            
+            // search
+            central_administration_to_customer_invoices_search_btn.on('click', e => {
+                central_administration_to_customer_invoices_search_input.trigger('keyup')
+            })
+            detectTypingEnd(central_administration_to_customer_invoices_search_input, val => {
+                displayCentralAdministrationProductsInvoices({
+                    method_type: 'direction_central_administration_to_customer_selling_search',
+                    query: val,
+                    advanced: {
+                        start: central_administration_to_customer_invoices_date_start_input.val(),
+                        end: central_administration_to_customer_invoices_date_end_input.val(),
+                        user_id: CustomerObject.id,
+                    }
+                })
+            })
+            central_administration_to_customer_invoices_search_input.trigger('keyup')
+            // displayCentralAdministrationProductsInvoices
+            async function displayCentralAdministrationProductsInvoices(params) {
+                SectionLoader(central_administration_to_customer_invoices_tableElement)
+
+                if (params.method_type == 'direction_central_administration_to_customer_selling_search') var res = await ORDER_MODEL.direction_central_administration_to_customer_selling_search(params)
+
+                SectionLoader(central_administration_to_customer_invoices_tableElement, '')
+
+                if (res.code == 404) return
+
+                var data = res.data
+                var html = ''
+
+                for (var i = 0; i < data.length; i++) {
+                    var order = data[i];
+                    // loop items
+                    if (order.order_items) {
+                        var itemsHTML = '<ul class="list-group list-group-flush list-group-numbered">';
+                        var itemsHTML2 = '';
+                        var order_item_dept_rate = 0.00;
+                        var order_item_price = 0.00;
+                        for (var j = 0; j < order.order_items.length; j++) {
+                            var item = order.order_items[j];
+                            order_item_dept_rate += parseFloat(item.item_dept.order_item_dept_rate);
+                            order_item_price += parseFloat(item.order_item_price);
+                            itemsHTML += `<li class="list-group-item text-04">${item.item_name}</li>`;
+                            itemsHTML2 += `<tr>
+                                    <td>${item.item_name}</td>
+                                    <td>${item.order_item_quantity}</td>
+                                    <td>${moneyFormat(item.order_item_price)}</td>
+                                    <td>${moneyFormat(item.order_item_final_amount)}</td>
+                                    </tr>`;
+                        }
+                        itemsHTML += '</ul>';
+                    }
+
+                    html += `<tr class="expand-row" data-role="row" data-id="${order.order_id}">
+                        <td>
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-orderid="${order.order_id}">
+                        </td>
+                        <td>${order.order_hash}</td>
+                        <td>${order.order_date}|${order.order_time}</td>
+                        <td>${moneyFormat(order.order_total_amount)}</td>
+                        <td>${moneyFormat(order.order_amount_paid)}</td>
+                        <td>
+                            <div class="py-2 px-2">
+                                <a class="d-inline-block mx-2 text-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ${FUI_DISPLAY_LANG.views.pages.global.more}
+                                </a>
+                                <ul class="dropdown-menu px-2">
+                                    <li>
+                                        <a href="#" class="no-link d-block py-2 border-bottom" data-role="PRINT_INVOICE" data-print-class="A3_PRINT" data-perm="a3_invoice_print">${FUI_DISPLAY_LANG.views.pages.global.print_sizes.A3_PRINT}</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="no-link d-block py-2 border-bottom" data-role="PRINT_INVOICE" data-print-class="A4_PRINT" data-perm="a4_invoice_print">${FUI_DISPLAY_LANG.views.pages.global.print_sizes.A4_PRINT}</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="no-link d-block py-2 border-bottom" data-role="PRINT_INVOICE" data-print-class="A5_PRINT" data-perm="a5_invoice_print">${FUI_DISPLAY_LANG.views.pages.global.print_sizes.A5_PRINT}</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="no-link" data-role="PRINT_INVOICE" data-print-class="RECEIPT_7_5_CM_PRINT" data-perm="receipt_7_5_cm_invoice_print">${FUI_DISPLAY_LANG.views.pages.global.print_sizes.RECEIPT_7_5_CM_PRINT}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td style="width:15px">
+                            <svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+                        </td>
+                    </tr>PAG_SEP
+                    <tr class="expand-row__row" style="display:none;">
+                        <td colspan="10">
+                            <table class="table-01">
+                                <thead>
+                                    <tr>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th26}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th27}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th28}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th29}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHTML2}
+                                </tbody>
+                            </table>
+                            <div class="order-price-table">
+                                <div class="order-price-table-contents">
+                                    ${itemsHTML}	
+                                </div>
+                                <div class="order-price-table-contents">
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th30}</strong>
+                                        <span>${moneyFormat(order.order_total_amount)}</span>
+                                    </div>
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th31}</strong>
+                                        <span>${moneyFormat(order.order_dept_amount)}</span>
+                                    </div>
+                                    <div class="border-top my-1"></div>
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th32}</strong>
+                                        <span>${moneyFormat(order.order_amount_paid)}</span>
+                                    </div>	
+                                </div>
+                            </div>
+                        </td>
+                    </tr>PAG_SEP`;
+                }
+                // add html
+                new SmoothPagination(central_administration_to_customer_invoices_pagination, central_administration_to_customer_invoices_tableElement.find('tbody'), {
+                    data: html.split('PAG_SEP'),
+                    resultsPerPage: 12
+                });
+            } 
+        }
+        // setup dept actions
+        function setupDeptActions()
+        {
+            const customer_dept_actions_search_btn = page_container.find('#customer_dept_actions_search_btn')
+            const customer_dept_actions_search_input = page_container.find('#customer_dept_actions_search_input')
+            const customer_dept_actions_date_start_input = page_container.find('#customer_dept_actions_date_start_input')
+            const customer_dept_actions_date_end_input = page_container.find('#customer_dept_actions_date_end_input')
+            const customer_dept_actions_pagination = page_container.find('#customer_dept_actions_pagination')
+            const customer_dept_actions_tableElement = page_container.find('#customer_dept_actions_tableElement')
+
+            // customer_dept_actions_tableElement click
+            customer_dept_actions_tableElement.on('click', async e => {
+                var target = $(e.target);
+                
+            });
+            
+            // search
+            customer_dept_actions_search_btn.on('click', e => {
+                customer_dept_actions_search_input.trigger('keyup')
+            })
+            detectTypingEnd(customer_dept_actions_search_input, val => {
+                displayCentralAdministrationDeptActions({
+                    method_type: 'dept_action_search',
+                    query: val,
+                    advanced: {
+                        start: customer_dept_actions_date_start_input.val(),
+                        end: customer_dept_actions_date_end_input.val(),
+                        customer_id: CustomerObject.id,
+                        administration_id: USER_CONFIG.administration.clinicId,
+                    }
+                })
+            })
+            customer_dept_actions_search_input.trigger('keyup')
+            // displayCentralAdministrationDeptActions
+            async function displayCentralAdministrationDeptActions(params) {
+                SectionLoader(customer_dept_actions_tableElement)
+
+                if (params.method_type == 'dept_action_search') var res = await CUSTOMER_MODEL.dept_action_search(params)
+
+                SectionLoader(customer_dept_actions_tableElement, '')
+
+                if (res.code == 404) return
+
+                var data = res.data
+                var html = ''
+
+                $.each(data, (k,v) =>
+                {
+                    html += `
+                    <div class="tr" data-role="row" data-id="${v.id}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">${v.reason}</div>
+                        <div class="td">${v.note}</div>
+                        <div class="td">
+                            (<span class="text-success">${ (v.in_amount > 0) ? '+'+moneyFormat(v.in_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">
+                            (<span class="text-danger">${ (v.out_amount > 0) ? '-'+moneyFormat(v.out_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">${v.created_at}</div>
+                    </div>PAG_SEP
+                    `
+                })
+                
+                // add html
+                new SmoothPagination(customer_dept_actions_pagination, customer_dept_actions_tableElement.find('.tbody'), {
+                    data: html.split('PAG_SEP'),
+                    resultsPerPage: 12
+                });
+            } 
+        }
+        
+
+    })
+
+</script>

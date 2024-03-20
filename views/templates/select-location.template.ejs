@@ -1,0 +1,165 @@
+<span id="select_location_template_<%= locals.componentId %>" class="pointer">
+
+    <input type="text" class="input-text input-text-outline mb-2 location_input" id="<%= locals.searchInputId ? locals.searchInputId : '' %>" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder9 %>">
+    
+</span>
+
+<script>
+
+    $(function()
+    {
+
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var searchInputId = (`<%- locals.searchInputId %>` == '' || `<%- locals.searchInputId %>` == null) ? 'select_centers_template_center_select' : `<%- locals.searchInputId %>`
+
+        var select_location_template = $('#select_location_template_'+componentId)
+        var location_input = select_location_template.find('.location_input')
+
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'location-selected' : `<%- locals.selectionEventName %>`
+
+        let dialog
+        // open map
+        location_input.off('dblclick').on('dblclick', e =>
+        {
+            dialog = new FullpageDialog({
+                container: 'select_location_google_map_container',
+                title: `${FUI_DISPLAY_LANG.views.pages.global.text18}
+                        <div class="mt-2"><input type="text" class="input-text input-text-outline" id="search_input" placeholder="${FUI_DISPLAY_LANG.views.pages.global.placeholder5}"></div>`,
+                html: ``,
+                size: {
+                    maxWidth: '550px',
+                    maxHeight: '500px',
+                }
+            })
+     
+            // setup ui
+            dialog.getElement().find('.dialog_container')
+            .css('max-height', '80vh')
+            .css('max-width', '900px')
+            dialog.getElement().find('.dialog_body').css('max-height', 'unset')
+            initMap(dialog.getElement())
+        })
+
+        // init map
+        function initMap(mapWrapper) 
+        {
+            const map = new google.maps.Map(mapWrapper.find('.dialog_body')[0], 
+            {
+                center: { lat: 28.0339, lng: 1.6596 },
+                zoom: 6,
+            });
+
+            const marker = new google.maps.Marker({
+                position: { lat: 28.0339, lng: 1.6596 },
+                map: map,
+            });
+
+            const searchInput = mapWrapper.find('#search_input')[0];
+            const searchBox = new google.maps.places.SearchBox(searchInput);
+
+            let boundsChangedListener;
+            let placesChangedListener;
+            let markerClickedListener;
+
+            function handleBoundsChanged() 
+            {
+                if (boundsChangedListener) 
+                {
+                    google.maps.event.removeListener(boundsChangedListener);
+                }
+                searchBox.setBounds(map.getBounds());
+            }
+
+            function handlePlacesChanged() 
+            {
+                const places = searchBox.getPlaces();
+
+                if (places.length === 0) {
+                    return;
+                }
+
+                const bounds = new google.maps.LatLngBounds();
+
+                places.forEach(function (place) 
+                {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    // Retrieve the desired information from the place object
+                    const coordinates = place.geometry.location.toJSON();
+                    const name = place.name;
+                    const address = place.formatted_address;
+                    // You can access additional information from the place object as needed
+
+                    marker.setPosition(place.geometry.location);
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(10);
+
+                    bounds.extend(place.geometry.location);
+                });
+
+                map.fitBounds(bounds);
+            }
+
+            function handleMarkerClicked(e)
+            {
+                console.log( e )
+            }
+
+            // Define the click event handler function
+            function handleMapClick(event) 
+            {
+                const geocoder = new google.maps.Geocoder();
+                const clickedLocation = event.latLng;
+
+                geocoder.geocode({ location: clickedLocation }, function (results, status) 
+                {
+                    if (status === google.maps.GeocoderStatus.OK && results[0]) 
+                    {
+                        const coordinates = clickedLocation.toJSON();
+                        const name = results[0].formatted_address;
+
+                        dialog.hide()
+                        var event = new CustomEvent(selectionEventName, { 
+                            detail: { 
+                                location: {
+                                    coordinates: coordinates,
+                                    data: results[0],
+                                    // data: checkJSON( decodeURIComponent( atob( target.data('object') ) ) ),
+                                },
+                                eventsReceiverId: eventsReceiverId 
+                            } 
+                        });
+
+                        document.dispatchEvent(event)
+                        // console.log("Clicked Location Name:", name);
+
+                        // Perform any further processing or display the information as needed
+                    } 
+                    else {
+                        console.log("Geocoder failed due to:", status);
+                    }
+                });
+            }
+
+            // removeMapClickListener() 
+            // Add the click event listener to the map
+            map.addListener("click", handleMapClick);
+
+            // Function to remove the click event listener
+            function removeMapClickListener() 
+            {
+                map.removeListener("click", handleMapClick);
+            }
+
+
+            boundsChangedListener = google.maps.event.addListener(map,"bounds_changed",handleBoundsChanged);
+
+            placesChangedListener = google.maps.event.addListener(searchBox,"places_changed",handlePlacesChanged);
+        }
+    })
+
+</script>

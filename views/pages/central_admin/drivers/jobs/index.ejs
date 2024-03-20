@@ -1,0 +1,615 @@
+<div class="container-fluid" id="all_drivers_jobs_container">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+
+        <div class="mt-3 WRAPPER" id="wrapper01">
+
+            <div class="py-4 px-3 mb-3 bg-white border rounded">
+
+                <div class="row gx-4 gy-3 mb-3">
+    
+                    <div class="col-lg-12">
+                        <button class="btn btn-danger btn-sm" id="deleteSelectedBTN" data-perm="delete_driver_jobs">
+                            <%= UI_DISPLAY_LANG.views.pages.global.delete_selected_button %>
+                        </button>
+                    </div>
+    
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                            searchBtnId: 'search_btn',
+                            searchInputId: 'search_input',
+                        }) -%>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                            dateStartId: 'date_start_input',
+                            dateEndId: 'date_end_input',
+                        }) -%>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-drivers.template.ejs`, {
+                            eventsReceiverId: 'all_drivers_jobs_container'
+                        }) -%>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-status.template.ejs`, {
+                            componentId: 'status_select_component',
+                            selectId: 'status_select',
+                        }) -%>
+                    </div>
+                    
+                </div>
+    
+            </div>
+    
+            <div id="pagination" class="flex flex-center my-3"></div>
+    
+            <div class="table-div bg-white border rounded">
+                <table class="table" id="table_element">
+                    <thead>
+                        <th>#</th>
+                        <th><%= UI_DISPLAY_LANG.views.pages.global.th42 %></th>
+                        <th><%= UI_DISPLAY_LANG.views.pages.global.th44 %></th>
+                        <th><%= UI_DISPLAY_LANG.views.pages.global.th45 %></th>
+                        <th><%= UI_DISPLAY_LANG.views.pages.global.th38 %></th>
+                        <th><%= UI_DISPLAY_LANG.views.pages.global.th43 %></th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="mt-3 WRAPPER" id="wrapper02" style="display: none;">
+            <button class="btn btn-light btn-sm mb-4" data-role="BACK_TO_MAIN_UI_BTN" style="width:120px;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <div class="row gx-4 gy-3">
+    
+                <div class="col-lg-12 col-md-12 app-block d-none" id="driver_job_trackings">
+    
+                    <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav71 %></h4>
+
+                    <ul class="list-group list-group-flush mb-4" id="driver_job_trackings_info_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+    
+                    <div class="py-4 px-3 mb-3 border rounded">
+                        <div class="row gx-4 gy-3">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                    searchBtnId: 'driver_job_trackings_search_btn',
+                                    searchInputId: 'driver_job_trackings_search_input',
+                                }) -%>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                    dateStartId: 'driver_job_trackings_date_start_input',
+                                    dateEndId: 'driver_job_trackings_date_end_input',
+                                }) -%>
+                            </div>
+                            <div class="col-lg col-md col-sm-12">
+                                <div class="fs-20 mb-2">
+                                    <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="driver_job_trackings_total">0</span>
+                                </div>
+                                <ul class="list-group list-group-flush" id="driver_job_trackings_extra_data_list">
+                                    <!-- <li class="list-group-item">An item</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="driver_job_trackings_pagination" class="flex flex-center my-3"></div>
+                    <div class="table-div bg-white border rounded">
+                        <table class="table" id="driver_job_trackings_tableElement">
+                            <thead>
+                                <th>#</th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.global.th52 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.global.th46 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.global.th21 %></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                             
+                            </tbody>
+                        </table>
+                    </div>
+    
+                </div>
+    
+            </div>
+        </div>
+
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#all_drivers_jobs_container');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination = page_container.find('#pagination');
+var table_element = page_container.find('#table_element');
+
+var search_input = page_container.find('#search_input');
+var search_btn = page_container.find('#search_btn');
+var date_start_input = page_container.find('#date_start_input');
+var date_end_input = page_container.find('#date_end_input');
+var select_drivers_template_driver_select = page_container.find('#select_drivers_template_driver_select');
+var status_select = page_container.find('#status_select');
+
+var driver_job_trackings_info_list = page_container.find('#driver_job_trackings_info_list');
+
+var wrapper01 = page_container.find('#wrapper01')
+var wrapper02 = page_container.find('#wrapper02')
+
+var BACK_TO_MAIN_UI_BTN = page_container.find('[data-role="BACK_TO_MAIN_UI_BTN"]')
+
+var res = await EMPLOYEE_MODEL.searchLocal({
+    query: '',
+    administration_id: 0,
+    employee_administration: '.'
+})
+
+if ( res.code == 200 )
+{
+    var DRIVERS_SELECT_OPTIONS = res.data.map(v => {
+        if ( v.type.employee_type_code == EMP_TYPE_DRIVER )
+        {
+            var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+            return `<option value="${v.employee_id}" data-object="${data}">${v.employee_name}</option>`
+        }
+    })
+}
+
+var JobObject = {}
+//
+date_start_input.val( CURRENT_DATE );
+date_end_input.val( CURRENT_DATE );
+
+// back to main ui
+BACK_TO_MAIN_UI_BTN.on('click', e =>
+{
+    wrapper01.slideDown(200).siblings('.WRAPPER').slideUp(200)
+})
+// table_element click
+table_element.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'show_in_map' )
+    {
+        var parent = target.closest('[data-role="row"]');
+        var coords = convertCoordinates(target.data('coords'), 'object')
+
+        MapDialog({
+            coordinates: coords
+        })
+    }
+    else if ( target.data('role') == 'set_driver' )
+    {
+        PromptConfirmDialog().then(async () =>
+        {
+            var parent = target.closest('[data-role="row"]');
+            var select = target.closest('td').find('select')
+
+            var driver_id = select.find(':selected').val()
+            var driver_name = select.find(':selected').text()
+
+            parent.addClass('disabled')
+            var res = await DRIVER_JOB_MODEL.setDriver({
+                id: parent.data('id'),
+                driver_id,
+                driver_name,
+                isAccepted: ST_YES,
+                status: STATUS_APPROVED,
+                link: `${DEFAULT_INI_SETTINGS.Server_Settings.PROJECT_URL}driver-jobs/confirm?job_id=${parent.data('id')}`
+            })
+            parent.removeClass('disabled')
+
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+            if ( res.code == 404 ) return
+            search_btn.trigger('click')
+        })
+    }
+    else if ( target.data('role') == 'view_more' )
+    {
+        var parent = target.closest('[data-role="row"]')
+
+        parent.addClass('disabled')
+        var res = await DRIVER_JOB_MODEL.show({
+            id: parent.data('id')
+        })
+        parent.removeClass('disabled')
+
+        JobObject = res.data
+        displayInfo()
+    }
+    else if ( target.data('role') == 'view_review' )
+    {
+        var parent = target.closest('[data-role="row"]')
+
+        parent.addClass('disabled')
+        var res = await DRIVER_JOB_MODEL.show({
+            id: parent.data('id')
+        })
+        parent.removeClass('disabled')
+
+        JobObject = res.data
+
+        var start_rating = parent.find('.star-rating')[0].outerHTML
+        
+        dialog = new FullpageDialog({
+            container: 'driver_job_review_dialog',
+            title: `${FUI_DISPLAY_LANG.views.pages.global.text49}`,
+            html: `<ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label86 }: </span>
+                            <span>${JobObject.driver_name}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label81 }: </span>
+                            <span>${JobObject.from_place}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label83 }: </span>
+                            <span>${JobObject.to_place}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label80 }: </span>
+                            <span>${JobObject.description}</span>
+                        </li>
+                        <li class="list-group-item no-pointer">
+                            ${start_rating}
+                        </li>
+                        <li class="list-group-item">
+                            ${ (JobObject.review) ?? '' }    
+                        </li>
+                    </ul>`,
+            size: {
+                maxWidth: '550px',
+                maxHeight: '500px',
+            }
+        })
+
+        dialog.getElement().find('.dialog_container').css('padding', '2em')
+    }
+})
+// delete selected
+deleteSelectedBTN.on('click', async e =>
+{
+	PromptConfirmDialog().then(async c =>
+	{
+		deleteSelectedBTN.addClass('disabled')
+		var res = await DRIVER_JOB_MODEL.batchDelete({
+            collection: selectedRows()
+        })
+        deleteSelectedBTN.removeClass('disabled')
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+		if ( res.code == 404 ) return
+		
+		//
+		displayAll({
+            method_type: 'search',
+            query: search_input.val()
+        })
+	});
+})
+// search between dates
+search_btn.on('click', async e =>
+{
+    displayAll({
+        method_type: 'search',
+        query: search_input.val(),
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+        }
+    })
+})
+// search
+search_input.on('keyup', async e =>
+{
+    displayAll({
+        method_type: 'search',
+        query: search_input.val()
+    })
+})
+// filter
+select_drivers_template_driver_select.on('change', e =>
+{
+    displayAll({
+        method_type: 'filterByDriver',
+        filter: select_drivers_template_driver_select.find(':selected').val()
+    })
+})
+//
+status_select.on('change', e =>
+{
+    displayAll({
+        method_type: 'filterByStatus',
+        filter: status_select.find(':selected').val()
+    })
+})
+//
+search_btn.trigger('click')
+// display all
+async function displayAll(params)
+{
+    table_element.find('tbody').html('');
+    SectionLoader(table_element)
+    if ( params.method_type == 'search' )
+        var res = await DRIVER_JOB_MODEL.search(params)
+    else if ( params.method_type == 'filterByDriver' )
+        var res = await DRIVER_JOB_MODEL.filterByDriver(params)
+    else if ( params.method_type == 'filterByStatus' )
+        var res = await DRIVER_JOB_MODEL.filterByStatus(params)
+
+    SectionLoader(table_element, '')
+    if ( res.code == 404 )
+        return;
+    
+    var data = res.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        var last_tracking_data = (v.trackings.last) ? v.trackings.last : ''
+        html+= `<tr data-role="row" data-id="${v.id}">
+                        <td>
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.employee_name}</div>
+                            <div>${ FUI_DISPLAY_LANG.views.pages.global.employee_type_codes[v.employee_type_code] }</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.from_place}</div>
+                            <div class="pointer mb-2">${ (v.from_place_coords) ? `<a href="#" class="text-primary text-decoration-underline" data-role="show_in_map" data-coords="${v.from_place_coords}">${FUI_DISPLAY_LANG.views.pages.global.text37}</a>"` : '' }</div>
+                            <div class="mb-2">${ (v.from_place_phone) ?? '' }</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.to_place}</div>
+                            <div class="pointer mb-2">${ (v.to_place_coords) ? `<a href="#" class="text-primary text-decoration-underline" data-role="show_in_map" data-coords="${v.to_place_coords}">${FUI_DISPLAY_LANG.views.pages.global.text37}</a>"` : '' }</div>
+                            <div class="mb-2">${ (v.to_place_phone) ?? '' }</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">
+                                ${v.description}
+                            </div>
+                            <div class="">
+                                ${ (v.selected_date) ? `<span class="d-block mb-2 text-success">${v.selected_date}<span>` : '' }
+                                ${ (v.selected_time) ? `<span class="d-block mb-2 text-success">${v.selected_time}<span>` : '' }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.driver_name}</div>
+                            <div class="row" data-perm="set_driver_for_driver_jobs">
+                                <div class="col">
+                                    <select class="input-text input-text-outline">${DRIVERS_SELECT_OPTIONS}</select>    
+                                </div>
+                                <div class="col-4 d-flex align-items-center">
+                                    <a href="#" class="text-primary text-decoration-underline" data-role="set_driver">${FUI_DISPLAY_LANG.views.pages.global.actions.set}</a>   
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.created_at}</div>
+                            <div class="mb-2">${v.created_at_diff.auto}</div>
+                            <div class="mb-2">
+                                <div class="alert alert-info alert-1">${FUI_DISPLAY_LANG.views.pages.global.status[v.status]}</div>
+                            </div>
+                            ${ (last_tracking_data) ? `<div class="pointer mb-2">${ (last_tracking_data.current_place) ? `<a href="#" class="text-success text-decoration-underline" data-role="show_in_map" data-coords="${last_tracking_data.current_place_coords}">${FUI_DISPLAY_LANG.views.pages.global.text37}</a>"` : '' }</div>` : '' }
+                            <div class="mb-2">
+                                <a href="#" class="text-primary text-decoration-underline" data-role="view_more">${FUI_DISPLAY_LANG.views.pages.global.view_more}</a>
+                            </div>
+                            ${ (v.link_status == 'completed') 
+                                ? `<div>
+                                        <div class="star-rating" style="--rating: ${v.rating};" aria-label="Rating of this product is 2.3 out of 5."></div>
+                                    </div>
+                                    <a href="#" class="text-primary text-decoration-underline" data-role="view_review">${FUI_DISPLAY_LANG.views.pages.global.view_review}</a>
+                                    ` : '' }
+                        </td>
+                    </tr>PAG_SEP`
+    })
+    // add html
+    new SmoothPagination(pagination, table_element.find('tbody'), {
+        data: html.split('PAG_SEP'),
+        resultsPerPage: 12
+    });
+}
+// displayInfo
+function displayInfo()
+{
+    if ( !JobObject.id ) return
+
+    // display tracking job info
+
+    driver_job_trackings_info_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label86 }: </span>
+            <span>${JobObject.driver_name}</span>
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label81 }: </span>
+            <span>${JobObject.from_place}</span>
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label83 }: </span>
+            <span>${JobObject.to_place}</span>
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.label80 }: </span>
+            <span>${JobObject.description}</span>
+        </li>
+    `)
+
+    wrapper02.slideDown(200).siblings('.WRAPPER').slideUp(200)
+
+    // Trackings
+    driver_job_trackings = page_container.find('#driver_job_trackings')
+    driver_job_trackings_search_btn = driver_job_trackings.find('#driver_job_trackings_search_btn')
+    driver_job_trackings_search_input = driver_job_trackings.find('#driver_job_trackings_search_input')
+    driver_job_trackings_date_start_input = driver_job_trackings.find('#driver_job_trackings_date_start_input')
+    driver_job_trackings_date_end_input = driver_job_trackings.find('#driver_job_trackings_date_end_input')
+    driver_job_trackings_pagination = driver_job_trackings.find('#driver_job_trackings_pagination')
+    driver_job_trackings_tableElement = driver_job_trackings.find('#driver_job_trackings_tableElement')
+
+    var driver_job_trackings_total = page_container.find('#driver_job_trackings_total');
+    var driver_job_trackings_extra_data_list = page_container.find('#driver_job_trackings_extra_data_list');
+
+    driver_job_trackings_date_start_input.val( CURRENT_DATE )
+    driver_job_trackings_date_end_input.val( CURRENT_DATE )
+
+    // table_element click
+    driver_job_trackings_tableElement.on('click', async e =>
+    {
+        var target = $(e.target);
+        if ( target.data('role') == 'show_in_map' )
+        {
+            var parent = target.closest('[data-role="row"]');
+            var coords = convertCoordinates(target.data('coords'), 'object')
+
+            MapDialog({
+                coordinates: coords
+            })
+        }
+    })
+    // search between dates
+    driver_job_trackings_search_btn.off('click').on('click', async e =>
+    {
+        displayAllDriverJobTrackings({
+            method_type: 'driver_job_tracking__job_search',
+            driver_id: JobObject.driver_id,
+            job_id: JobObject.id,
+            query: driver_job_trackings_search_input.val(),
+            advanced: {
+                start: driver_job_trackings_date_start_input.val(),
+                end: driver_job_trackings_date_end_input.val(),
+            }
+        })
+    });
+    // search
+    driver_job_trackings_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllDriverJobTrackings({
+            method_type: 'driver_job_tracking__job_search',
+            driver_id: JobObject.driver_id,
+            job_id: JobObject.id,
+            query: driver_job_trackings_search_input.val()
+        })
+    });
+    // display all
+    displayAllDriverJobTrackings({
+        method_type: 'driver_job_tracking__job_search',
+        driver_id: JobObject.driver_id,
+        job_id: JobObject.id,
+        query: driver_job_trackings_search_input.val()
+    })
+    async function displayAllDriverJobTrackings(params)
+    {
+        driver_job_trackings_total.text('0')
+        //
+        driver_job_trackings_extra_data_list.html('')
+        driver_job_trackings_tableElement.find('tbody').html('');
+        SectionLoader(driver_job_trackings_tableElement)
+        if ( params.method_type == 'driver_job_tracking__job_search' )
+            var res = await DRIVER_JOB_MODEL.driver_job_tracking__job_search(params)
+
+        SectionLoader(driver_job_trackings_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            driver_job_trackings.addClass('d-none')
+            return
+        }
+        // show wrapper
+        driver_job_trackings.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        driver_job_trackings_total.text(data.length)
+        var last_data = firstArrayElement(data)
+        $.each(data, (k,v) =>
+        {
+            html+= `<tr data-role="row" data-id="${v.id}">
+                        <td>
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </td>
+                        <td>
+                            <div class="">${v.description}</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.current_place}</div>
+                            <div class="pointer">${ (v.current_place_coords) ? `<a href="#" class="text-primary text-decoration-underline" data-role="show_in_map" data-coords="${v.current_place_coords}">${FUI_DISPLAY_LANG.views.pages.global.text37}</a>"` : '' }</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.note}</div>
+                        </td>
+                        <td>
+                            <div class="mb-2">${v.created_at}</div>
+                            <div class="mb-2">${v.created_at_diff.auto}</div>
+                        </td>
+                    </tr>PAG_SEP`
+        })
+        // add html
+        new SmoothPagination(driver_job_trackings_pagination, driver_job_trackings_tableElement.find('tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+        // display extra data
+        driver_job_trackings_extra_data_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+                <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+                <span>${last_data.employee_name}, </span>
+                <span>${FUI_DISPLAY_LANG.views.pages.global.in_location} </span>
+                <span class="">${last_data.current_place}, </span>
+                <span class="">${FUI_DISPLAY_LANG.views.pages.global.in_date} </span>
+                <span class="text-primary">${last_data.created_at} </span>
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text39 }: </span>
+                <span>${last_data.note} </span>
+            </li>
+        `)
+    }
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = table_element.find('[data-role="row"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]');
+
+        if ( check.is(':checked') )
+        {
+            list.push({
+                id: parent.data('id')
+            })
+        }
+    }
+
+    return list;
+}
+// 
+
+})
+
+</script>

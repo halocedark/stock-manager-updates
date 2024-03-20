@@ -1,0 +1,245 @@
+<div class="container-fluid" id="addSuppliersContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.sectionTitle %></h1>
+	</div>
+	<div class="mt-3 app-block" id="wrapper01">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<form action="#" id="addForm">
+			<div class="row gx-4 gy-4">
+
+				<div class="col-md-6">
+
+					<div class="mb-2">
+						<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-supplier-categories.template.ejs`, {
+							componentId: 'select_supplier_categories_component',
+							selectId: 'supplier_type_select',
+						}) -%>
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label01 %></label>
+							<input type="text" required class="input-text input-text-outline" name="supplier_name" id="nameInput">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label02 %></label>
+							<input type="text" class="input-text input-text-outline" name="supplier_phone1" id="phone1Input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label03 %></label>
+							<input type="text" class="input-text input-text-outline" name="supplier_phone2" id="phone2Input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label04 %></label>
+							<input type="text" class="input-text input-text-outline" name="supplier_phone3" id="phone3Input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label05 %></label>
+							<input type="text" class="input-text input-text-outline" name="supplier_address" id="addressInput">
+						</div>	
+					</div>
+
+				</div>
+
+				<div class="col-md-6">
+
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label06 %></label>
+							<input type="email" class="input-text input-text-outline" name="supplier_email1" id="email1Input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label07 %></label>
+							<input type="email" class="input-text input-text-outline" name="supplier_email2" id="email2Input">
+						</div>	
+					</div>
+					<div class="mb-2">
+						<div class="">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label08 %></label>
+							<input type="email" class="input-text input-text-outline" name="supplier_email3" id="email3Input">
+						</div>	
+					</div>
+
+				</div>
+				
+				<div class="col-md-6">
+
+					<div class="row">
+
+						<div class="col-md-6">
+
+							<div class="">
+								<div class="">
+									<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.label09 %></label>
+									<input type="file" class="input-text" id="imageInput">
+								</div>	
+							</div>
+
+						</div>
+
+						<div class="col-md-6">
+
+							<div class=" text-center">
+								<div class="">
+									<img src="assets/img/utils/placeholder.jpg" id="previewImage" class="img-04 img-thumbnail" alt="">
+								</div>	
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+			</div>
+			<div class="mt-3">
+				<input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.add_suppliers.form01.submitBTN01 %>">
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#addSuppliersContainer');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var addForm = page_container.find('#addForm');
+var supplier_type_select = addForm.find('#supplier_type_select');
+var nameInput = addForm.find('#nameInput');
+var phone1Input = addForm.find('#phone1Input');
+var phone2Input = addForm.find('#phone2Input');
+var phone3Input = addForm.find('#phone3Input');
+var addressInput = addForm.find('#addressInput');
+var email1Input = addForm.find('#email1Input');
+var email2Input = addForm.find('#email2Input');
+var email3Input = addForm.find('#email3Input');
+var imageInput = addForm.find('#imageInput');
+var previewImage = addForm.find('#previewImage');
+
+var wrapper01 = page_container.find('#wrapper01');
+
+var SupplierObject = {
+    supplier_id: sessionData(true).supplier_id
+};
+// submt
+addForm.off('submit');
+addForm.on('submit', async e =>
+{
+    e.preventDefault();
+    var target = addForm;
+	SupplierObject.category_id = supplier_type_select.find(':selected').val()
+	SupplierObject.type = supplier_type_select.find(':selected').text()
+    SupplierObject.supplier_name = nameInput.val();
+    SupplierObject.supplier_phone1 = phone1Input.val();
+    SupplierObject.supplier_phone2 = phone2Input.val();
+    SupplierObject.supplier_phone3 = phone3Input.val();
+    SupplierObject.supplier_address = addressInput.val();
+    SupplierObject.supplier_email1 = email1Input.val();
+    SupplierObject.supplier_email2 = email2Input.val();
+    SupplierObject.supplier_email3 = email3Input.val();
+    if ( imageInput[0].files.length > 0 )
+        SupplierObject.image = imageInput[0].files[0];
+    // display loader
+    SectionLoader(wrapper01);
+
+    // update
+    if ( SupplierObject.supplier_id )
+    {
+        var response = await SUPPLIER_MODEL.update(SupplierObject)
+
+		// hide loader
+		SectionLoader(wrapper01, '');
+		if ( response.code == 404 )
+		{
+			ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+			return;
+		}
+		ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+		// reset
+		target[0].reset();
+		SupplierObject.supplier_id = null;
+
+        return;
+    }
+    // add
+
+    var response = await SUPPLIER_MODEL.store(SupplierObject)
+
+	// hide loader
+	SectionLoader(wrapper01, '');
+	if ( response.code == 404 )
+	{
+		ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+		return;
+	}
+	ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+	// reset
+	target[0].reset();
+});
+// select image
+imageInput.off('change');
+imageInput.on('change', e =>
+{
+    if ( imageInput[0].files.length == 0 )
+        return
+
+    previewImage.attr('src', imageInput[0].files[0].path);
+});
+// display one
+displayOne();
+async function displayOne()
+{
+    if ( SupplierObject.supplier_id == null )
+        return;
+
+    // display loader
+    SectionLoader(wrapper01);
+    var response = await SUPPLIER_MODEL.show({
+		supplier_id: SupplierObject.supplier_id
+	})
+    // hide loader
+    SectionLoader(wrapper01, '');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var supplier_image_url = (data.supplier_image_object) ? JSON.parse(data.supplier_image_object).url : 'assets/img/utils/placeholder.jpg';
+	// setOptionSelected(supplier_type_select, data.type)
+    // nameInput.val(data.supplier_name);
+    // phone1Input.val(data.supplier_phone1);
+    // phone2Input.val(data.supplier_phone2);
+    // phone3Input.val(data.supplier_phone3);
+    // addressInput.val(data.supplier_address);
+    // email1Input.val(data.supplier_email1);
+    // email2Input.val(data.supplier_email2);
+    // email3Input.val(data.supplier_email3);
+	
+	observeElement( supplier_type_select[0], mutation =>
+	{
+		setOptionSelected(supplier_type_select, data.category_id, true)
+	})
+	fillForm(addForm, data)
+    previewImage.attr('src', supplier_image_url);
+}
+
+})
+
+</script>

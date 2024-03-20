@@ -1,0 +1,11 @@
+<span id="<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label122 %></label>
+    <select name="<%= locals.name ? locals.name : 'target_center_select' %>" class="input-text" id="<%= locals.selectId ? locals.selectId : 'target_center_select' %>">
+        <option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>
+        <% for (const key in UI_DISPLAY_LANG.views.pages.global.center_types2) { %>
+            <option value="<%= key.toUpperCase() %>"><%= UI_DISPLAY_LANG.views.pages.global.center_types2[key] %></option>
+        <% } %>
+    </select>
+
+</span>

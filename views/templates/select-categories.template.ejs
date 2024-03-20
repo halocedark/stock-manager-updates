@@ -1,0 +1,58 @@
+<span id="select_categories_template" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label46 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_categories_template_search_input">
+    <select name="" class="input-text" id="select_categories_template_category_select">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- eventsReceiverId %>`
+
+        var select_categories_template = $('#select_categories_template')
+        var select_categories_template_search_input = select_categories_template.find('#select_categories_template_search_input')
+        var select_categories_template_category_select = select_categories_template.find('#select_categories_template_category_select')
+
+        // search
+        select_categories_template_search_input.on('keyup', select_categories_template_displayAll)
+
+        select_categories_template_displayAll()
+        async function select_categories_template_displayAll()
+        {
+            var res = await CATEGORY_MODEL.search({
+                query: select_categories_template_search_input.val()
+            })
+            select_categories_template_category_select.html('')
+            if ( res.code == 200 )
+            {
+                var data = res.data
+                var html = ''
+       
+                $.each(data, (k,v) =>
+                {
+                    html += `<option value="${v.id}">${v.name}</option>`	
+                })
+                // add html
+                select_categories_template_category_select.html(html)
+                // dispatch an event
+                var event = new CustomEvent('category-selected', { 
+                    detail: { 
+                        category: {
+                            id: select_categories_template_category_select.find(':selected').val(),
+                            name: select_categories_template_category_select.find(':selected').text(),
+                        },
+                        eventsReceiverId: eventsReceiverId 
+                    } 
+                });
+
+                document.dispatchEvent(event)
+            }
+        }
+    })
+
+</script>

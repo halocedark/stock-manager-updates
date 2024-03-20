@@ -1,0 +1,47 @@
+<div class="has-direction-locale px-3 py-3 h-100 position-relative overflow-x-hidden overflow-y-auto max-height-100">
+
+    <form id="create_center_dialog__form">
+
+        <div class="row gx-4 gy-4 mb-3">
+
+            <div class="col-md-6">
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label1 %></label>
+                    <input type="text" class="input-text input-text-outline" id="create_center_dialog__form__name_input">
+                </div>	
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label2 %></label>
+                    <input type="text" class="input-text input-text-outline" id="create_center_dialog__form__phone_input">
+                </div>
+
+                <div class="">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label8 %></label>
+                    <input type="email" class="input-text input-text-outline" id="create_center_dialog__form__email_input">
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-wilaya-baladia2.template.ejs', {
+                    componentId: 'create_center_dialog__form__wilaya_baladia_component',
+                    wilayaSelectId: 'create_center_dialog__form__wilaya_select',
+                    baladiaInputId: 'create_center_dialog__form__baladia_input',
+                    addressInputId: 'create_center_dialog__form__address_input',
+                }) -%>	
+
+            </div>
+
+        </div>
+
+        <div class="">
+            <button type="submit" class="btn btn-success d-block w-100 rounded-0">
+                <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+            </button>
+        </div>
+
+    </form>
+
+</div>

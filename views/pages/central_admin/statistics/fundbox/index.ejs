@@ -1,0 +1,1196 @@
+<div class="container-fluid" id="fundbox_statistics_container">
+
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_clinics.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+    <ul class="list-h js_list_tabs_navs mb-4 mt-4" id="centers_list_tabs_navs">
+        <!-- <li class="list-item list-item-solid flex flex-center active js_list_tab_nav" data-target="#personal_details_tab" >
+            <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab1 %>
+        </li> -->
+
+    </ul> 
+    <div class="d-none"></div>
+
+	<div class="mt-5">
+
+        <div class="row gy-4">
+
+            <div class="col-lg-12 col-md-12">
+
+                <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text27 %></h4>
+
+                <div class="col-md-6">
+
+                    <div class="box-1 mb-5" id="revenue_box" data-perm="fundbox_revenue_total_revenue_statistics">
+                        <div class="box-1-image-holder">
+                            <img src="../assets/img/icons/revenue.png" alt="">
+                        </div>
+                        <div class="box-1-content">
+                            <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text1 %></div>
+                            <div class="box-1-value">0</div>
+                        </div>
+                    </div>
+    
+                    <div class="">
+    
+                        <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                            componentId: 'revenue_box_chart_timestamp_select',
+                            selectId: 'revenue_box_chart_timestamp_select_select',
+                            options: {
+                                option1: {
+                                    permission: 'fundbox_revenue_total_revenue_chart_current_week_statistics',
+                                },
+                                option2: {
+                                    permission: 'fundbox_revenue_total_revenue_chart_current_month_statistics',
+                                },
+                                option3: {
+                                    permission: 'fundbox_revenue_total_revenue_chart_current_year_statistics',
+                                },
+                                option4: {
+                                    permission: 'fundbox_revenue_total_income_chart_today_statistics',
+                                },
+                                option5: {
+                                    permission: 'fundbox_revenue_total_income_chart_all_time_statistics',
+                                },
+                            },
+                        }) -%>
+    
+                        <div class="w-100 h-100" data-perm="fundbox_revenue_total_income_chart_statistics">
+                            <canvas id="revenue_box_chart"></canvas>
+                        </div>
+    
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+
+                <div class="row gy-4">
+
+                    <div class="col-md-6">
+
+                        <div class="box-1 mb-5" id="appointments_box" data-perm="fundbox_appointments_total_income_statistics">
+                            <div class="box-1-image-holder">
+                                <img src="../assets/img/icons/appointment.png" alt="">
+                            </div>
+                            <div class="box-1-content">
+                                <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text2 %></div>
+                                <div class="box-1-value">0</div>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                componentId: 'appointments_box_chart_timestamp',
+                                selectId: 'appointments_box_chart_timestamp_select',
+                                options: {
+                                    option1: {
+                                        permission: 'fundbox_appointments_total_income_chart_current_week_statistics',
+                                    },
+                                    option2: {
+                                        permission: 'fundbox_appointments_total_income_chart_current_month_statistics',
+                                    },
+                                    option3: {
+                                        permission: 'fundbox_appointments_total_income_chart_current_year_statistics',
+                                    },
+                                    option4: {
+                                        permission: 'fundbox_appointments_total_income_chart_today_statistics',
+                                    },
+                                    option5: {
+                                        permission: 'fundbox_appointments_total_income_chart_all_time_statistics',
+                                    },
+                                },
+                            }) -%>
+
+                            <div class="w-100 h-100" data-perm="fundbox_appointments_total_income_chart_statistics">
+                                <canvas id="appointments_box_chart"></canvas>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="box-1 mb-5" id="store_box" data-perm="fundbox_store_total_income_statistics">
+                            <div class="box-1-image-holder">
+                                <img src="../assets/img/icons/shop.png" alt="">
+                            </div>
+                            <div class="box-1-content">
+                                <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text3 %></div>
+                                <div class="box-1-value"></div>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                componentId: 'store_box_chart_timestamp',
+                                selectId: 'store_box_chart_timestamp_select',
+                                options: {
+                                    option1: {
+                                        permission: 'fundbox_store_total_income_chart_current_week_statistics',
+                                    },
+                                    option2: {
+                                        permission: 'fundbox_store_total_income_chart_current_month_statistics',
+                                    },
+                                    option3: {
+                                        permission: 'fundbox_store_total_income_chart_current_year_statistics',
+                                    },
+                                    option4: {
+                                        permission: 'fundbox_store_total_income_chart_today_statistics',
+                                    },
+                                    option5: {
+                                        permission: 'fundbox_store_total_income_chart_all_time_statistics',
+                                    },
+                                },
+                            }) -%>
+
+                            <div class="w-100 h-100" data-perm="fundbox_store_total_income_chart_statistics">
+                                <canvas id="store_box_chart"></canvas>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="box-1 mb-5" id="client_depts_box" data-perm="fundbox_client_depts_total_income_statistics">
+                            <div class="box-1-image-holder">
+                                <img src="../assets/img/icons/liability.png" alt="">
+                            </div>
+                            <div class="box-1-content">
+                                <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text21 %></div>
+                                <div class="box-1-value"></div>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                componentId: 'client_depts_box_chart_timestamp',
+                                selectId: 'client_depts_box_chart_timestamp_select',
+                                options: {
+                                    option1: {
+                                        permission: 'fundbox_client_depts_total_income_chart_current_week_statistics',
+                                    },
+                                    option2: {
+                                        permission: 'fundbox_client_depts_total_income_chart_current_month_statistics',
+                                    },
+                                    option3: {
+                                        permission: 'fundbox_client_depts_total_income_chart_current_year_statistics',
+                                    },
+                                    option4: {
+                                        permission: 'fundbox_client_depts_total_income_chart_today_statistics',
+                                    },
+                                    option5: {
+                                        permission: 'fundbox_client_depts_total_income_chart_all_time_statistics',
+                                    },
+                                },
+                            }) -%>
+
+                            <div class="w-100 h-100" data-perm="fundbox_client_depts_total_income_chart_statistics">
+                                <canvas id="client_depts_box_chart"></canvas>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+
+                <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text5 %></h4>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="box-1 mb-5" id="expenses_box" data-perm="fundbox_expenses_total_expenses_statistics">
+                            <div class="box-1-image-holder">
+                                <img src="../assets/img/icons/budget.png" alt="">
+                            </div>
+                            <div class="box-1-content">
+                                <div class="box-1-name"><%= UI_DISPLAY_LANG.views.pages.global.statistics.text4 %></div>
+                                <div class="box-1-value">0</div>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-timestamp-filter.template.ejs', {
+                                componentId: 'expenses_box_chart_timestamp_select',
+                                selectId: 'expenses_box_chart_timestamp_select_select',
+                                options: {
+                                    option1: {
+                                        permission: 'fundbox_expenses_total_expenses_chart_current_week_statistics',
+                                    },
+                                    option2: {
+                                        permission: 'fundbox_expenses_total_expenses_chart_current_month_statistics',
+                                    },
+                                    option3: {
+                                        permission: 'fundbox_expenses_total_expenses_chart_current_year_statistics',
+                                    },
+                                    option4: {
+                                        permission: 'fundbox_expenses_total_income_chart_today_statistics',
+                                    },
+                                    option5: {
+                                        permission: 'fundbox_expenses_total_income_chart_all_time_statistics',
+                                    },
+                                },
+                            }) -%>
+
+                            <div class="w-100 h-100" data-perm="fundbox_expenses_total_income_chart_statistics">
+                                <canvas id="expenses_box_chart"></canvas>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        
+	</div>
+
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#fundbox_statistics_container')
+if ( !page_container[0] ) return
+
+// set MAIN_CONTENT_CONTAINER css
+MAIN_CONTENT_CONTAINER.css('background-color', '#ffffff')
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+const centers_list_tabs_navs = page_container.find('#centers_list_tabs_navs')
+
+var clinicsRes = await CLINIC_MODEL.search('')
+
+if ( clinicsRes.code == 404 ) return
+
+const CLINICS_DATA = clinicsRes.data
+var html = ''
+var tabContentsHTML = ''
+// create tabs navs
+$.each(CLINICS_DATA, (k,v) =>
+{
+    html += `<li class="list-item list-item-solid flex flex-center ${ (k==0) ? 'active' : '' } js_list_tab_nav" data-target="#${v.clinicHash}_tab" data-id="${v.clinicId}" data-uuid="${v.clinicHash}" data-name="${v.clinicName}">
+                ${v.clinicName}
+            </li>`
+    //
+    tabContentsHTML += `<div id="${v.clinicHash}_tab" data-role="tab_content"></div>`
+})
+
+centers_list_tabs_navs.html(html)
+centers_list_tabs_navs.next().html(tabContentsHTML)
+
+dispatch_onNewAjaxContentLoaded()
+
+var center_id = selectedCenter().clinicId
+init()
+
+// select center tab
+centers_list_tabs_navs.on('tab-changed', e =>
+{
+    var detail = e.originalEvent.detail
+
+    center_id = selectedCenter().clinicId
+    init()
+})
+
+// TOTAL INCOME CHARTS
+var revenue_box_chartjs = null
+var appointments_box_chartjs = null
+var store_box_chartjs = null
+var client_depts_box_chartjs = null
+// TOTAL EXPENSES CHARTS
+var expenses_box_chartjs = null
+
+// total income
+function setup_total_income()
+{
+    const revenue_box = page_container.find('#revenue_box')
+    const revenue_box_chart_timestamp_select =  page_container.find('#revenue_box_chart_timestamp_select')
+    const revenue_box_chart =  page_container.find('#revenue_box_chart')
+    // var revenue_box_chartjs = null
+
+    const appointments_box = page_container.find('#appointments_box')
+    const appointments_box_chart_timestamp_select =  page_container.find('#appointments_box_chart_timestamp_select')
+    const appointments_box_chart =  page_container.find('#appointments_box_chart')
+    // var appointments_box_chartjs = null
+
+    const store_box = page_container.find('#store_box')
+    const store_box_chart_timestamp_select =  page_container.find('#store_box_chart_timestamp_select')
+    const store_box_chart =  page_container.find('#store_box_chart')
+    // var store_box_chartjs = null
+
+    const client_depts_box = page_container.find('#client_depts_box')
+    const client_depts_box_chart_timestamp_select =  page_container.find('#client_depts_box_chart_timestamp_select')
+    const client_depts_box_chart =  page_container.find('#client_depts_box_chart')
+    // var client_depts_box_chartjs = null
+
+    // revenue
+    revenue_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = revenue_box_chart_timestamp_select.find(':selected').val()
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(in_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+       
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(TotalSearchObject)
+
+        revenue_box.find('.box-1-value').text( commerceMoney(0) )
+        if ( res.data[0].total )
+        {
+            revenue_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+        }
+        
+        //
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            revenue_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+       
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()]
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        revenue_box_chart.removeClass('d-none')
+    
+        createRevenue_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text1,
+                        data: values,
+                        borderColor: 'rgba(0, 255, 153, 1)',
+                        backgroundColor: 'rgba(0, 255, 153, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    revenue_box_chart_timestamp_select.trigger('change')
+    // create revenue_box_chart
+    function createRevenue_box_chart(options = {})
+    {
+        const ctx = revenue_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'line',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text27
+                    }
+                }
+            },
+        }
+
+        if ( revenue_box_chartjs ) revenue_box_chartjs.destroy()
+
+        revenue_box_chartjs = new Chart(ctx, config)
+                
+    }
+
+
+    // appointments
+    appointments_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = appointments_box_chart_timestamp_select.find(':selected').val()
+        
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'appointments',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(in_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'appointments',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+       
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+        
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(TotalSearchObject)
+
+        appointments_box.find('.box-1-value').text( commerceMoney(0) )
+        if ( res.data[0].total )
+        {
+            appointments_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+        }
+
+        //
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(ChartSearchObject)
+        
+        if ( res.code == 404 )
+        {
+            appointments_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+       
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()]
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        appointments_box_chart.removeClass('d-none')
+    
+        createAppointment_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text1,
+                        data: values,
+                        borderColor: 'rgba(109, 157, 255, 1)',
+                        backgroundColor: 'rgba(109, 157, 255, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    appointments_box_chart_timestamp_select.trigger('change')
+    // create appointment_box_chart
+    function createAppointment_box_chart(options = {})
+    {
+        const ctx = appointments_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text2
+                    }
+                }
+            },
+        }
+
+        if ( appointments_box_chartjs ) appointments_box_chartjs.destroy()
+
+        appointments_box_chartjs = new Chart(ctx, config)
+                
+    }
+    
+    // shop
+    store_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = store_box_chart_timestamp_select.find(':selected').val()
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'store',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(in_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'store',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+       
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(TotalSearchObject)
+
+        store_box.find('.box-1-value').text( commerceMoney(0) )
+        if ( res.data[0].total )
+        {
+           store_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) ) 
+        }
+
+        //
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(ChartSearchObject)
+
+        if ( res.code == 404 )
+        {
+            store_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+       
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()]
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+    
+        store_box_chart.removeClass('d-none')
+
+        createStore_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text1,
+                        data: values,
+                        borderColor: 'rgba(0, 179, 0, 1)',
+                        backgroundColor: 'rgba(102, 255, 102, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    store_box_chart_timestamp_select.trigger('change')
+    // create store_box_chart
+    function createStore_box_chart(options = {})
+    {
+        const ctx = store_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text3
+                    }
+                }
+            },
+        }
+
+        if ( store_box_chartjs ) store_box_chartjs.destroy()
+
+        store_box_chartjs = new Chart(ctx, config)
+                
+    } 
+
+    // depts
+    client_depts_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = client_depts_box_chart_timestamp_select.find(':selected').val()
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'center_client_depts',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(in_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                action: 'center_client_depts',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+       
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(in_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(TotalSearchObject)
+
+        client_depts_box.find('.box-1-value').text( commerceMoney(0) )
+        if ( res.data[0].total )
+        {
+           client_depts_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) ) 
+        }
+
+        //
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(ChartSearchObject)
+
+        if ( res.code == 404 )
+        {
+            client_depts_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+       
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()]
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+    
+        client_depts_box_chart.removeClass('d-none')
+
+        createDepts_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text22,
+                        data: values,
+                        borderColor: 'rgba(153, 255, 102, 1)',
+                        backgroundColor: 'rgba(153, 255, 102, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    client_depts_box_chart_timestamp_select.trigger('change')
+    // create client_depts_box_chart
+    function createDepts_box_chart(options = {})
+    {
+        const ctx = client_depts_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'bar',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text21
+                    }
+                }
+            },
+        }
+
+        if ( client_depts_box_chartjs ) client_depts_box_chartjs.destroy()
+
+        client_depts_box_chartjs = new Chart(ctx, config)
+                
+    } 
+
+}
+
+// total expenses
+function setup_total_expenses()
+{
+    const expenses_box = page_container.find('#expenses_box')
+    const expenses_box_chart_timestamp_select =  page_container.find('#expenses_box_chart_timestamp_select')
+    const expenses_box_chart =  page_container.find('#expenses_box_chart')
+    // var expenses_box_chartjs = null
+
+    // expenses
+    expenses_box_chart_timestamp_select.off('change').on('change', async e =>
+    {
+        const value = expenses_box_chart_timestamp_select.find(':selected').val()
+        var TotalSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: "SELECT SUM(out_amount) as total FROM",
+                },
+            }
+        }
+
+        var ChartSearchObject = {
+            query: '',
+            advanced: {
+                owner_id: center_id,
+                owner_type: 'centers',
+                select : {
+                    search: "SELECT * FROM",
+                    replace: '',
+                },
+            }
+        }
+
+        var chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+
+        if ( value == 'today' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+       
+            TotalSearchObject.advanced['today'] = true
+
+            ChartSearchObject.advanced['today'] = true
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_week' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%W') AS days_of_week FROM"
+       
+            TotalSearchObject.advanced['week_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['week_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'days_of_week'
+        }
+        else if ( value == 'current_month' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+      
+            TotalSearchObject.advanced['month_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['month_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        }
+        else if ( value == 'current_year' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date, DATE_FORMAT(created_at, '%M') AS month_name FROM"
+
+            TotalSearchObject.advanced['year_date'] = CURRENT_DATE
+
+            ChartSearchObject.advanced['year_date'] = CURRENT_DATE
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'month_name'
+        }
+        else if ( value == 'all_time' )
+        {
+            chartSQL = "SELECT SUM(out_amount) as total, DATE(created_at) as date FROM"
+
+            ChartSearchObject.advanced.select.replace = chartSQL
+            ChartSearchObject.advanced.groupBy = 'date'
+        } 
+
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(TotalSearchObject)
+
+        expenses_box.find('.box-1-value').text( commerceMoney(0) )
+        if ( res.data[0].total )
+        {
+            expenses_box.find('.box-1-value').text( commerceMoney( moneyFormat(res.data[0].total) ) )
+        }
+        
+        //
+        var res = await STATISTICS_MODEL.fundbox_appointment_search(ChartSearchObject)
+       
+        if ( res.code == 404 )
+        {
+            expenses_box_chart.addClass('d-none')
+            return
+        }
+        if ( !res.data[0].total ) return
+        
+        var data = res.data
+        var labels = []
+        var values = []
+       
+        $.each(data, (k,v) =>
+        {
+            var timestamp = ''
+            if ( value == 'today' || value == 'all_time' ) timestamp = v.date
+            else if ( value == 'current_week' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.days[v.days_of_week.toUpperCase()]
+            else if ( value == 'current_month' ) timestamp = v.date
+            else if ( value == 'current_year' ) timestamp = FUI_DISPLAY_LANG.views.pages.global.months[v.month_name.toUpperCase()]
+            labels.push( timestamp )
+            values.push( v.total )
+        })
+
+        expenses_box_chart.removeClass('d-none')
+    
+        createExpenses_box_chart({
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: FUI_DISPLAY_LANG.views.pages.global.statistics.text1,
+                        data: values,
+                        borderColor: 'rgba(255, 163, 102, 1)',
+                        backgroundColor: 'rgba(255, 194, 153, 0.2)',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderSkipped: false,
+                    }
+                ]
+            }
+        })
+
+    })
+    expenses_box_chart_timestamp_select.trigger('change')
+    // create expenses_box_chart
+    function createExpenses_box_chart(options = {})
+    {
+        const ctx = expenses_box_chart[0].getContext('2d');
+
+        const config = {
+            type: 'line',
+            data: options.data,
+            options: {
+                responsive: true,
+                height: 500,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: FUI_DISPLAY_LANG.views.pages.global.statistics.text5
+                    }
+                }
+            },
+        }
+
+        if ( expenses_box_chartjs ) expenses_box_chartjs.destroy()
+
+        expenses_box_chartjs = new Chart(ctx, config)
+                
+    }
+
+}
+// init
+function init()
+{
+    setup_total_income()
+    setup_total_expenses()
+}
+// selected center
+function selectedCenter()
+{
+    const selected = centers_list_tabs_navs.find('li.active')
+    
+    return {
+        clinicId: selected.data('id'),
+        clinicHash: selected.data('uuid'),
+        clinicName: selected.data('name'),
+    }
+}
+
+})
+
+</script>

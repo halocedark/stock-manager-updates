@@ -1,0 +1,231 @@
+<div class="container-fluid" id="all_center_inventory_consommables">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_products.sectionTitle %></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="table-nav">
+
+			<div class="row gx-2 gy-2">
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        search_inputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                    }) -%>
+				</div>
+                <div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="products_total">0</span>
+                    </div>
+                    <ul class="list-group list-group-flush" id="products_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+                </div>
+
+			</div>
+
+		</div>
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="table-div">
+			<div class="utable separate-rows" id="tableElement">
+				<div class="thead">
+					<div class="td">#</div>
+					<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_products.th01 %></div>
+					<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_products.th02 %></div>
+					<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_products.th03 %></div>
+					<div class="td"><%= UI_DISPLAY_LANG.views.pages.all_products.th04 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th12 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+				</div>
+				<div class="tbody">
+					<!--
+					<div class="tr">
+						<div class="td">
+							<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-productid="">
+						</div>
+						<div class="td">
+							<img src="" style="width:50px;height:50px;" class="img-thumbnail" alt="">
+						</div>
+						<div class="td">name</div>
+						<div class="td">price</div>
+						<div class="td">quantity</div>
+						<div class="td">
+							<button class="btn btn-primary btn-sm rounded-0" data-role="UPDATE" data-productid="${v.productId}">
+								<i class="fas fa-edit no-pointer"></i>
+							</button>
+						</div>
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#all_center_inventory_consommables');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+
+var pagination = page_container.find('#pagination');
+var tableElement = page_container.find('#tableElement');
+
+var search_btn = page_container.find('#search_btn')
+var search_input = page_container.find('#search_input')
+var date_start_input = page_container.find('#date_start_input')
+var date_end_input = page_container.find('#date_end_input')
+
+var products_total = page_container.find('#products_total');
+var products_extra_data_list = page_container.find('#products_extra_data_list');
+
+date_start_input.val(CURRENT_DATE)
+date_end_input.val(CURRENT_DATE)
+// delete selected
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("حذف البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Suprimmer les données...");
+
+        var response = await CONSOMMABLE_MODEL.center_batchDelete({
+            administration_id: USER_CONFIG.administration.clinicId,
+            list: selectedRows()
+        });
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        displayAll({
+            method_type: 'center_local_search',
+            administration_id: USER_CONFIG.administration.clinicId,
+            query: search_input.val()
+        })
+    });
+});
+// search
+search_btn.on('click', async e =>
+{
+    displayAll({
+        method_type: 'center_local_search',
+        administration_id: USER_CONFIG.administration.clinicId,
+        query: search_input.val(),
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+        }
+    })
+})
+search_input.on('keyup', async e =>
+{
+    displayAll({
+        method_type: 'center_local_search',
+        administration_id: USER_CONFIG.administration.clinicId,
+        query: search_input.val()
+    })
+})
+// display all
+displayAll({
+    method_type: 'center_local_search',
+    administration_id: USER_CONFIG.administration.clinicId,
+    query: search_input.val()
+})
+async function displayAll(params)
+{
+    // total
+    products_total.text(0)
+
+    products_extra_data_list.html('')
+    tableElement.find('.tbody').html('')
+    if ( params.method_type == 'center_local_search' )
+        var res = await CONSOMMABLE_MODEL.center_local_search(params)
+
+    if ( res.code == 404 )
+        return;
+
+    var data = res.data;
+    var html = '';
+    var last_data = firstArrayElement(data)
+    // total
+    products_total.text(data.length)
+    $.each(data, (k,v) =>
+    {
+        var productImageUrl = (v.image) ? imgFallback(v.image.url) : imgFallback('');
+
+        html += `<div class="tr flex-align-center" data-role="row" data-id="${v.consommable_id}">
+                    <div class="td">
+                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                    </div>
+                    <div class="td">
+                        <img src="${productImageUrl}" style="width:50px;height:50px;" class="img-thumbnail" alt="">
+                    </div>
+                    <div class="td">${v.consommable_name}</div>
+                    <div class="td">${v.consommable_price}</div>
+                    <div class="td">${v.consommable_quantity}</div>
+                    <div class="td">${v.administration_name}</div>
+                    <div class="td">${v.created_at}</div>
+                </div>PAG_SEP`;
+    });
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination, tableElement.find('.tbody'), options);
+    // extra data
+    products_extra_data_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+            <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+            <span>${last_data.productName}, </span>
+            <span class="text-primary">${last_data.created_at}</span> 
+        </li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text41 }: </span>
+            <span>${ (last_data.productDesc) ?? '' } </span>
+        </li>
+    `)
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="row"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i]);
+        var check = parent.find('[data-role="CHECK"]')
+        if ( check.is(':checked') )
+            list.push({ id: parent.data('id') });
+    }
+
+    return list;
+}
+
+})
+
+</script>

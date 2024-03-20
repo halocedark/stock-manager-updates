@@ -1,0 +1,321 @@
+<div class="container-fluid" id="select_fundboxes_available_for_transfers_container">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_suppliers.sectionTitle %></h1>
+	</div>
+	<div class="mt-3 app-block" id="wrapper01">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<form action="#" id="create_form">
+			<div class="row gx-4 gy-4">
+
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="">
+						<%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-fundbox-owner-type.template.ejs', {
+                            selectId: 'owner_type_select',
+                            targets: {
+                                target1: '#centers_tab',
+                                target2: '#distributors_tab',
+                                target3: '#employees_tab',
+                                target4: '#central_administration_tab',
+                            }
+                        }) -%>
+
+                        <div class="py-3 px-2 border rounded mt-2">
+    
+                            <div id="centers_tab">
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers.template.ejs', {
+                                    componentId: 'sender',
+                                    selectId: 'center_select_sender',
+                                    eventsReceiverId: 'transfer_funds_between_fundboxes',
+                                    selectionEventName: 'sender-center-selected',
+                                }) -%>
+                            </div>
+
+                            <div id="distributors_tab" style="display:none;">
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-distributors.template.ejs', {
+                                    componentId: 'sender',
+                                    selectId: 'distributor_select_sender',
+                                    eventsReceiverId: 'transfer_funds_between_fundboxes',
+                                    selectionEventName: 'sender-distributor-selected',
+                                    options: {
+                                        search: {
+                                            currentAdministrationOnly: false
+                                        }
+                                    }
+                                }) -%>
+                            </div>
+
+                            <div id="employees_tab" style="display:none;">
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-employees.template.ejs', {
+                                    componentId: 'sender',
+                                    selectId: 'employee_select_sender',
+                                    eventsReceiverId: 'transfer_funds_between_fundboxes',
+                                    selectionEventName: 'sender-employee-selected',
+                                    options: {
+                                        showAdministration: true,
+                                        search: {
+                                            currentAdministrationOnly: false,
+                                        }
+                                    }
+                                }) -%>
+                            </div>
+
+                            <div id="central_administration_tab" style="display:none;">
+                                <h5 class="h5"><%= UI_DISPLAY_LANG.views.pages.global.attributes.central_administration %></h5>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-3">
+                            <input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+                        </div>
+
+					</div>	
+				</div>
+
+                <div class="col-lg col-md col-sm-12">
+
+                    <div class="table-nav">
+
+                        <div class="row gy-3">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/searchbox.template.ejs', {
+                                    searchBtnId: 'search_btn',
+                                    searchInputId: 'search_input'
+                                }) -%>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6">
+                                <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-fundbox-owner-type.template.ejs', {
+                                    selectId: 'filter_owner_type_select',
+                                    targets: {
+                                        target1: '#centers_tab',
+                                        target2: '#distributors_tab',
+                                        target3: '#employees_tab',
+                                        target4: '#central_administration_tab',
+                                    }
+                                }) -%>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div id="pagination" class="my-3 flex flex-center"></div>
+                    <div class="utable shadowed" id="tableElement">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th55 %></div>
+                        </div>
+                        <div class="tbody">
+                            <!--
+                            <div class="tr" data-role="row" data-id="">
+                                <div class="td">
+                                    <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                                </div>
+                                <div class="td">name</div>
+                                <div class="td">reason</div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+
+                </div>
+
+			</div>
+
+		</form>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#select_fundboxes_available_for_transfers_container');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+var create_form = page_container.find('#create_form')
+var owner_type_select = page_container.find('#owner_type_select')
+
+var center_select_sender = page_container.find('#center_select_sender')
+var distributor_select_sender = page_container.find('#distributor_select_sender')
+var employee_select_sender = page_container.find('#employee_select_sender')
+
+var filter_owner_type_select = page_container.find('#filter_owner_type_select')
+var search_btn = page_container.find('#search_btn')
+var search_input = page_container.find('#search_input')
+
+var pagination = page_container.find('#pagination')
+var tableElement = page_container.find('#tableElement')
+
+// owner_type_select_sender
+owner_type_select.on('change', e =>
+{
+    var selected = owner_type_select.find(':selected')
+
+    var tab = page_container.find(selected.data('target'))
+
+    tab.slideDown(200).siblings().slideUp(200)
+
+    if ( tab.attr('id') == 'central_administration_tab' )
+        tab.parent().addClass('d-none')
+    else
+        tab.parent().removeClass('d-none')
+})
+
+// submit
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    create_form.find(':submit').addClass('disabled')
+
+    const SENDER = getSender()
+
+    // check sender
+    if ( SENDER.id == '' )
+    {
+        create_form.find(':submit').removeClass('disabled')
+        return
+    }
+
+    var res = await FUNDBOX_MODEL.selected_for_transfers_store({
+        sender_id: SENDER.id,
+        sender_name: SENDER.name,
+        sender_type: SENDER.type,
+        collection: selectedRows()
+    })
+
+    create_form.find(':submit').removeClass('disabled')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    CreateToast('PS', res.message, '')
+
+    if ( res.code == 404 ) return
+
+    // create_form[0].reset()
+})
+
+// search
+search_btn.on('click', e =>
+{
+    search_input.trigger('keyup')
+})
+search_input.on('keyup', e =>
+{
+    displayFundboxes({
+        method_type: 'search',
+        query: search_input.val(),
+        advanced: {
+            owner_type: filter_owner_type_select.find(':selected').val(),
+        }
+    })
+})
+filter_owner_type_select.on('change', e =>
+{
+    search_input.trigger('keyup')
+})
+
+// get sender
+function getSender()
+{
+    var owner_type_sender = owner_type_select.find(':selected').val()
+    var sender = {}
+
+    if ( owner_type_sender == 'centers' )
+    {
+        sender = {
+            id: center_select_sender.find(':selected').val(),
+            name: center_select_sender.find(':selected').text(),
+        }
+    }
+    else if ( owner_type_sender == 'distributors' )
+    {
+        sender = {
+            id: distributor_select_sender.find(':selected').val(),
+            name: distributor_select_sender.find(':selected').text(),
+        }
+    }
+    else if ( owner_type_sender == 'employees' )
+    {
+        sender = {
+            id: employee_select_sender.find(':selected').val(),
+            name: employee_select_sender.find(':selected').text(),
+        }
+    }
+    else if ( owner_type_sender == 'central_administration' )
+    {
+        sender = {
+            id: 0,
+            name: 'Administration Centrale',
+        }
+    }
+
+    sender['type'] = owner_type_sender
+
+    return sender
+}
+
+// display fundboxes
+async function displayFundboxes(params)
+{
+    tableElement.find('.tbody').html('')
+
+    if ( params.method_type == 'search' ) var res = await FUNDBOX_MODEL.search(params)
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<div class="tr" data-role="row" data-id="${v.id}" data-owner-id="${v.owner_id}" data-owner-name="${v.owner_name}" data-owner-type="${v.owner_type}">
+                    <div class="td">
+                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                    </div>
+                    <div class="td">
+                        <div class="mb-2 h5">${v.owner_name}</div>
+                        <div class="">(${ FUI_DISPLAY_LANG.views.pages.global.attributes[v.owner_type] })</div>
+                    </div>
+                </div>PAG_SEP`
+    })
+
+    new SmoothPagination(pagination, tableElement.find('.tbody'), {
+        data: html.split('PAG_SEP'),
+    })
+}
+// get selected
+function selectedRows()
+{
+    var list = []
+    var items = tableElement.find('[data-role="row"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]')
+        if ( check.is(':checked') )
+        {
+            list.push({
+                fund_box_id: parent.data('id'),
+                fund_box_owner_id: parent.data('owner-id'),
+                fund_box_owner_name: parent.data('owner-name'),
+                fund_box_owner_type: parent.data('owner-type'),
+            })
+        }
+    }
+
+    return list
+}
+
+})
+
+</script>

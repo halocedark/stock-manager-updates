@@ -1,0 +1,2103 @@
+<div class="navbar-container" id="sideNavbarContainer">
+
+	<div class="px-4 py-3 employee-info d-inline-flex flex-center w-100">
+		<div class="text-center">
+			<div class="text-01" id="EMPLOYEE_NAME" style="color: #ffffff;"></div>
+			<div class="text-02" id="EMPLOYEE_TYPE" style="color: #e9e9e9;font-size: 13px;"></div>
+            <div class="text-01" id="CENTER_NAME" style="color: #e9e9e9;"></div>
+		</div>
+	</div>
+
+    <div class="px-4 py-3 btn-close-holder d-none">
+        <button class="btn-close-1" id="back_to_main_navmenu_button">
+            &times;
+        </button>
+    </div>
+    
+	<div class="wrapper WRAPPER position-relative" style="z-index: 5;">
+
+        <div class="navmenus-wrapper" id="navmenus_wrapper">
+		
+            <ul class="nb-navmenu" id="main_navmenu">
+                <li class="list-dropdown-toggle" data-perm="statistics">
+                    <a href="#" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/growth.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav27 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="fundbox_statistics">
+                            <a href="../views/pages/central_admin/statistics/fundbox/index.ejs" data-name="all-fundbox-statistics" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav87 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="general_totals_statistics">
+                            <a href="../views/pages/central_admin/statistics/general-totals/index.ejs" data-name="all-general-totals-statistics" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav88 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="departments">
+                    <a href="#" class="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/class.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav15 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_department">
+                            <a href="../views/pages/central_admin/departments/create.ejs" data-name="create-departments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav16 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_departments">
+                            <a href="../views/pages/central_admin/departments/index.ejs" data-name="all-departments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="appointments">
+                    <a href="#" class="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/timetable.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav18 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_private_appointment">
+                            <a href="../views/pages/central_admin/appointments/private/create.ejs" data-name="create-private-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav19 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="batch_create_private_appointments">
+                            <a href="../views/pages/central_admin/appointments/private/batchCreate.ejs" data-name="batch-create-private-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav133 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="create_followup_appointment">
+                            <a href="../views/pages/central_admin/appointments/followup/create.ejs" data-name="create-followup-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav40 %></span>
+                            </a>
+                        </li> -->
+                        <!-- <li data-perm="view_followup_appointments">
+                            <a href="../views/pages/central_admin/appointments/followup/index.ejs" data-name="all-followup-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav49 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_private_appointments">
+                            <a href="../views/pages/central_admin/appointments/private/index.ejs" data-name="all-private-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav20 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_private_appointment_special_cases">
+                            <a href="../views/pages/central_admin/appointments/private/special-cases/index.ejs" data-name="all-private-appointments-special-cases" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav132 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_unapproved_private_appointments">
+                            <a href="../views/pages/central_admin/appointments/private/waiting-approval/index.ejs" data-name="all-private-waiting-approval-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav57 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_unapproved_online_appointments">
+                            <a href="../views/pages/central_admin/appointments/online/waiting-approval/index.ejs" data-name="all-online-waiting-approval-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav74 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_private_appointments_archives">
+                            <a href="../views/pages/central_admin/appointments/private/archives/index.ejs" data-name="all-private-appointments-archives" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav74 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_private_appointments_blacklists">
+                            <a href="../views/pages/central_admin/appointments/private/blacklists/index.ejs" data-name="all-private-appointments-blacklists" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav93 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_online_followup_appointments">
+                            <a href="../views/pages/central_admin/appointments/online-followup/index.ejs" data-name="all-online-followup-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav108 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="messages">
+                    <a href="" data-role="NAV_LINK" class="position-relative">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/messages.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav11 %></span>
+                        <span class="position-absolute translate-middle badge rounded-pill bg-info" id="MESSAGES_BADGE">
+                            0
+                        </span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="send_messages">
+                            <a href="../views/pages/central_admin/messages/send.ejs" data-name="send-messages" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav12 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="send_hidden_messages">
+                            <a href="../views/pages/central_admin/messages/hidden/send.ejs" data-name="send-hidden-messages" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav114 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="create_sms_templates">
+                            <a href="../views/pages/central_admin/messages/templates/sms/create.ejs" data-name="create-sms-templates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav135 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="messages_inbox">
+                            <a href="../views/pages/central_admin/messages/inbox.ejs" data-name="messages-inbox" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav78 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="messages_sent">
+                            <a href="../views/pages/central_admin/messages/sent.ejs" data-name="messages-sent" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav79 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="messages_private_inbox">
+                            <a href="../views/pages/central_admin/messages/private/inbox.ejs" data-name="messages-private-inbox" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav80 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="messages_private_sent">
+                            <a href="../views/pages/central_admin/messages/private/sent.ejs" data-name="messages-private-sent" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav81 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="create_employee_group_for_messaging">
+                            <a href="../views/pages/central_admin/messages/employee-group-for-messaging/create.ejs" data-name="messages-employee-group-for-messaging-create" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav79 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_employee_group_for_messaging">
+                            <a href="../views/pages/central_admin/messages/employee-group-for-messaging/index.ejs" data-name="messages-employee-group-for-messaging-index" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav80 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="chats">
+                    <a href="" data-role="NAV_LINK" class="position-relative">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/chat.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav147 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="chat_groups">
+                            <a href="../views/pages/central_admin/chats/groups/create.ejs" data-name="manage-chat-groups" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav83 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="chat_group_patients">
+                            <a href="../views/pages/central_admin/chats/groups/patients/create.ejs" data-name="manage-chat-group-patients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav84 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/chats/groups/show.ejs" data-name="show-chat-group" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav85 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="view_chat_groups">
+                            <a href="../views/pages/central_admin/chats/groups/index.ejs" data-name="all-chat-groups" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav82 %></span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="centers">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/center.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav38 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_center">
+                            <a href="../views/pages/central_admin/clinics/create.ejs" data-name="create-clinics" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_centers">
+                            <a href="../views/pages/central_admin/clinics/index.ejs" data-name="all-clinics" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="patients">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/patients.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav01 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/patients/medical-data/create.ejs" data-name="create-patient-medical-data" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav75 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/patients/medical-data/index.ejs" data-name="all-patient-medical-data" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav76 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/patients/show.ejs" data-name="show-patient-profile" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav77 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="create_patient">
+                            <a href="../views/pages/central_admin/patients/create.ejs" data-name="create-patients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav08 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patients_has_appointments">
+                            <a href="../views/pages/central_admin/patients/has-appointments.ejs" data-name="all-patients-has-appointments" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav87 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patients_has_chronic_diseases">
+                            <a href="../views/pages/central_admin/patients/has-chronic-diseases.ejs" data-name="all-patients-has-chronic-diseases" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav88 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patients">
+                            <a href="../views/pages/central_admin/patients/index.ejs" data-name="all-patients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav07 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_archive_patients">
+                            <a href="../views/pages/central_admin/patients/archive/index.ejs" data-name="all-archive-patients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav96 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="create_patient_reports">
+                            <a href="../views/pages/central_admin/patients/reports/create.ejs" data-name="create-patient-reports" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav94 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patient_reports">
+                            <a href="../views/pages/central_admin/patients/reports/index.ejs" data-name="all-patient-reports" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav95 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="update_patient_point_settings">
+                            <a href="../views/pages/central_admin/patients/points/settings/create.ejs" data-name="update-patient-point-settings" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav110 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patient_point_actions">
+                            <a href="../views/pages/central_admin/patients/points/actions/index.ejs" data-name="views-patient-point-actions" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav111 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="customers">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/customers.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav152 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/customers/show.ejs" data-name="show-customer-profile" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav77 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_customers">
+                            <a href="../views/pages/central_admin/customers/index.ejs" data-name="all-customers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="prescriptions">
+                    <a href="" class="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/prescription.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav02 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_prescription">
+                            <a href="../views/pages/central_admin/prescriptions/create.ejs" data-name="create-prescriptions" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav06 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_prescriptions_not_in_orders">
+                            <a href="../views/pages/central_admin/prescriptions/not-in-orders/index.ejs" data-name="view-prescriptions-not-in-orders" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav90 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_prescriptions_in_orders">
+                            <a href="../views/pages/central_admin/prescriptions/in-orders/index.ejs" data-name="view-prescriptions-in-orders" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav89 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_prescriptions">
+                            <a href="../views/pages/central_admin/prescriptions/index.ejs" data-name="all-prescriptions" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav09 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_prescription_products">
+                            <a href="../views/pages/central_admin/prescriptions/products/index.ejs" data-name="all-prescription-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav107 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="patient_medical_analysis">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/lungs.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav125 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_patient_medical_analysis">
+                            <a href="../views/pages/central_admin/patient-medical-analysis/create.ejs" data-name="create-patient-medical-analysis" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patient_medical_analysis">
+                            <a href="../views/pages/central_admin/patient-medical-analysis/index.ejs" data-name="all-patient-medical-analysis" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="members">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/members.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav75 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="view_unapproved_members">
+                            <a href="../views/pages/central_admin/members/unapproved/index.ejs" data-name="all-unapproved-members" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav77 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_approved_members">
+                            <a href="../views/pages/central_admin/members/approved/index.ejs" data-name="all-approved-members" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav76 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="suppliers">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/suppliers.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav83 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_supplier">
+                            <a href="../views/pages/central_admin/suppliers/create.ejs" data-name="create-suppliers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_suppliers">
+                            <a href="../views/pages/central_admin/suppliers/index.ejs" data-name="all-suppliers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_supplier_categories">
+                            <a href="../views/pages/central_admin/suppliers/categories/index.ejs" data-name="all-supplier-categories" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav173 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="contractors">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/delivery-courier.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav153 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_contractors">
+                            <a href="../views/pages/central_admin/contractors/create.ejs" data-name="create-contractors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_contractors">
+                            <a href="../views/pages/central_admin/contractors/index.ejs" data-name="all-contractors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/contractors/show.ejs" data-name="show-contractor-profile" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav77 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="inventory">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/inventory.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav21 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li class="d-none">
+                            <a href="../views/pages/centers/inventory/products/show.ejs" data-name="show-center-product-page" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav77 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/inventory/edit.ejs" data-name="edit-product" data-role="NAV_LINK">
+                                
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/inventory/consommables/edit.ejs" data-name="edit-consommable" data-role="NAV_LINK">
+                                
+                            </a>
+                        </li>
+                        <li data-perm="view_products">
+                            <a href="../views/pages/central_admin/inventory/index.ejs" data-name="all-inventory-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav34 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_consommables">
+                            <a href="../views/pages/central_admin/inventory/consommables/index.ejs" data-name="all-inventory-consommables" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav36 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_center_products">
+                            <a href="../views/pages/central_admin/inventory/centers/products/index.ejs" data-name="all-centers-inventory-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav35 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_center_consommables">
+                            <a href="../views/pages/central_admin/inventory/centers/consommables/index.ejs" data-name="all-centers-inventory-consommables" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav37 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="transfer_center_to_center_products">
+                            <a href="../views/pages/central_admin/inventory/centers/products/trasnsfers/center-to-center/batchTransfer.ejs" data-name="transfer-center-to-center-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav109 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_products">
+                            <a href="../views/pages/central_admin/inventory/distributors/products/index.ejs" data-name="all-distributors-inventory-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav40 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_inventory_products" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/inventory/distributors/self/products/index.ejs" data-name="all-distributor-inventory-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav50 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="categories">
+                            <a href="../views/pages/central_admin/inventory/categories/create.ejs" data-name="create-categories" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav140 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="families">
+                            <a href="../views/pages/central_admin/inventory/families/create.ejs" data-name="create-families" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav151 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="invoices">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/invoice.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav139 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+
+                        <!-- Transfer Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav184 %></h5>
+                        </li>
+
+                        <li data-perm="center_to_central_administration_transfer_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-central-administration-transfer/index.ejs" data-name="all-center-to-central-administration-transfer-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav117 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_central_administration_to_center_unconfirmed_transfer_invoices">
+                            <a href="../views/pages/central_admin/invoices/centers/direction/products/central-administration-to-center-transfer/create.ejs" data-name="create-central-administration-to-center-transfer-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav112 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="central_administration_to_center_transfer_invoices">
+                            <a href="../views/pages/central_admin/invoices/centers/direction/products/central-administration-to-center-transfer/index.ejs" data-name="all-central-administration-to-center-transfer-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav116 %></span>
+                            </a>
+                        </li>
+                        <!-- Transfer Invoices End -->
+
+                        <!-- Centers Transfer Invoices Start -->
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav189 %></h5>
+                        </li>
+
+                        <li data-perm="center_to_center_transfer_sent_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-center-transfer/sent/index.ejs" data-name="all-center-to-center-transfer-sent-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav126 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="center_to_center_transfer_received_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-center-transfer/received/index.ejs" data-name="all-center-to-center-transfer-received-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav127 %></span>
+                            </a>
+                        </li>
+
+                        <!-- Centers Transfer Invoices End -->
+
+                        <!-- Buying Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav145 %></h5>
+                        </li>
+
+                        <li data-perm="create_supplier_to_central_administration_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-central-administration-selling/create.ejs" data-name="create-supplier-to-central-administration-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav18 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_supplier_to_central_administration_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-central-administration-selling/index.ejs" data-name="all-supplier-to-central-administration-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav26 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_contractor_to_central_administration_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/contractor-to-central-administration-selling/create.ejs" data-name="create-contractor-to-central-administration-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav141 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_contractor_to_central_administration_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/contractor-to-central-administration-selling/index.ejs" data-name="all-contractor-to-central-administration-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav142 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_supplier_to_central_administration_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-central-administration-unconfirmed-selling/create.ejs" data-name="create-supplier-to-central-administration-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav170 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_supplier_to_central_administration_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-central-administration-unconfirmed-selling/index.ejs" data-name="all-supplier-to-central-administration-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav171 %></span>
+                            </a>
+                        </li>
+                        <!-- Buying Invoices End -->
+
+                        <!-- Centers Buying Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav190 %></h5>
+                        </li>
+
+                        <li data-perm="view_supplier_to_center_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-center-selling/index.ejs" data-name="all-supplier-to-center-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav135 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_contractor_to_center_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/contractor-to-center-selling/index.ejs" data-name="all-contractor-to-center-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav142 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_supplier_to_center_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/supplier-to-center-unconfirmed-selling/index.ejs" data-name="all-supplier-to-center-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav171 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_center_unconfirmed_received_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-center-unconfirmed-selling/received/index.ejs" data-name="create-center-to-center-unconfirmed-received-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav176 %></span>
+                            </a>
+                        </li>
+
+                        <!-- Centers Buying Invoices End -->
+
+                        <!-- Selling Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav146 %></h5>
+                        </li>
+
+                        <li data-perm="create_central_administration_to_distributor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/central-administration-to-distributor-selling/create.ejs" data-name="create-central-administration-to-distributor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav38 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_central_administration_to_distributor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/central-administration-to-distributor-selling/index.ejs" data-name="all-central-administration-to-distributor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav39 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_central_administration_to_distributor_buying_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/central-administration-to-distributor-buying/index.ejs" data-name="all-central-administration-to-distributor-buying-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav52 %></span>
+                            </a>
+                        </li>
+
+                        <!-- <li data-perm="view_client_to_central_administration_online_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/online/products/client-to-central-administration/index.ejs" data-name="all-online-client-to-central-administration-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav105 %></span>
+                            </a>
+                        </li> -->
+
+                        <!-- <li data-perm="view_external_client_to_central_administration_online_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/online/products/external-client-to-central-administration/index.ejs" data-name="all-online-external-client-to-central-administration-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav106 %></span>
+                            </a>
+                        </li> -->
+
+                        <li data-perm="create_central_administration_to_customer_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/customers/direction/products/central-administration-to-customer-selling/create.ejs" data-name="create-central-administration-to-customer-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav120 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_central_administration_to_customer_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/customers/direction/products/central-administration-to-customer-selling/index.ejs" data-name="all-central-administration-to-customer-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav121 %></span>
+                            </a>
+                        </li>
+
+
+                        <li data-perm="create_distributor_to_client_selling_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/distributor-to-client-selling/create.ejs" data-name="create-distributor-to-client-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav42 %></span>
+                            </a>
+                        </li>
+                        
+                        <li data-perm="view_distributor_to_client_selling_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/distributor-to-client-selling/index.ejs" data-name="all-distributor-to-client-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav43 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_central_administration_to_contractor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-contractor-selling/create.ejs" data-name="create-central-administration-to-contractor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav143 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_central_administration_to_contractor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-contractor-selling/index.ejs" data-name="all-central-administration-to-contractor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav144 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_selectable_suppliers_to_selectable_users_unconfirmed_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/selectable-suppliers-to-selectable-users-unconfirmed-selling/create.ejs" data-name="create-selectable-suppliers-to-selectable-users-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav158 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_central_administration_to_contractor_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-contractor-unconfirmed-selling/index.ejs" data-name="all-central-administration-to-contractor-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav160 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_central_administration_to_customer_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-customer-unconfirmed-selling/index.ejs" data-name="all-central-administration-to-customer-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav161 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_central_administration_to_distributor_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-distributor-unconfirmed-selling/index.ejs" data-name="all-central-administration-to-distributor-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav162 %></span>
+                            </a>
+                        </li>
+
+                        <!-- Selling Invoices End -->
+
+                        <!-- <li data-perm="create_external_dr_aoun__central_administration_to_center_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/external-dr-aoun-central-administration-to-center-unconfirmed-selling/create.ejs" data-name="create-external-dr-aoun-central-administration-to-center-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav164 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="external_dr_aoun__central_administration_to_center_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/external-dr-aoun-central-administration-to-center-unconfirmed-selling/index.ejs" data-name="all-external-dr-aoun-central-administration-to-center-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav165 %></span>
+                            </a>
+                        </li> -->
+
+                        <!-- Centers Selling Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav191 %></h5>
+                        </li>
+
+                        <li data-perm="view_center_to_contractor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-contractor-selling/index.ejs" data-name="all-center-to-contractor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav144 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_distributor_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-distributor-selling/index.ejs" data-name="all-center-to-distributor-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav39 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_customer_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-customer-selling/index.ejs" data-name="all-center-to-customer-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav121 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_contractor_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-contractor-unconfirmed-selling/index.ejs" data-name="all-center-to-contractor-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav160 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_customer_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-customer-unconfirmed-selling/index.ejs" data-name="all-center-to-customer-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav161 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_center_to_distributor_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-distributor-unconfirmed-selling/index.ejs" data-name="all-center-to-distributor-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav162 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="external_dr_aoun__center_to_center_unconfirmed_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/external-dr-aoun-center-to-center-unconfirmed-selling/index.ejs" data-name="all-external-dr-aoun-center-to-center-unconfirmed-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav165 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="center_to_center_sent_selling_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/center-to-center-unconfirmed-selling/sent/index.ejs" data-name="create-center-to-center-unconfirmed-sent-selling-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav175 %></span>
+                            </a>
+                        </li>
+
+                        <!-- Centers Selling Invoices End -->
+
+                        <!-- Return Invoices Start -->
+
+                        <li>
+                            <h5 class="h5 text-white mb-4 mt-4 text-center"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav186 %></h5>
+                        </li>
+
+                        <li data-perm="create_central_administration_to_supplier_return_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-supplier-return/create.ejs" data-name="create-central-administration-to-supplier-return-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav91 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="view_central_administration_to_supplier_return_invoices">
+                            <a href="../views/pages/central_admin/invoices/direction/products/central-administration-to-supplier-return/index.ejs" data-name="all-central-administration-to-supplier-return-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav92 %></span>
+                            </a>
+                        </li>
+
+                        <li data-perm="create_client_to_distributor_return_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/client-to-distributor-return/create.ejs" data-name="create-client-to-distributor-return-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav89 %></span>
+                            </a>
+                        </li>
+                        
+                        <li data-perm="view_client_to_distributor_return_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/invoices/distributors/direction/products/client-to-distributor-return/index.ejs" data-name="all-client-to-distributor-return-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav90 %></span>
+                            </a>
+                        </li>
+                        <!-- Return Invoices End -->
+
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="formal_invoices" data-perm-attribute="show_to_granted_only">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/formal-invoice.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav146 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_distributor_to_client_selling_formal_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/formal-invoices/distributors/direction/products/distributor-to-client-selling/create.ejs" data-name="create-distributor-to-client-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav42 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_to_client_selling_formal_invoices" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/formal-invoices/distributors/direction/products/distributor-to-client-selling/index.ejs" data-name="all-distributor-to-client-invoices-for-products" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav43 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="depts">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/liability.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav142 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="view_suppliers_dues">
+                            <a href="../views/pages/central_admin/depts/dues/suppliers/index.ejs" data-name="all-suppliers-dues" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav62 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_centers_depts">
+                            <a href="../views/pages/central_admin/depts/centers/index.ejs" data-name="all-centers-depts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav58 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributors_depts">
+                            <a href="../views/pages/central_admin/depts/distributors/index.ejs" data-name="all-distributors-depts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav59 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_registered_clients_online_invoices_depts">
+                            <a href="../views/pages/central_admin/depts/online-invoices/clients/registered/index.ejs" data-name="all-registered-clients-online-invoices-depts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav105 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_depts" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/depts/distributors/self/index.ejs" data-name="all-distributor-depts"  data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav63 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_clients_depts" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/depts/distributors/self/clients/index.ejs" data-name="all-distributor-clients-depts"  data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav61 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_customers_depts">
+                            <a href="../views/pages/central_admin/depts/customers/index.ejs" data-name="all-customers-depts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav118 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_contractors_depts">
+                            <a href="../views/pages/central_admin/depts/contractors/index.ejs" data-name="all-contractors-depts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav149 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_contractors_dues">
+                            <a href="../views/pages/central_admin/depts/dues/contractors/index.ejs" data-name="all-contractors-dues" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav150 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="employees">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/employees.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav31 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_employees_for_centers">
+                            <a href="../views/pages/central_admin/employees/centers/create.ejs" data-name="create-employees-for-centers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav32 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="create_employees_for_central_admin">
+                            <a href="../views/pages/central_admin/employees/central-admin/create.ejs" data-name="create-employees-for-central-admin" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav42 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_center_employees">
+                            <a href="../views/pages/central_admin/employees/centers/index.ejs" data-name="all-center-employees" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav33 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_central_admin_employees">
+                            <a href="../views/pages/central_admin/employees/central-admin/index.ejs" data-name="all-central-admin-employees" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav43 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="employees_attendance_for_central_admin">
+                            <a href="../views/pages/central_admin/employees/central-admin/attendance.ejs" data-name="employees-attendance-for-central-admin" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav121 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_employee_types">
+                            <a href="../views/pages/central_admin/employees/types/index.ejs" data-name="all-employee-types" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav119 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="create_employees_cashouts_for_central_admin">
+                            <a href="../views/pages/central_admin/employees/central-admin/cashouts/create.ejs" data-name="create-employee-cashouts-for-central-admin" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav122 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_employees_cashouts_for_central_admin">
+                            <a href="../views/pages/central_admin/employees/central-admin/cashouts/index.ejs" data-name="all-employee-cashouts-for-central-admin"  data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav123 %></span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="employee_actions">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/working.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav130 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="view_centers_employee_actions">
+                            <a href="../views/pages/central_admin/employee-actions/centers/index.ejs" data-name="all-centers-employee-actions" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav9 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_central_admin_employee_actions">
+                            <a href="../views/pages/central_admin/employee-actions/central-admin/index.ejs" data-name="all-central-admin-employee-actions" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav10 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="distributors">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/distributors.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav101 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_distributor">
+                            <a href="../views/pages/central_admin/distributors/create.ejs" data-name="create-distributors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributors">
+                            <a href="../views/pages/central_admin/distributors/index.ejs" data-name="all-distributors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li class="d-none">
+                            <a href="../views/pages/central_admin/distributors/show.ejs" data-name="show-distributor-profile" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav77 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="distributor_clients">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/distributor-clients.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav141 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_distributor_clients">
+                            <a href="../views/pages/central_admin/distributor-clients/create.ejs" data-name="create-distributor-clients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributors_clients">
+                            <a href="../views/pages/central_admin/distributor-clients/index.ejs" data-name="all-distributors-clients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_distributor_clients" data-perm-attribute="show_to_granted_only">
+                            <a href="../views/pages/central_admin/distributor-clients/distributor/index.ejs" data-name="all-distributor-clients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="privileges">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/permissions.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav111 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="change_centers_privileges">
+                            <a href="../views/pages/central_admin/privileges/centers/create.ejs" data-name="create-centers-privileges" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav112 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="change_central_admin_privileges">
+                            <a href="../views/pages/central_admin/privileges/central-admin/create.ejs" data-name="create-central-admin-privileges" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav113 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="medical_analysis">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/medical-analysis.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav119 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_medical_analysis">
+                            <a href="../views/pages/central_admin/medical-analysis/create.ejs" data-name="create-medical-analysis" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_medical_analysis">
+                            <a href="../views/pages/central_admin/medical-analysis/index.ejs" data-name="all-medical-analysis" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li data-perm="testimonials">
+                    <a href="../views/pages/central_admin/testimonials/index.ejs" data-name="all-testimonials" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/testimonials.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav70 %></span>
+                    </a>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="certificates">
+                    <a href="" data-role="NAV_LINK" class="position-relative">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/certificate.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav120 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_patient_certificates">
+                            <a href="../views/pages/central_admin/certificates/patients/create.ejs" data-name="create-patient-certificates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav126 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_patient_certificates">
+                            <a href="../views/pages/central_admin/certificates/patients/index.ejs" data-name="all-patient-certificates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav128 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="create_employee_certificates">
+                            <a href="../views/pages/central_admin/certificates/employees/create.ejs" data-name="create-employee-certificates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav127 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_employee_certificates">
+                            <a href="../views/pages/central_admin/certificates/employees/index.ejs" data-name="all-employee-certificates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav129 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="daily_reports">
+                    <a href="" data-role="NAV_LINK" class="position-relative">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/report.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav118 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_daily_report">
+                            <a href="../views/pages/central_admin/daily-reports/create.ejs" data-name="create-daily-reports" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_daily_reports">
+                            <a href="../views/pages/central_admin/daily-reports/index.ejs" data-name="all-daily-reports" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_staff_daily_reports">
+                            <a href="../views/pages/central_admin/daily-reports/staff/index.ejs" data-name="all-staff-daily-reports" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav3 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="advertisements">
+                    <a href="#" class="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/ad.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav61 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_advertisement">
+                            <a href="../views/pages/central_admin/advertisements/create.ejs" data-name="create-advertisements" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav62 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_advertisements">
+                            <a href="../views/pages/central_admin/advertisements/index.ejs" data-name="all-advertisements" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav63 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_advertisements_clients">
+                            <a href="../views/pages/central_admin/advertisements/clients/index.ejs" data-name="all-advertiments-clients" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav64 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="videos">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/video.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav71 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_video">
+                            <a href="../views/pages/central_admin/videos/create.ejs" data-name="create-videos" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav72 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_videos">
+                            <a href="../views/pages/central_admin/videos/index.ejs" data-name="all-videos" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="healthy_kitchen_posts">
+                    <a href="#" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/kitchen.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav131 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_healthy_kitchen_posts">
+                            <a href="../views/pages/central_admin/landing-page/healthy-kitchen-posts/create.ejs" data-name="create-healthy-kitchen-posts" data-role="NAV_LINK">
+                                <span class="text no-pointer">
+                                    <%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %>
+                                </span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_healthy_kitchen_posts">
+                            <a href="../views/pages/central_admin/landing-page/healthy-kitchen-posts/index.ejs" data-name="all-healthy-kitchen-posts" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="fundboxes">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/fundboxes.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav137 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_fundboxes">
+                            <a href="../views/pages/central_admin/fundboxes/create.ejs" data-name="create-fundboxes" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_fundboxes">
+                            <a href="../views/pages/central_admin/fundboxes/index.ejs" data-name="all-fundboxes" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_fundbox">
+                            <a href="../views/pages/central_admin/fundboxes/self/index.ejs" data-name="self-fundbox" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav65 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="transfer_funds_between_fundboxes_employee">
+                            <a href="../views/pages/central_admin/fundboxes/self/funds/transfer.ejs" data-name="transfer-funds-between-fundboxes-for-employee" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav49 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="add_or_subtract_funds_from_fundboxes_employee">
+                            <a href="../views/pages/central_admin/fundboxes/self/funds/change.ejs" data-name="add-or-subtract-funds-from-fundboxes-for-employee" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav56 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="transfer_funds_between_fundboxes_central_administration">
+                            <a href="../views/pages/central_admin/fundboxes/funds/transfer.ejs" data-name="transfer-funds-between-fundboxes" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav49 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="add_or_subtract_funds_from_fundboxes_central_administration">
+                            <a href="../views/pages/central_admin/fundboxes/funds/change.ejs" data-name="add-or-subtract-funds-from-fundboxes" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav56 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="select_fundboxes_available_for_transfers">
+                            <a href="../views/pages/central_admin/fundboxes/selected-for-transfers/create.ejs" data-name="select-fundboxes-available-for-transfers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav101 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_fundboxes_available_for_transfers">
+                            <a href="../views/pages/central_admin/fundboxes/selected-for-transfers/index.ejs" data-name="all-fundboxes-available-for-transfers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav102 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="content_templates">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/template.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav138 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="content_templates">
+                            <a href="../views/pages/central_admin/content-templates/create.ejs" data-name="create-content_templates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <!-- <li data-perm="view_content_templates">
+                            <a href="../views/pages/central_admin/content-templates/index.ejs" data-name="all-content_templates" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="drivers">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/driver.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav145 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="create_drivers">
+                            <a href="../views/pages/central_admin/drivers/create.ejs" data-name="create-drivers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_drivers">
+                            <a href="../views/pages/central_admin/drivers/index.ejs" data-name="all-drivers" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_driver_jobs">
+                            <a href="../views/pages/central_admin/drivers/jobs/index.ejs" data-name="all-driver-jobs" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav70 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_driver_canceled_jobs">
+                            <a href="../views/pages/central_admin/drivers/jobs/canceled/index.ejs" data-name="all-driver-canceled-jobs" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav72 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li data-perm="educational_presentations">
+                    <a href="../views/pages/central_admin/educational-presentations/create.ejs" data-name="create-educational-presentations" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/presentation.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav148 %></span>
+                    </a>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="wallets">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/wallet.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav149 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="view_wallets">
+                            <a href="../views/pages/central_admin/wallets/index.ejs" data-name="all-wallets" data-role="NAV_LINK">
+                                <span class="text no-pointer">
+                                    <%= UI_DISPLAY_LANG.views.pages.global.navs.nav100 %>
+                                </span>
+                            </a>
+                        </li>
+                        <li data-perm="transfer_funds_to_wallets">
+                            <a href="../views/pages/central_admin/wallets/funds/transfer.ejs" data-name="transfer-funds-to-wallets" data-role="NAV_LINK">
+                                <span class="text no-pointer">
+                                    <%= UI_DISPLAY_LANG.views.pages.global.navs.nav97 %>
+                                </span>
+                            </a>
+                        </li>
+                        <li data-perm="cashout_funds_from_wallets">
+                            <a href="../views/pages/central_admin/wallets/funds/cashout.ejs" data-name="cashout-funds-from-wallets" data-role="NAV_LINK">
+                                <span class="text no-pointer">
+                                    <%= UI_DISPLAY_LANG.views.pages.global.navs.nav98 %>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="visitors">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/visitors.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav150 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <!-- <li data-perm="create_visitors">
+                            <a href="../views/pages/central_admin/visitors/create.ejs" data-name="create-visitors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav2 %></span>
+                            </a>
+                        </li> -->
+                        <li data-perm="view_visitors">
+                            <a href="../views/pages/central_admin/visitors/index.ejs" data-name="all-visitors" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-dropdown-toggle" data-perm="docit">
+                    <a href="" data-role="NAV_LINK">
+                        <span class="icon">
+                            <img src="../assets/img/navbar/docit.png" alt="">
+                        </span>
+                        <span class="text"><%= UI_DISPLAY_LANG.views.partials.sidebar.nav156 %></span>
+                    </a>
+                    <ul class="dropdown-list nb-navmenu shadow-01">
+                        <li data-perm="view_docit_files">
+                            <a href="../views/pages/central_admin/docit/index.ejs" data-name="all-docit-files" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav1 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_docit_groups">
+                            <a href="../views/pages/central_admin/docit/groups/index.ejs" data-name="all-docit-groups" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav192 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_shared_with_me_docit_files">
+                            <a href="../views/pages/central_admin/docit/shared-with-me/index.ejs" data-name="all-docit-shared-with-me" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav193 %></span>
+                            </a>
+                        </li>
+                        <li data-perm="view_shared_with_me_in_groups_docit_files">
+                            <a href="../views/pages/central_admin/docit/shared-with-me/groups/index.ejs" data-name="all-docit-shared-with-me-in-groups" data-role="NAV_LINK">
+                                <span class="text no-pointer"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav194 %></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+	</div>
+
+    <div class="copyright position-absolute left-50 top-50 translate-center" style="z-index: 0;opacity: .3;">
+
+        <div class="container position-relative has-direction-ltr" style="max-width: 239px;z-index: 5;margin-top: 2.5em;">
+
+            <div class="row gx-0 gy-4 mb-3">
+    
+                <div class="col-2 logo-left">
+                    <div class="d-flex is-align-items-center is-justify-content-center h-100">
+                        <img src="../assets/img/logo/logo.png" class="img-fluid" alt="">
+                    </div>
+                </div>
+                <div class="col logo-right">
+                    <p class="copyright-title-1">شركة الأصل للصناعات الغذائية</p>
+                </div>
+    
+            </div>
+    
+        </div>
+
+    </div>
+
+    <div class="nm-jumper-button-previous d-none" id="navmenu_jumper_button_previous">
+        <a href="#">
+            <span><%= UI_DISPLAY_LANG.views.pages.global.previous_menu_button %></span>
+            <span class="icon">
+                <i class="fas fa-long-arrow-alt-left"></i>
+            </span>
+        </a>
+    </div>
+
+    <div class="nm-jumper-button-next d-none" id="navmenu_jumper_button_next">
+        <a href="#">
+            <span><%= UI_DISPLAY_LANG.views.pages.global.next_menu_button %></span>
+            <span class="icon">
+                <i class="fas fa-long-arrow-alt-left"></i>
+            </span>
+        </a>
+    </div>
+
+</div>
+
+<script>
+
+$(async function()
+{
+
+var EMPLOYEE_NAME = SIDE_NAV_CONTAINER.find('#EMPLOYEE_NAME');
+var EMPLOYEE_TYPE = SIDE_NAV_CONTAINER.find('#EMPLOYEE_TYPE');
+var CENTER_NAME = SIDE_NAV_CONTAINER.find('#CENTER_NAME');
+
+var navmenus_wrapper = SIDE_NAV_CONTAINER.find('#navmenus_wrapper')
+var main_navmenu = navmenus_wrapper.find('#main_navmenu')
+var back_to_main_navmenu_button = SIDE_NAV_CONTAINER.find('#back_to_main_navmenu_button')
+var navmenu_jumper_button_previous = SIDE_NAV_CONTAINER.find('#navmenu_jumper_button_previous')
+var navmenu_jumper_button_next = SIDE_NAV_CONTAINER.find('#navmenu_jumper_button_next')
+
+const MAX_NAVMENU_ITEMS = 8
+
+
+// ui setup finished event
+$(document).on('user-interface-setup-has-finished', e =>
+{
+    displayEmployeeData()
+    setupAppUpdates()
+    splitNavMenu()
+    setupGlobalNotificationsArea()
+    // hide loader
+    PageLoader(false);
+    setContainersActive(false)
+    // append scripts
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: 'https://www.gstatic.com/charts/loader.js',
+            async: false,
+        }
+    })
+    //
+    // appendScript({
+    //     appendPosition: 'end',
+    //     container: $('head')[0],
+    //     script: {
+    //         src: '../assets/rcrop/js/rcrop.min.js',
+    //         async: false,
+    //     }
+    // })
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: '../assets/cropper/js/Cropper-1.6.0.min.js',
+            async: false,
+        }
+    })
+    //
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBkVYB4MAOLqk-JqoBdct0o89endQOKqQk&libraries=places',
+            async: false,
+        }
+    })
+    //
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: '../assets/js/include/GoogleMap.js',
+            async: false,
+        }
+    })
+    //
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: '../assets/pickme/js/pickme.js',
+            async: false,
+        }
+    })
+    //
+    appendScript({
+        appendPosition: 'end',
+        container: $('head')[0],
+        script: {
+            src: '../assets/jquerySpellingNumber/js/jquerySpellingNumber.js',
+            async: false,
+        }
+    })
+})
+// Click on nav
+SIDE_NAV_CONTAINER.on('click', e =>
+{
+    e.preventDefault();
+    var target = $(e.target);
+    if ( target.data('role') == 'NAV_LINK' )
+    {
+      
+        var href = target.attr('href');
+
+        if ( href.length == 0 || href == '#' )
+            return;
+       
+        goToPage(target.data('name'), {})
+
+        SIDE_NAV_CONTAINER.find('[data-role="NAV_LINK"]').removeClass('active')
+        target.addClass('active')
+       
+        var parent = target.closest('.list-dropdown-toggle');
+        if ( parent[0] != undefined )
+        {
+            if ( parent[0].nodeName == 'LI' )
+            {
+                $(parent.find('[data-role="NAV_LINK"]')[0]).addClass('active');
+            }
+        }
+    }
+    else if ( target.data('role') == 'LOGOUT_NAV_LINK' )
+    {
+        PromptConfirmDialog().then(c =>
+        {
+            deleteFile(USER_CONFIG_FILE, () =>
+            {
+                createWindow('WIN_LOGIN', {
+                    page: 'index.ejs',
+                    name: 'WIN_LOGIN'
+                });
+                // close current window
+                closeWindow('WIN_'+USER_CONFIG.LOGIN_TYPE);
+            });	
+        });
+    }
+    else if ( target.data('role') == 'CHECK_FOR_UPDATES_NAV_LINK' )
+    {
+        // translate
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        {
+            PromptConfirmDialog('تأكيد العمل', 'هل انت متأكد؟ سيبدأ التحميل مباشرة عند ايجاد اصدار جديد.').then(c =>
+            {
+                ipcIndexRenderer.send('check-for-updates', '');
+            });
+        }
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            PromptConfirmDialog("Confirmer l'action", "Êtes-vous sûr? Le téléchargement commencera immédiatement lorsqu'une nouvelle version sera trouvée.").then(c =>
+            {
+                ipcIndexRenderer.send('check-for-updates', '');
+            });
+        }
+    }
+    else
+        return;
+});
+
+// display employee data
+function displayEmployeeData()
+{
+    EMPLOYEE_NAME.text(USER_CONFIG.employee_name);
+    CENTER_NAME.text( (FUI_DISPLAY_LANG.lang == 'ar') ? "الادارة المركزية" : "Administration centrale" );
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        EMPLOYEE_TYPE.text(USER_CONFIG.type.employee_type_name_ar);
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        EMPLOYEE_TYPE.text(USER_CONFIG.type.employee_type_name_fr);
+}
+// Setup app updates
+function setupAppUpdates()
+{
+	var title = '';
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		title = 'تنزيل التحديثات...';
+	else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		title = 'Télécharger les mises à jour...';
+	var options =
+	{
+		title: title,
+		version: '',
+		progress: {
+			percent: 0,
+		}
+	};
+	// remove listeners
+	ipcIndexRenderer.removeAllListeners('update-about-to-download');
+	ipcIndexRenderer.removeAllListeners('checking-for-update');
+	ipcIndexRenderer.removeAllListeners('update-available');
+	ipcIndexRenderer.removeAllListeners('update-not-available');
+	ipcIndexRenderer.removeAllListeners('update-error');
+	ipcIndexRenderer.removeAllListeners('update-downloaded');
+	ipcIndexRenderer.removeAllListeners('download-update-progress');
+	// check for updates only
+	ipcIndexRenderer.send('check-for-updates', '');
+	//
+	ipcIndexRenderer.on('update-about-to-download', (e, info) =>
+	{
+		console.log(info);
+	});
+	ipcIndexRenderer.on('checking-for-update', (e, info) =>
+	{
+		// Translate
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		{
+			// Display loader
+			TopLoader('البحث عن تحديثات...');
+		}
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		{
+			// Display loader
+			TopLoader("Vérification des mises à jour...");
+		}
+	});
+	ipcIndexRenderer.on('update-available', (e, info) =>
+	{
+		console.log(info);
+        // Hide loader
+		TopLoader('', false);
+		options.version = 'v'+info.version;
+		// translate
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		{
+			CreateToast("اشعار", `تم العثور على اصدار جديد: ${options.version}`, 'الآن', 20000);
+		}
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		{
+			CreateToast("Notification", `Nouvelle version trouvée: ${options.version}`, "à l'heure actuelle", 20000);
+		}
+	});
+	ipcIndexRenderer.on('update-not-available', (e, info) =>
+	{
+		// Hide loader
+		TopLoader('', false);
+		console.log(info);
+	});
+	ipcIndexRenderer.on('update-error', (e, info) =>
+	{
+		// Hide loader
+		TopLoader('', false);
+		console.log(info);
+	});
+	ipcIndexRenderer.on('update-downloaded', (e, info) =>
+	{
+		// Translate
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		{
+			PromptConfirmDialog('تأكيد', 'تم تنزيل التحديثات ، هل تريد التثبيت؟')
+			.then(confirmed =>
+			{
+				ipcIndexRenderer.send('quit-and-install-update', info);
+			});
+		}
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		{
+			PromptConfirmDialog("Confirmer", "Mises à jour téléchargées, souhaitez-vous les installer ?")
+			.then(confirmed =>
+			{
+				ipcIndexRenderer.send('quit-and-install-update', info);
+			});
+		}
+		console.log(info);
+	});
+	ipcIndexRenderer.on('download-update-progress', (e, info) =>
+	{
+		// Display update dialog
+		options.progress.percent = info.percent;
+		//options.total = info.total;
+		//options.transferred = info.transferred;
+		//options.bytesPerSecond = info.bytesPerSecond;
+		TopProgressBar(options);
+	});
+}
+// split nav menu into separate menus
+// function splitNavMenu()
+// {
+//     var items = main_navmenu.children('li')
+//     var current_navmenu = 0
+    
+//     // check total items and display menu jumper button
+//     if ( items.length >= MAX_NAVMENU_ITEMS )
+//     {
+//         back_to_main_navmenu_button.parent().removeClass('d-none')
+//         navmenu_jumper_button_next.removeClass('d-none')
+//     }
+//     else return
+
+//     // split into separate nav menus
+//     $(items[0]).closest('ul').html('')
+//     var navmenu = main_navmenu
+//     var menu_index = 0
+//     items.each((k,li) =>
+//     {
+//         var li = $(li)
+//         // append only if max items in nav menu not reached
+//         navmenu.append(li[0].outerHTML)
+        
+//         if ( navmenu.children().length >= MAX_NAVMENU_ITEMS )
+//         {
+//             var id = `navmenu_${menu_index}`
+//             var navmenu_html = `<ul class="nb-navmenu d-none" id="${id}"></ul>`
+//             navmenus_wrapper.append(navmenu_html)
+//             navmenu = navmenus_wrapper.find('#'+id)
+//             menu_index++
+//         }
+//     })
+
+//     // put menu with visible  items first
+//     var ul_list = navmenus_wrapper.children('ul')
+//     var total_items = 0
+//     for (let i = 0; i < ul_list.length; i++) 
+//     {
+//         const ul = $(ul_list[i]);
+//         const html = ul[0].outerHTML
+    
+//         if ( menuVisibleItemsCount(ul) > total_items )
+//         {
+//             $(html).removeClass('d-none')
+//             .insertBefore(ul.siblings().first())
+//             .siblings().addClass('d-none')
+//             ul.remove()
+//         }
+
+//         total_items = menuVisibleItemsCount(ul)
+//     }
+
+//     // select nav menus
+//     var navmenus = navmenus_wrapper.children('.nb-navmenu')
+//     // back to main nav menu
+//     back_to_main_navmenu_button.off('click').on('click', e =>
+//     {
+//         var navmenu = $(navmenus[0])
+//         navmenu.removeClass('d-none').siblings().addClass('d-none')
+//         navmenu_jumper_button_next.removeClass('d-none')
+//         navmenu_jumper_button_previous.addClass('d-none')
+//         current_navmenu = 0
+//     })
+//     // navigate to next menus
+//     navmenu_jumper_button_next.off('click').on('click', e =>
+//     {
+//         var navmenu = $(navmenus[current_navmenu])
+//         navmenu.addClass('d-none').next().removeClass('d-none')
+        
+//         current_navmenu++
+//         // check if last menu reached
+//         if ( navmenus.length -1 == current_navmenu )
+//         {
+//             navmenu_jumper_button_next.addClass('d-none')
+//         }
+//         if ( current_navmenu > 0 )
+//             navmenu_jumper_button_previous.removeClass('d-none')
+//     })
+//     // navigate to previous menus
+//     navmenu_jumper_button_previous.off('click').on('click', e =>
+//     {
+//         var navmenu = $(navmenus[current_navmenu])
+//         navmenu.addClass('d-none').prev().removeClass('d-none')
+        
+//         current_navmenu--
+//         // check if first menu reached
+//         if ( current_navmenu == 0 )
+//         {
+//             navmenu_jumper_button_previous.addClass('d-none')
+//             navmenu_jumper_button_next.removeClass('d-none')
+//         }
+//     })
+// }
+function splitNavMenu()
+{
+    var items = main_navmenu.children('li:not(.d-none)')
+    var current_navmenu = 0
+    
+    // check total items and display menu jumper button
+    if ( items.length >= MAX_NAVMENU_ITEMS )
+    {
+        // back_to_main_navmenu_button.parent().removeClass('d-none')
+        navmenu_jumper_button_next.removeClass('d-none')
+    }
+    else 
+    {
+        setupMenu()
+        return
+    }
+
+    // split into separate nav menus
+    $(items[0]).closest('ul').html('')
+    var navmenu = main_navmenu
+    var menu_index = 0
+    items.each((k,li) =>
+    {
+        var li = $(li)
+        // append only if max items in nav menu not reached
+        navmenu.append(li[0].outerHTML)
+        
+        if ( navmenu.children().length >= MAX_NAVMENU_ITEMS )
+        {
+            var id = `navmenu_${menu_index}`
+            var navmenu_html = `<ul class="nb-navmenu d-none" id="${id}"></ul>`
+            navmenus_wrapper.append(navmenu_html)
+            navmenu = navmenus_wrapper.find('#'+id)
+            menu_index++
+        }
+    })
+
+    // put menu with visible  items first
+    var ul_list = navmenus_wrapper.children('ul')
+    var total_items = 0
+    for (let i = 0; i < ul_list.length; i++) 
+    {
+        const ul = $(ul_list[i]);
+        const html = ul[0].outerHTML
+    
+        if ( menuVisibleItemsCount(ul) > total_items )
+        {
+            $(html).removeClass('d-none')
+            .insertBefore(ul.siblings().first())
+            .siblings().addClass('d-none')
+            ul.remove()
+        }
+
+        total_items = menuVisibleItemsCount(ul)
+    }
+
+    // select nav menus
+    var navmenus = navmenus_wrapper.children('.nb-navmenu')
+    // back to main nav menu
+    back_to_main_navmenu_button.off('click').on('click', e =>
+    {
+        var navmenu = $(navmenus[0])
+        navmenu.removeClass('d-none').siblings().addClass('d-none')
+        navmenu_jumper_button_next.removeClass('d-none')
+        navmenu_jumper_button_previous.addClass('d-none')
+        back_to_main_navmenu_button.parent().addClass('d-none')
+        current_navmenu = 0
+    })
+    // navigate to next menus
+    navmenu_jumper_button_next.off('click').on('click', e =>
+    {
+        var navmenu = $(navmenus[current_navmenu])
+        navmenu.addClass('d-none').next().removeClass('d-none')
+        back_to_main_navmenu_button.parent().removeClass('d-none')
+        current_navmenu++
+        // check if last menu reached
+        if ( navmenus.length -1 == current_navmenu )
+        {
+            navmenu_jumper_button_next.addClass('d-none')
+        }
+        if ( current_navmenu > 0 )
+            navmenu_jumper_button_previous.removeClass('d-none')
+    })
+    // navigate to previous menus
+    navmenu_jumper_button_previous.off('click').on('click', e =>
+    {
+        var navmenu = $(navmenus[current_navmenu])
+        navmenu.addClass('d-none').prev().removeClass('d-none')
+        
+        current_navmenu--
+        // check if first menu reached
+        if ( current_navmenu == 0 )
+        {
+            navmenu_jumper_button_previous.addClass('d-none')
+            navmenu_jumper_button_next.removeClass('d-none')
+            back_to_main_navmenu_button.parent().addClass('d-none')
+        }
+    })
+    // setup menu
+    setupMenu()
+}
+// setupMenu
+function setupMenu()
+{
+    const list_dropdown_toggle = SIDE_NAV_CONTAINER.find('.list-dropdown-toggle')
+
+    list_dropdown_toggle.each((k,v) =>
+    {
+        const toggle = $(v)
+        
+        toggle.off('click').on('click', e =>
+        {
+            const dropdown = toggle.find('.dropdown-list')
+           
+            // hide all siblings
+            list_dropdown_toggle.find('.dropdown-list').css('display', 'none')
+
+            if ( dropdown.css('display') == 'none' )
+            {
+                dropdown.css('display', 'block')
+            }
+            else
+            {
+                dropdown.css('display', 'none')
+            }
+
+            $('body').off('click').on('click', e =>
+            {
+                if ( dropdown.css('display') == 'block' && !toggle[0].contains(e.target) )
+                {
+                    dropdown.css('display', 'none')
+                }
+            })
+
+        })
+        
+    })
+}
+
+// total visible menu items
+function menuVisibleItemsCount(menu)
+{
+    var li_list = menu.children('li')
+    var count = 0
+    for (let i = 0; i < li_list.length; i++) 
+    {
+        const li = $(li_list[i]);
+        if ( !li.hasClass('d-none') )
+            count++
+    }
+
+    return count
+}
+// setup global notifications area
+async function setupGlobalNotificationsArea()
+{
+    var html = await getPage('../views/templates/global-notifications-area.template.ejs')
+    var buttonHTML = `<button class="gna-toggle-button" id="gna_toggle_button" data-target="#global_notifications_area">
+                        <span class="gna-toggle-button-icon"><i class="fas fa-bell"></i></span>
+                        <span class="gna-toggle-button-badge fw-300">0</span>
+                    </button>`
+    $('body').prepend(html)
+    // append button
+    TOP_NAV_BAR.find('.gna-button-toggler-wrapper').replaceWith($(buttonHTML))
+
+    //
+    var gna_toggle_button = $('#gna_toggle_button')
+
+    var global_notifications_area = $('#global_notifications_area')
+    var gna_header = global_notifications_area.find('#gna_header')
+    var gna_header_close = global_notifications_area.find('#gna_header_close')
+    var gna_header_title = global_notifications_area.find('#gna_header_title')
+    var gna_header_search_button = global_notifications_area.find('#gna_header_search_button')
+    var gna_search_box = global_notifications_area.find('#gna_search_box')
+    var gna_search_back = global_notifications_area.find('#gna_search_back')
+    var gna_search_input = global_notifications_area.find('#gna_search_input')
+    var gna_notifications = global_notifications_area.find('#gna_notifications')
+
+    gna_header_title.text( FUI_DISPLAY_LANG.views.pages.global.notifications )
+    gna_search_input.attr('placeholder', FUI_DISPLAY_LANG.views.pages.global.placeholder5)
+    // toggle bar
+    gna_toggle_button.on('click', e =>
+    {
+        e.preventDefault()
+        global_notifications_area.addClass('active')
+        gna_search_input.trigger('keyup')
+    })
+    // close
+    gna_header_close.on('click', e =>
+    {
+        e.preventDefault()
+        global_notifications_area.removeClass('active')
+    })
+    // toggle search box
+    gna_header_search_button.on('click', e =>
+    {
+        e.preventDefault()
+        gna_search_box.addClass('active ready')
+        gna_header.removeClass('active')
+    })
+    // back to header
+    gna_search_back.on('click', e =>
+    {
+        e.preventDefault()
+        gna_search_box.removeClass('active ready')
+        gna_header.addClass('active')
+    })
+    // gna_notifications
+    gna_notifications.on('click', async e =>
+    {
+        var target = $(e.target)
+
+        if ( target.data('role') == 'row' )
+        {
+            if ( target.data('is-read') == ST_YES ) return
+
+            SectionLoader(target)
+            var res = await NOTIFICATION_MODEL.setIsRead({
+                id: target.data('id'),
+                is_read: ST_YES,
+            })
+            SectionLoader(target, '')
+            if ( res.code == 404 ) return
+            target.addClass('is-read')
+        }
+    })
+    // search for notifications
+    detectTypingEnd(gna_search_input, val =>
+    {
+        notifications_displayAll({
+            method_type: 'search',
+            query: val,
+            advanced: {
+                receiver_id: USER_CONFIG.employee_id,
+                receiver_type_code: 'employees',
+                orderBy: 'id',
+                order: 'desc',
+            }
+        })
+    })
+    // on new notifications found
+    $(document).off('new-notifications-found').on('new-notifications-found', e =>
+    {
+        var detail = e.originalEvent.detail
+
+        gna_toggle_button.find('.gna-toggle-button-badge').text( trimNumber(detail.data) )
+        if ( detail.data > 0 )
+            CreateToast('PS', FUI_DISPLAY_LANG.views.messages.you_have_new_notifications, '')
+    })
+    // display all notifications
+    async function notifications_displayAll(params)
+    {
+        gna_notifications.html('')
+        SectionLoader(gna_notifications)
+        if ( params.method_type == 'search' ) var res = await NOTIFICATION_MODEL.search(params)
+
+        SectionLoader(gna_notifications, '')
+        if ( res.code == 404 ) return
+
+        var data = res.data
+        var html = ''
+
+        $.each(data, (k,v) =>
+        {
+            // <div class="gna-notification-avatar">
+            //     <img src="${ (v.sender_avatar) ? imgFallback(v.sender_avatar.url, '../assets/img/icons/man.png') : imgFallback('../assets/img/icons/man.png') }" class="w-100 h-100 img-thumbnail" alt="">
+            // </div>
+            html += `<div class="gna-notification ${ (v.is_read == ST_YES) ? 'is-read' : '' }" data-role="row" data-id="${v.id}" data-is-read="${v.is_read}">
+                        <div class="gna-notification-inner">
+                            <span class="gna-notification-is-read ripple"></span>
+                            
+                            <div class="gna-notification-content">
+                                <div class="mb-2 gna-notification-content-message">${ strSnippet(v.message, 100) }</div>
+                                <div class="gna-notification-content-timestamp">
+                                    ${v.created_at_alt}
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+        })
+
+        gna_notifications.html(html)
+    }
+}
+
+
+})
+
+</script>

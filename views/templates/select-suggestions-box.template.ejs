@@ -1,0 +1,281 @@
+<span id="select_suggestions_box_template_<%= locals.componentId %>" class="pointer position-relative">
+
+    <input type="text" class="input-text input-text-outline mb-2 search_input" placeholder="<%= locals.searchInputPlaceholder ? locals.searchInputPlaceholder : '' %>" id="<%= locals.searchInputId ? locals.searchInputId : '' %>">
+    <div class="w-100 height-5px content-placeholder rounded js_select_suggestions_box_loader d-none">&nbsp;</div>
+    <ol class="list-group list-group-numbered suggestions_box max-height-200px overflow-y-auto overflow-x-hidden position-absolute w-100 d-none z-index-5" id="<%= locals.searchSuggestionsId ? locals.searchSuggestionsId : '' %>" ></ol>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var component = $(`#select_suggestions_box_template_<%- locals.componentId %>`)
+        var search_input = component.find('.search_input')
+        var suggestions_box = component.find('.suggestions_box')
+
+        const js_select_suggestions_box_loader = component.find('.js_select_suggestions_box_loader')
+
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'suggestion-selected' : `<%- locals.selectionEventName %>`
+        var suggestions = JSON.parse(`<%- JSON.stringify(locals.suggestions) %>`)
+
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+
+        const defaultOptions = {
+            clearInputOnSelection: false,
+            filters: {
+                category_id: null,
+                family_id: null,
+            }
+        }
+
+        options = {...defaultOptions, ...options}
+
+        var currentSelection = 0
+
+        var suggestions_box_form = suggestions_box.closest('form')
+
+        if ( suggestions_box_form[0] )
+        {
+            suggestions_box_form.off('keydown').on('keydown', e =>
+            {
+                return e.key != 'Enter'
+            })
+        }
+        // search
+        search_input.off('keyup').on('keyup', e =>
+        {
+            if ( search_input.val().length > 0 )
+                select_suggestions_box_displaySuggestions() 
+        })
+        .off('keydown').on('keydown', e =>
+        {
+            if ( suggestions_box.children() == 0 ) return
+
+            var children = suggestions_box.children()
+            var firstChild = children.first()
+            var scrollAmount = firstChild.outerHeight() // Adjust this value as needed
+
+            if (e.key === 'ArrowDown') 
+            { // Down arrow key
+                suggestions_box.scrollTop(suggestions_box.scrollTop() + scrollAmount)
+                if ( currentSelection < children.length )
+                {
+                    currentSelection++
+                }
+            }
+            else if (e.key === 'ArrowUp') 
+            { // Up arrow key
+                suggestions_box.scrollTop(suggestions_box.scrollTop() - scrollAmount)
+                if ( currentSelection > 0 )
+                {
+                    currentSelection--
+                }
+            }
+
+            suggestions_box.find(children[currentSelection]).addClass('selected-area').siblings().removeClass('selected-area')
+          
+            // if enter
+            if ( e.key == 'Enter' )
+            {
+                var target = suggestions_box.find(children[currentSelection])
+                
+                select_suggestions_box_dispatchSelectionEventName(target)
+                suggestions_box.html('').addClass('d-none')
+                search_input.blur()
+            }
+        })
+        .off('focus').on('focus', e =>
+        {
+            select_suggestions_box_displaySuggestions(data =>
+            {
+                suggestions_box.find(suggestions_box.children()[currentSelection]).addClass('selected-area').siblings().removeClass('selected-area')
+            })
+        })
+        .off('blur').on('blur', e =>
+        {
+            setTimeout(() => {
+                suggestions_box.addClass('d-none')
+            }, 200);
+        })
+        // select item
+        suggestions_box.off('mousemove').on('mousemove', e =>
+        {
+            var target = $(e.target)
+
+            if ( target[0].nodeName == 'LI' )
+            {
+                target.addClass('selected-area').siblings().removeClass('selected-area')
+                currentSelection = target.index() 
+            }
+        })
+        .off('click').on('click', e =>
+        {
+            var target = $(e.target)
+
+            if ( target[0].nodeName == 'LI' )
+            {
+                // dispatch an event
+                select_suggestions_box_dispatchSelectionEventName(target)
+                suggestions_box.html('').addClass('d-none')
+            }
+        })
+
+        //  
+        async function select_suggestions_box_displaySuggestions(callback = null)
+        {
+            suggestions_box.html('')
+            console.log( suggestions )
+            // display loader
+            js_select_suggestions_box_loader.removeClass('d-none')
+            // disable search_input
+            search_input.addClass('disabled')
+
+            if ( suggestions.api.model == 'PRODUCT_MODEL' )
+            {
+                if ( suggestions.api.method == 'distributor_local_search' )
+                {
+                    var res = await PRODUCT_MODEL.distributor_local_search({
+                        distributor_id: USER_CONFIG.employee_id,
+                        query: search_input.val()
+                    })
+                }
+                else if ( suggestions.api.method == 'center_local_search' )
+                {
+                    
+                    if ( suggestions.api.hasOwnProperty('administration_id') )
+                    {
+                        var res = await PRODUCT_MODEL.center_advancedSearch({
+                            query: search_input.val(),
+                            advanced: {
+                                administration_id: suggestions.api.administration_id,
+                                category_id: options.filters.category_id,
+                                family_id: options.filters.family_id,
+                            }
+                        })
+                    }
+                    else
+                    {
+                        var res = await PRODUCT_MODEL.center_advancedSearch({
+                            query: search_input.val(),
+                            advanced: {
+                                administration_id: USER_CONFIG.administration.clinicId,
+                                category_id: options.filters.category_id,
+                                family_id: options.filters.family_id,
+                            }
+                        })
+                    }
+                }
+                else
+                {
+                    var res = await PRODUCT_MODEL.search({
+                        query: search_input.val()
+                    })
+                }
+            }
+            else if ( suggestions.api.model == 'CONSOMMABLE_MODEL' )
+            {
+                var res = await CONSOMMABLE_MODEL.search({
+                    query: search_input.val()
+                })
+            }
+            else if ( suggestions.api.model == 'STATE_MODEL' )
+            {
+                if ( suggestions.api.method == 'search' )
+                {
+                    var res = await STATE_MODEL.search({
+                        query: search_input.val()
+                    })
+                }
+                else if ( suggestions.api.method == 'baladia_search' )
+                {
+                    var res = await STATE_MODEL.baladia_search({
+                        query: search_input.val()
+                    })
+                }
+            }
+            else if ( suggestions.api.model == 'PRESCRIPTION_MODEL' )
+            {
+                if ( suggestions.api.method == 'product_search' )
+                {
+                    var res = await PRESCRIPTION_MODEL.product_search({
+                        query: search_input.val(),
+                        advanced: {
+                            is_deleted: false,
+                        }
+                    })  
+                }
+            }
+
+            // hide loader
+            js_select_suggestions_box_loader.addClass('d-none')
+            // enable search_input
+            search_input.removeClass('disabled')
+
+            if ( res.code == 404 ) return
+
+            var data = res.data
+            var html = ''
+            console.log(data)
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                html += `<li class="list-group-item d-flex align-items-start cursor-pointer" data-name="${v[suggestions.selections.name]}" data-value="${v[suggestions.selections.value]}" data-object='${ data }'>
+                    <div class="ms-2 no-pointer">
+                        <div class="fw-bold">${v[suggestions.selections.name]}</div>
+                        ${v[suggestions.selections.value]}
+                    </div>
+                </li>`
+                
+            })
+            suggestions_box.html(html).removeClass('d-none')
+            // callback
+            if ( typeof callback == 'function' )
+            {
+                callback(data)
+            }
+        }
+
+        // column match
+        function isColumnMatch(source_column, target_column)
+        {
+            var keys = Object.keys(source_column)
+
+        }
+        // dispatch selectionEventName
+        function select_suggestions_box_dispatchSelectionEventName(target)
+        {
+            search_input.val( target.data('value') )
+            var event = new CustomEvent(selectionEventName, { 
+                detail: { 
+                    suggestion: {
+                        name: target.data('name'),
+                        value: target.data('value'),
+                        data: checkJSON( decodeURIComponent( atob( target.data('object') ) ) ),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                } 
+            });
+
+            document.dispatchEvent(event)
+            //
+            dispatchCustomEvent(selectionEventName, { 
+                suggestion: {
+                    name: target.data('name'),
+                    value: target.data('value'),
+                    data: checkJSON( decodeURIComponent( atob( target.data('object') ) ) ),
+                },
+                eventsReceiverId: eventsReceiverId 
+            }, search_input[0])
+
+            // clear input
+            if ( options.clearInputOnSelection )
+            {
+                search_input.val(null)
+            }
+            
+        }
+    })
+
+</script>

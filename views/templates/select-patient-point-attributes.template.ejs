@@ -1,0 +1,77 @@
+<span id="<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label117 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced js_select_attribute_search_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'attribute_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        const eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        const componentId = `<%- locals.componentId %>`
+        const component = $(`#${componentId}`)
+        const selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_center_clients2_template_client_select' : `<%- locals.selectId %>`
+
+        const ATTRIBUTES_OBJECT = FUI_DISPLAY_LANG.views.pages.global.patient_point_attributes
+
+        const action_select = component.find(`#${selectId}`)
+        const js_select_attribute_search_input = component.find('.js_select_attribute_search_input')
+
+        // search
+        js_select_attribute_search_input.on('keyup', e =>
+        {
+            const searchTerm = js_select_attribute_search_input.val().toLowerCase();
+            const options = action_select.children()
+            let firstMatchIndex = -1;
+            
+            if ( js_select_attribute_search_input.val().length > 0 ) options.first().prop('hidden', true)
+            else options.first().prop('hidden', false)
+            
+            options.each((k,v) =>
+            {
+                const option = $(v)
+                const text = option.text().toLowerCase()
+    
+                if (text.indexOf(searchTerm) !== -1) 
+                {
+                    if (firstMatchIndex === -1) firstMatchIndex = k;
+                    
+                    option.prop('hidden', false)
+                } 
+                else 
+                {
+                    option.prop('hidden', true)
+                }
+            })
+
+            if (firstMatchIndex !== -1) {
+                options.eq(firstMatchIndex).prop('selected', true).attr('selected', true)
+            } else {
+                options.prop('selected', false).attr('selected', false)
+            }
+        })
+
+        // display all
+        select_attribute_displayAll()
+        function select_attribute_displayAll()
+        {
+            action_select.html(`<option value="">${FUI_DISPLAY_LANG.views.pages.global.placeholder11}</option>`)
+
+            var html = ''
+
+            for (const key in ATTRIBUTES_OBJECT) 
+            {
+                html += `<option value="${key}">${ATTRIBUTES_OBJECT[key]}</option>`
+            }
+
+            action_select.append(html)
+        }
+        
+    })
+
+</script>

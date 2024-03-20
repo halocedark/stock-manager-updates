@@ -1,0 +1,77 @@
+<div class="orders-cart-dialog container px-1 py-2 w-responsive" id="ordersCartDialog">
+	<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+	<div class="text-right p-1">
+		<div class="cart-btn-close" id="CLOSE_BTN">
+			&times;
+		</div>
+	</div>
+	<div class="text-center py-1">
+		<a href="#" class="text-2 fw-300 text-decor-none view-orders-btn" id="VIEW_ORDERS_BTN">
+			<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.text01 %>
+		</a>
+	</div>
+	<div class="orders-list" id="ORDERS_LIST" data-visible="false" style="display: none;">
+		<!--
+		<div class="order">
+			<div class="cart-btn-close" data-role="REMOVE" style="background: transparent;">
+				&times;
+			</div>
+			<div class="text-center" style="flex-grow: 1;">
+				<img src="assets/img/burgers/1.jpg" alt="" class="order-img mb-1">
+				<div class="text-muted fw-200 mb-1 order-price">500.00 DA</div>
+				<div class="text-muted fw-200 order-quantity">1x5</div>
+			</div>
+			<div class="order-name fw-300" style="flex-grow:9;">Big Mc Burger</div>
+		</div>
+		-->
+	</div>
+	<div class="bg-white py-3 px-2 my-2 border rounded text-center">
+		<div id="TOTAL" class="text-03"></div>
+		<div class="mt-1">
+			<input type="number" class="input-text-01" step="any" min="0" value="0" id="AMOUNT_PAID_INPUT">
+		</div>
+	</div>
+	<div class="bg-white py-3 px-2">
+		<div id="INSIDE_ORDER_TAB" class="TAB">
+			<div class="mb-2">
+				<label for="" class=""><%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.label01 %></label>
+				<input type="text" class="input-text input-text-outline my-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.ph01 %>" id="patientsSearchInput">
+				<div class="my-2 text-04" id="loader01" style="display:none;"></div>
+				<select name="" id="patientSelect" class="input-text"></select>
+			</div>
+			<div class="mb-3">
+				<button class="btn-2 w-100 fw-300 mt-2" style="padding: .7em 1em;background-color: #ffffff;color: #7b51fb;border:1px solid #7b51fb40 !important;border-radius: 5px !important;" id="SEND_CART_ORDER_BTN">
+					<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.btn01 %>
+					
+				</button>
+			</div>
+		</div>
+		<div id="OUTSIDE_ORDER_TAB" class="TAB" style="display:none;">
+			<div class="mb-2">
+				<label for="" class=""><%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.label02 %></label>
+				<input type="text" class="input-text input-text-outline" id="patientNameInput">
+			</div>
+			<div class="mb-2">
+				<label for="" class=""><%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.label03 %></label>
+				<input type="text" class="input-text input-text-outline" id="patientPhoneInput">
+			</div>
+			<div class="mb-3">
+				<button class="btn-2 w-100 fw-300 mt-2" style="padding: .7em 1em;background-color: #ffffff;color: #7b51fb;border:1px solid #7b51fb40 !important;border-radius: 5px !important;" id="SEND_CART_ORDER_BTN2">
+					<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.btn01 %>
+					
+				</button>
+			</div>
+		</div>
+		<ul class="tabs-list" id="TABS_LIST">
+			<li class="list-item active" data-role="TAB" data-tab="#INSIDE_ORDER_TAB">
+				<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.text02 %>
+			</li>
+			<li class="list-item" data-role="TAB" data-tab="#OUTSIDE_ORDER_TAB">
+				<%= UI_DISPLAY_LANG.views.dialogs.ordersCartDialog.text03 %>
+			</li>
+		</ul>
+	</div>
+</div>

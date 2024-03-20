@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/loading.css">
+    <title>Loading</title>
+</head>
+<body>
+    
+    <main class="position-relative">
+
+        <div class="px-4 py-5 my-5 text-center">
+          <img class="d-block mx-auto mb-4" src="./assets/img/logo/logo.png" alt="" width="72" height="57">
+          <h1 class="display-5 fw-bold">
+            <%= UI_DISPLAY_LANG.views.pages.welcome.text03 %>
+          </h1>
+          <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+                <%= UI_DISPLAY_LANG.views.pages.welcome.text02 %>
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              
+            </div>
+          </div>
+        </div>
+
+        <small class="position-absolute bottom-5 start-50 translate-middle" id="loadingStatus">
+            
+        </small>
+
+    </main>
+
+    <script src="./assets/js/loading.js"></script>
+</body>
+</html>

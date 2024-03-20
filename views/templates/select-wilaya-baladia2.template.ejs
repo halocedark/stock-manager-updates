@@ -1,0 +1,156 @@
+<span id="<%= locals.componentId %>" class="pointer">
+
+    <div class="row gy-2">
+
+        <div class="col-md-12 COL_WRAPPER">
+
+            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label17 %></label>
+            <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="wilaya_search_input_<%= locals.componentId %>">
+            <select name="" class="input-text" id="<%= locals.wilayaSelectId ? locals.wilayaSelectId : 'wilaya_select' %>">
+                
+            </select>
+
+        </div>
+
+        <div class="col-md-12 COL_WRAPPER d-none">
+
+            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label95 %></label>
+            <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="baladia_search_input_<%= locals.componentId %>">
+            <select name="" class="input-text" id="baladia_select_<%= locals.componentId %>">
+                
+            </select>
+
+            <div class="text-separator my-2 max-width-260px mx-auto">
+                <%= UI_DISPLAY_LANG.views.pages.global.or %>
+            </div>
+
+            <input type="text" class="input-text input-text-outline" id="<%= locals.baladiaInputId ? locals.baladiaInputId : 'baladia_input' %>">
+
+        </div>
+        
+        <div class="col-md-12 COL_WRAPPER">
+
+            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label50 %></label>
+            <input type="text" class="input-text input-text-outline" id="<%= locals.addressInputId ? locals.addressInputId : 'address_input' %>">
+
+        </div>
+
+    </div>
+
+</span>
+
+<script>
+
+    $(function()
+    {
+
+        const componentId = `<%= locals.componentId %>`
+
+        const component = $(`#${componentId}`)
+        const eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        
+        const wilaya_select = $(`#<%= locals.wilayaSelectId %>`)
+
+        const wilaya_search_input_ = $(`#wilaya_search_input_${componentId}`)
+        
+        var isWilayaFirstTimeSearchInitialized = false
+
+        const baladia_select_ = $(`#baladia_select_${componentId}`)
+        const baladia_search_input_ = $(`#baladia_search_input_${componentId}`)
+        const baladia_input = $(`#<%= locals.baladiaInputId %>`)
+
+        // Wilaya
+        detectTypingEnd(wilaya_search_input_, () =>
+        {
+            select_wilaya_baladia__displayAllWilaya()
+        }, 500)
+        // wilaya_search_input_.on('keyup', select_wilaya_baladia__displayAllWilaya)
+        wilaya_search_input_.trigger('keyup')
+        // select
+        wilaya_select.on('change', e =>
+        {
+            const selected = wilaya_select.find(':selected')
+
+            dispatchCustomEvent('wilaya-selected', {
+                code: selected.data('code'),
+                name: selected.text(),
+                eventsReceiverId: eventsReceiverId,
+            }, wilaya_select[0])
+
+            wilaya_select.closest('.COL_WRAPPER').next().removeClass('d-none')
+            select_wilaya_baladia__displayAllBaladia()
+        })
+        
+        // Baladia
+        detectTypingEnd(baladia_search_input_, () =>
+        {
+            select_wilaya_baladia__displayAllBaladia()
+        }, 500)
+        // baladia_search_input_.on('keyup', select_wilaya_baladia__displayAllBaladia)
+        baladia_select_.on('change', e =>
+        {
+            const selected = baladia_select_.find(':selected')
+
+            baladia_input.val(selected.text())
+        })    
+
+        // display all wilaya
+        async function select_wilaya_baladia__displayAllWilaya()
+        {
+            wilaya_select.html('')
+   
+            const promise = STATE_MODEL.search({
+                query: wilaya_search_input_.val(),
+            })
+
+            var res = await promise
+
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                html += `<option value="${v.wilaya_name_ascii}" data-code="${v.wilaya_code}">${v.wilaya_name_ascii}</option>`
+            })
+
+            wilaya_select.html(html)
+
+            wilaya_select.trigger('change')
+
+            if ( !isWilayaFirstTimeSearchInitialized )
+            {
+                dispatchCustomEvent('wilaya-selected-first-time', {
+                    code: wilaya_select.find(':selected').data('code'),
+                    name: wilaya_select.find(':selected').text(),
+                    eventsReceiverId: eventsReceiverId,
+                }, wilaya_select[0])
+
+                isWilayaFirstTimeSearchInitialized = true
+            }
+        }
+        // display all baladia
+        async function select_wilaya_baladia__displayAllBaladia()
+        {
+            baladia_select_.html('')
+   
+            var res = await STATE_MODEL.baladia_search({
+                query: baladia_search_input_.val(),
+                wilaya_code: wilaya_select.find(':selected').data('code'),
+            })
+
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                html += `<option value="${v.commune_name_ascii}" data-code="${v.wilaya_code}">${v.commune_name_ascii}</option>`
+            })
+
+            baladia_select_.html(html)
+        
+            baladia_select_.trigger('change')
+        }
+        
+    })
+
+</script>

@@ -1,0 +1,168 @@
+.pickme-emoji-picker-background-overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1200;
+    display: none;
+}
+.pickme-emoji-picker-background-overlay.show
+{
+    display: block;
+}
+.pickme-emoji-picker-container
+{
+    background: #ffffff;
+    width: 324px;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px 0 rgba(0,0,0,.2), 0 2px 4px 0 rgba(0,0,0,.1);
+    overflow: hidden;
+    display: none;
+    direction: inherit;
+    position: fixed;
+    z-index: 1205;
+}
+.pickme-emoji-picker-container.show
+{
+    display: block;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+{
+    padding: 10px 5px;
+    border-bottom: 1px solid #f1f0f0;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+.pickme-emoji-picker-search-input-group
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e8eaec;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+.pickme-emoji-picker-search-input-group .pickme-emoji-picker-search-input 
+{
+    font-weight: 400;
+    color: #1b1b1b;
+    outline: 0;
+    border: none;
+    padding: 0;
+    background: transparent;
+    width: 100%;
+    direction: inherit;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+.pickme-emoji-picker-search-input-group .pickme-emoji-picker-search-input::placeholder
+{
+    font-weight: 300;
+    font-size: 15px;
+    color: #727272;
+    transition: font-size .3s ease-in-out;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+.pickme-emoji-picker-search-input-group .pickme-emoji-picker-search-input:focus::placeholder
+{
+    font-size: 11px;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-header
+.pickme-emoji-picker-search-input-group .pickme-emoji-picker-search-icon
+{
+    pointer-events: none;
+}
+
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+{
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+.pickme-emoji-picker-category-tab
+{
+    margin: 0 2px 2px 2px;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+.pickme-emoji-picker-category-tab .pickme-emoji-picker-category-button
+{
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: background .2s ease-in-out;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+.pickme-emoji-picker-category-tab .pickme-emoji-picker-category-button:hover
+{
+    background: #efefef;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+.pickme-emoji-picker-category-tab .pickme-emoji-picker-category-button svg
+{
+    fill: #65676b;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-categories-list
+.pickme-emoji-picker-category-tab.active .pickme-emoji-picker-category-button svg
+{
+    fill: #216FDB;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-body
+{
+    padding: 10px 10px;
+    border-bottom: 1px solid #f1f0f0;
+}
+.pickme-emoji-picker-container .js-pickme-emoji-picker-category-tabs-wrapper
+{
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 222px;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-category-tab-wrapper
+.pickme-emoji-picker-category-tab-name
+{
+    font-weight: 400;
+    font-size: 13px;
+    color: #65676b;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-category-tab-content
+{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-category-tab-content 
+.pickme-emoji-picker-category-item {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: background .2s ease-in-out;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-category-tab-content 
+.pickme-emoji-picker-category-item:hover
+{
+    background: #e1e1e1;
+}
+.pickme-emoji-picker-container .pickme-emoji-picker-category-tab-content 
+.pickme-emoji-picker-category-item img
+{
+    cursor: pointer;
+    pointer-events: auto !important;
+}

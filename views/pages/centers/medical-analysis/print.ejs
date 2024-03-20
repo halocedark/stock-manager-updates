@@ -1,0 +1,192 @@
+<div class="container-fluid" id="printMedicalAnalysis_page">
+
+    <div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_patients.sectionTitle %></h1>
+	</div>
+
+	<div class="row gx-4 gy-5">
+
+        <div class="col-lg-4 col-md-6">
+
+            <div style="max-width: 420px; margin: 0 auto 1em auto;" id="print_page"> 
+        
+            </div>
+
+            <div class="has-text-centered p-5 border rounded">
+                <a href="#" id="print_button"><%= UI_DISPLAY_LANG.views.pages.global.text2 %></a>
+            </div>
+
+        </div>
+
+        <div class="col-lg col-md">
+
+            <div class="app-block">
+
+                <div id="pagination" class="my-3 flex flex-center"></div>
+
+                <div class="row gx-4 gy-5" id="table_element">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#printMedicalAnalysis_page')
+
+if ( !page_container[0] ) return
+
+var print_page = page_container.find('#print_page')
+var print_button = page_container.find('#print_button')
+
+var pagination = page_container.find('#pagination')
+var table_element = page_container.find('#table_element')
+var medical_analysis_category = new MedicalAnalysisCategoryModel()
+
+// append print template
+print_page.html( sessionData().html )
+
+var medical_analysis = print_page.find('.prescription-print')
+var analysis_list = medical_analysis.find('#analysis_list')
+
+medical_analysis.find('#presc_date').text(CURRENT_DATE)
+medical_analysis.find('#patient_first').text(sessionData().patient.patientName)
+medical_analysis.find('#patient_age').text(sessionData().patient.patientAge)
+
+// table_element
+table_element.on('click', e =>
+{
+    var target = $(e.target)
+
+    if ( target.data('role') == 'check' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        var medical_analysis = target.closest('[data-role="medical_analysis"]')
+
+        if ( !target.prev().is(':checked') )
+            appendItem({
+                category: {
+                    id: parent.data('id'),
+                    name: parent.data('name')
+                },
+                item: {
+                    id: medical_analysis.data('id'),
+                    name: medical_analysis.data('name')
+                }
+            })
+        else
+            removeItem({
+                category: {
+                    id: parent.data('id'),
+                    name: parent.data('name')
+                },
+                item: {
+                    id: medical_analysis.data('id'),
+                    name: medical_analysis.data('name')
+                }
+            })
+    }
+})
+// print
+print_button.on('click', e =>
+{
+    printHTMLToPdf( medical_analysis[0].outerHTML, {
+        top: 10000,
+        left: 10000,
+        page: {
+            size: 'A5',
+            margin: '-5cm -1cm -2cm -1cm'
+        }
+    } )
+})
+
+// display all
+displayAll()
+async function displayAll()
+{
+    var res = await medical_analysis_category.index()
+
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    for (let i = 0; i < data.length; i++) 
+    {
+        const category = data[i];
+        
+        html += `<div class="col-lg-4 col-md-6" data-role="row" data-id="${category.id}" data-name="${category.name}">
+                    <h5 class="h4 mb-3">${category.name}</h5>`
+
+        if ( category.medical_analyses )
+        {
+            html += `<ul class="list-group list-group-flush">`
+            for (let j = 0; j < category.medical_analyses.length; j++) 
+            {
+                const medical_analysis = category.medical_analyses[j];
+                
+                html += `<li class="list-group-item d-flex is-justify-content-space-between" data-role="medical_analysis" data-id="${medical_analysis.id}" data-name="${medical_analysis.name}">
+                            <div class="form-check" >
+                                <input class="form-check-input" type="checkbox" value="" id="checkbox_${medical_analysis.id}">
+                                <label class="form-check-label" for="checkbox_${medical_analysis.id}" data-role="check">
+                                    ${medical_analysis.name}
+                                </label>
+                            </div>
+                        </li>`
+            }
+            html+= `</ul>`
+        }
+
+        html += `</div>PAG_SEP`
+    }
+
+    new SmoothPagination(pagination, table_element, {
+        data: html.split('PAG_SEP')
+    })
+}
+// append item
+function appendItem(options)
+{
+    // check category
+    if ( !analysis_list.find('#category_'+options.category.id)[0] )
+    {
+        analysis_list.append(`
+            <div class="col-md-4" id="category_${options.category.id}">    
+                <h6 style="font-size: 14px;font-weight:bold;margin-bottom:.5em;">${options.category.name}</h6>
+            </div>
+        `)
+    }
+    // check item
+    if ( !analysis_list.find('#item_'+options.item.id)[0] )
+    {
+        analysis_list.find('#category_'+options.category.id)
+        .append(`<p id="item_${options.item.id}" style="font-size: 10px;">${options.item.name}</p>`)
+    }
+}
+// remove item
+function removeItem(options)
+{
+    var parent = analysis_list.find('#item_'+options.item.id).closest('#category_'+options.category.id)
+    // remove item
+    if ( analysis_list.find('#item_'+options.item.id)[0] ) 
+        analysis_list.find('#item_'+options.item.id).remove()
+    // remove category name if all children removed
+    // console.log( parent.children() -1 )
+    if ( parent.children().length -1 == 0 )
+    {
+        parent.remove()
+    }
+}
+
+})
+
+</script>

@@ -1,0 +1,209 @@
+<div class="container-fluid" id="sendMessageContainer">
+	<div class="wrapper">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.send_message.sectionTitle %></h1>
+	</div>
+	<div class="mt-5 app-block">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="">
+			<form action="#" id="sendMSGToEmployeeForm">
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.send_message.form01.label05 %></label>
+					<input type="text" class="input-text input-text-outline" id="employeePhoneInput">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.send_message.form01.label02 %></label>
+					<input type="text" class="input-text input-text-outline" id="subject2Input" placeholder="<%= UI_DISPLAY_LANG.views.pages.send_message.form01.ph01 %>">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label4 %></label>
+					<textarea class="input-text input-text-outline" rows="5" id="body2Input" placeholder="<%= UI_DISPLAY_LANG.views.pages.send_message.form01.ph02 %>"></textarea>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_file %></label>
+					<input type="file" class="input-text input-text-outline" id="attachmentsInput" multiple>
+				</div>
+				<div class="">
+					<input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.send_message.form01.submitBTN01 %>">
+					<a href="#" class="text-02 d-none mx-2" id="switchBackToPatientsMessagingBTN">
+						<%= UI_DISPLAY_LANG.views.pages.send_message.link02 %>
+					</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+    var sendMessageContainer = $('#sendMessageContainer');
+	if ( sendMessageContainer[0] == undefined )
+		return;
+
+	var ERROR_BOX = sendMessageContainer.find('#ERROR_BOX');
+	var sendMSGForm = sendMessageContainer.find('#sendMSGForm');
+	var searchPatientsInput = sendMessageContainer.find('#searchPatientsInput');
+	var receiverSelect = sendMessageContainer.find('#receiverSelect');
+	var subjectInput = sendMessageContainer.find('#subjectInput');
+	var bodyInput = sendMessageContainer.find('#bodyInput');
+	var attachmentsInput = sendMessageContainer.find('#attachmentsInput');
+
+
+	var sendToPatientsWrapper = sendMessageContainer.find('#sendToPatientsWrapper');
+	var switchToEmployeeMessagingBTN = sendToPatientsWrapper.find('#switchToEmployeeMessagingBTN');
+	var sendToEmployeeWrapper = sendMessageContainer.find('#sendToEmployeeWrapper');
+	var switchBackToPatientsMessagingBTN = sendToEmployeeWrapper.find('#switchBackToPatientsMessagingBTN');
+
+	var sendMSGToEmployeeForm = sendMessageContainer.find('#sendMSGToEmployeeForm');
+	var employeePhoneInput = sendMessageContainer.find('#employeePhoneInput');
+	var subject2Input = sendMessageContainer.find('#subject2Input');
+	var body2Input = sendMessageContainer.find('#body2Input');
+
+	// back to patients messaging
+	switchBackToPatientsMessagingBTN.off('click');
+	switchBackToPatientsMessagingBTN.on('click', e =>
+	{
+		sendToPatientsWrapper.slideDown(200).siblings('.WRAPPER').slideUp(200);
+	});
+	// back to manager messaging
+	switchToEmployeeMessagingBTN.off('click');
+	switchToEmployeeMessagingBTN.on('click', e =>
+	{
+		sendToEmployeeWrapper.slideDown(200).siblings('.WRAPPER').slideUp(200);
+	});
+	// send
+	sendMSGForm.off('submit');
+	sendMSGForm.on('submit', async e =>
+	{
+		e.preventDefault();
+		var target = sendMSGForm;
+		var MessageObject = {
+			sender: USER_CONFIG.administration.clinicHash,
+			receiver: receiverSelect.find(':selected').val(),
+			subject: subjectInput.val(),
+			body: bodyInput.val()
+		};
+		if ( attachmentsInput[0].files.length > 0 ) MessageObject.attachments = attachmentsInput[0].files
+		// display loader
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			TopLoader("يتم ارسال الرسالة...");
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			TopLoader("Le message est envoyé...");
+		console.log(MessageObject)
+		return
+		var response = await MESSAGE_MODEL.send(MessageObject)
+		
+		// hide loader
+		TopLoader('', false);
+		if ( response.code == 404 )
+		{
+			ERROR_BOX.show(0).delay(7*1000).hide(0)
+			.find('#text').text(response.message);
+			return;
+		}
+		ERROR_BOX.show(0).delay(7*1000).hide(0)
+		.find('#text').text(response.message);
+		// reset
+		target[0].reset();
+
+	});
+	// search patients
+	searchPatientsInput.off('keyup');
+	searchPatientsInput.on('keyup', e =>
+	{
+		var target = searchPatientsInput;
+		var SearchObject = {
+			clinicId: USER_CONFIG.administration.clinicId,
+			query: target.val()
+		};
+		// display loader
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			TopLoader("جاري البحث...");
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			TopLoader("En train de rechercher...");
+		PATIENT_MODEL.searchLocal(SearchObject).then(response =>
+		{
+			// hide loader
+			TopLoader('', false);
+			if ( response.code == 404 )
+				return;
+
+			var data = response.data;
+			var html = '';
+			$.each(data, (k,v) =>
+			{
+				html += `<option value="${v.patientHashId}">${v.patientName}</option>`;
+			});
+			// add html
+			receiverSelect.html(html);
+		});
+	});
+	searchPatientsInput.trigger('keyup');
+	// send to manager
+	sendMSGToEmployeeForm.off('submit');
+	sendMSGToEmployeeForm.on('submit', async e =>
+	{
+		e.preventDefault();
+		var target = sendMSGToEmployeeForm;
+
+		//display loader
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			TopLoader("جاري استرجاع الرمز التسلسلي للمستلم...");
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			TopLoader("Récupérer le code de série du destinataire...");
+
+		var response = await EMPLOYEE_MODEL.show( '', $.trim(employeePhoneInput.val()) );
+		// hide loader
+		TopLoader("", false);
+		if ( response.code == 404 )
+		{
+			ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+			return;
+		}
+
+		var MessageObject = {
+			sender: USER_CONFIG.employee_hash,
+			receiver: response.data.employee_hash,
+			subject: subject2Input.val(),
+			body: body2Input.val()
+		};
+		if ( attachmentsInput[0].files.length > 0 ) MessageObject.attachments = attachmentsInput[0].files
+		// display loader
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			TopLoader("يتم ارسال الرسالة...");
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			TopLoader("Le message est envoyé...");
+
+		var response = await MESSAGE_MODEL.send(MessageObject)
+	
+		// hide loader
+		TopLoader('', false);
+		if ( response.code == 404 )
+		{
+			ERROR_BOX.show(0).delay(7*1000).hide(0)
+			.find('#text').text(response.message);
+			return;
+		}
+		ERROR_BOX.show(0).delay(7*1000).hide(0)
+		.find('#text').text(response.message);
+		// reset
+		target[0].reset();
+	});
+	// employeePhoneInput
+	employeePhoneInput.off('dblclick');
+	employeePhoneInput.on('dblclick', e =>
+	{
+		SelectEmployeeDialog(data =>
+		{
+			employeePhoneInput.val(data.employee_phone);
+		});
+	});
+
+})
+
+</script>

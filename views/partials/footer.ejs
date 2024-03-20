@@ -1,0 +1,369 @@
+
+
+<script src="./renderer.js"></script>
+<script type="text/javascript" src="assets/js/include/Dialogs.js"></script>
+<!-- <script type="text/javascript" id="GLOBALS_SCRIPT" src="assets/js/include/Globals.js"></script> -->
+<!--<script type="text/javascript" src="assets/js/popper.min.js"></script>-->
+<!--<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>-->
+<!--<script type="text/javascript" id="PAGINATION" src="assets/js/pagination_ar.js"></script>-->
+<!--<script type="text/javascript" src="assets/js/include/Classes.js"></script>-->
+<!--<script type="text/javascript" src="assets/js/include/Functions.js"></script>-->
+<!--<script type="text/javascript" src="assets/js/include/Dialogs.js"></script>-->
+<script type="text/javascript" src="assets/js/index.js"></script>
+<!-- <script type="text/javascript" src="assets/js/scripts.js"></script> -->
+
+<script>
+
+$(function()
+{
+
+// Setup app updates
+function setupAppUpdates()
+{
+var title = '';
+if ( FUI_DISPLAY_LANG.lang == 'ar' )
+	title = 'تنزيل التحديثات...';
+else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+	title = 'Télécharger les mises à jour...';
+var options =
+{
+	title: title,
+	version: '',
+	progress: {
+		percent: 0,
+	}
+};
+// check for updates
+//ipcIndexRenderer.send('check-for-updates', '');
+//
+ipcIndexRenderer.on('update-about-to-download', (e, info) =>
+{
+	console.log(info);
+});
+ipcIndexRenderer.on('checking-for-update', (e, info) =>
+{
+	// Translate
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+	{
+		// Display loader
+		TopLoader('البحث عن تحديثات...');
+	}
+	else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+	{
+		// Display loader
+		TopLoader("Vérification des mises à jour...");
+	}
+});
+ipcIndexRenderer.on('update-available', (e, info) =>
+{
+	// Hide loader
+	TopLoader('', false);
+	options.version = 'v'+info.version;
+	console.log(info);
+	// translate
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+	{
+		CreateToast("اشعار", `تم العثور على اصدار جديد: ${options.version}`, 'الآن', 20000);
+	}
+	else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+	{
+		CreateToast("Notification", `Nouvelle version trouvée: ${options.version}`, "à l'heure actuelle", 20000);
+	}
+});
+ipcIndexRenderer.on('update-not-available', (e, info) =>
+{
+	// Hide loader
+	TopLoader('', false);
+	console.log(info);
+});
+ipcIndexRenderer.on('update-error', (e, info) =>
+{
+	// Hide loader
+	TopLoader('', false);
+	console.log(info);
+});
+ipcIndexRenderer.on('update-downloaded', (e, info) =>
+{
+	// Translate
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+	{
+		PromptConfirmDialog('تأكيد', 'تم تنزيل التحديثات ، هل تريد التثبيت؟')
+		.then(confirmed =>
+		{
+			ipcIndexRenderer.send('quit-and-install-update', info);
+		});
+	}
+	else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+	{
+		PromptConfirmDialog("Confirmer", "Mises à jour téléchargées, souhaitez-vous les installer ?")
+		.then(confirmed =>
+		{
+			ipcIndexRenderer.send('quit-and-install-update', info);
+		});
+	}
+	console.log(info);
+});
+ipcIndexRenderer.on('download-update-progress', (e, info) =>
+{
+	// Display update dialog
+	options.progress.percent = info.percent;
+	//options.total = info.total;
+	//options.transferred = info.transferred;
+	//options.bytesPerSecond = info.bytesPerSecond;
+	TopProgressBar(options);
+});
+}
+// setup user auth
+function setupUserAuth()
+{
+var userAuthContainer = $('#userAuthContainer');
+if ( userAuthContainer[0] == undefined )
+	return;
+
+// check if logged in
+if ( isConfigExists() )
+	userAuthContainer.removeClass('active')
+else
+	userAuthContainer.addClass('active')
+
+var ERROR_BOX = userAuthContainer.find('#ERROR_BOX');
+
+var signupWrapper = userAuthContainer.find('#signupWrapper');
+var signupForm = signupWrapper.find('#signupForm');
+var switchToSigninForm = signupForm.find('#switchToSigninForm');
+
+var loginFormTypeSelect = userAuthContainer.find('#loginFormTypeSelect');
+
+var signinWrapper = userAuthContainer.find('#signinWrapper');
+var DOCTOR_LOGIN_FORM = signinWrapper.find('#DOCTOR_LOGIN_FORM');
+var PATIENT_LOGIN_FORM = signinWrapper.find('#PATIENT_LOGIN_FORM');
+var CENTRAL_ADMINISTRATION_LOGIN_FORM = signinWrapper.find('#CENTRAL_ADMINISTRATION_LOGIN_FORM');
+var GENERAL_LOGIN_FORM = signinWrapper.find('#GENERAL_LOGIN_FORM');
+
+// go to signin
+switchToSigninForm.off('click');
+switchToSigninForm.on('click', e =>
+{
+	e.preventDefault();
+	signinWrapper.slideDown(200);
+	signupWrapper.slideUp(200);
+});
+// go to signup
+DOCTOR_LOGIN_FORM.find('#switchToSignupForm').off('click');
+DOCTOR_LOGIN_FORM.find('#switchToSignupForm').on('click', e =>
+{
+	e.preventDefault();
+	signupWrapper.slideDown(200);
+	signinWrapper.slideUp(200);
+});
+// go to signup
+CENTRAL_ADMINISTRATION_LOGIN_FORM.find('#switchToSignupForm').off('click');
+CENTRAL_ADMINISTRATION_LOGIN_FORM.find('#switchToSignupForm').on('click', e =>
+{
+	e.preventDefault();
+	signupWrapper.slideDown(200);
+	signinWrapper.slideUp(200);
+});
+// sign up
+signupForm.off('submit');
+signupForm.on('submit', e =>
+{
+	e.preventDefault();
+	var target = signupForm;
+	var ClinicObject = {
+		clinicDoctorName: target.find('#sfDoctorName').val(),
+		clinicName: target.find('#sfName').val(),
+		clinicPhone: $.trim(target.find('#sfPhone').val()),
+		clinicUsername: $.trim(target.find('#sfUsername').val()),
+		clinicPass: $.trim(target.find('#sfPassword').val()),
+		clinicState: target.find('#sfState :selected').val(),
+		clinicBaladia: target.find('#sfCity').val(),
+		clinicAddress: target.find('#sfAddress').val()
+	};
+	// translate
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+	{
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+			TopLoader("جاري إنشاء حسابك ، برجاء الانتظار ...");
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+			TopLoader("Création de votre compte, veuillez patienter...");
+		registerClinic(ClinicObject).then(response =>
+		{
+			// hide loader
+			TopLoader('', false);
+			if ( response.code == 404 )
+			{
+				ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+				return;
+			}
+
+			ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+			// reset
+			target[0].reset();
+		});	
+	}	
+});
+// select login form
+loginFormTypeSelect.off('change');
+loginFormTypeSelect.on('change', async e =>
+{
+	var form = $(loginFormTypeSelect.find(':selected').data('form'));
+	form.fadeIn(200).siblings().fadeOut(200);
+});
+// GENERAL_LOGIN_FORM submit
+GENERAL_LOGIN_FORM.off('submit');
+GENERAL_LOGIN_FORM.on('submit', e =>
+{
+	e.preventDefault();
+	target = GENERAL_LOGIN_FORM;
+	var loginType = loginFormTypeSelect.find(':selected').val();
+	var login = {
+		username: target.find('#sfUsername').val(),
+		password: $.trim(target.find('#sfPassword').val())
+	};
+	// translate
+	if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		TopLoader("تسجيل الدخول ، برجاء الانتظار ...");
+	else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		TopLoader("Connectez-vous, veuillez patienter...");
+	employeeLogin( login )
+	.then(response =>
+	{
+		// hide loader
+		TopLoader('', false);
+		if ( response.code == 404 )
+		{
+			ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+			return;
+		}
+
+		var data = response.data;
+		data['LOGIN_TYPE'] = data.type.employee_type_code;
+		
+		if ( data.administration_id == 0 ) // Central administration employee window
+		{
+			saveUserConfig(data, (err) => 
+			{
+				console.log(err)
+				// check login type
+				createWindow({
+					page: 'CentralAdministrationEmployeeWindow/index.ejs',
+					name: 'WIN_'+data['LOGIN_TYPE']
+				});
+				// close login
+				closeWindow('WIN_LOGIN');
+			})
+		}
+		else // Center employee window
+		{
+			saveUserConfig(data, (err) => 
+			{
+				console.log(err)
+				// check login type
+				createWindow({
+					page: 'CenterEmployeeWindow/index.ejs',
+					name: 'WIN_'+data['LOGIN_TYPE']
+				});
+				// close login
+				closeWindow('WIN_LOGIN');
+			})
+		}
+
+	});	
+});
+}
+// employee Login
+function employeeLogin(data)
+{
+var url = API_END_POINT+'Employees/login';
+var data = {
+	username: data.username,
+	password: data.password
+};
+data['lang'] = FUI_DISPLAY_LANG.lang;
+return $.ajax({
+	url: url,
+	type: 'POST',
+	data: data,
+	success: function(res)
+	{
+		console.log(res)
+	},
+	error: function( jqXHR, textStatus, errorThrown)
+	{
+		console.error(jqXHR)
+		console.error(errorThrown)
+		console.log(textStatus)
+
+		$('#ERROR_BOX').show(0).delay(10*1000).hide(0).find('#text').text(FUI_DISPLAY_LANG.views.messages.error_server_connection)
+		TopLoader('', false)
+	}
+})
+}
+// Top loader
+function TopLoader(text, visible = true)
+{
+var sideNavLoader = $('#topLoader');
+
+sideNavLoader.find('#text').text(text);
+if ( visible )
+{
+	sideNavLoader.css('display', 'block');
+}
+else
+{
+	sideNavLoader.css('display', 'none');
+}
+}
+// replace with files that has proper interface
+if ( FUI_DISPLAY_LANG.lang == 'ar' )
+{
+// change style sheet
+$('head').append('<link rel="stylesheet" type="text/css" class="MAIN_STYLESHEET" href="assets/css/main_ar.css">');
+setTimeout(() => {
+	$($('.MAIN_STYLESHEET')[0]).remove();
+}, 0);
+}
+else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+{
+// change style sheet
+$('head').append('<link rel="stylesheet" type="text/css" class="MAIN_STYLESHEET" href="assets/css/main_fr.css">');
+setTimeout(() => {
+	$($('.MAIN_STYLESHEET')[0]).remove();
+}, 0);
+}
+setupUserAuth();
+// check login
+if ( isConfigExists() )
+{
+	if ( USER_CONFIG.administration.clinicId == 0 )
+	{
+		createWindow({
+			page: 'CentralAdministrationEmployeeWindow/index.ejs',
+			name: 'WIN_'+USER_CONFIG.LOGIN_TYPE
+		});
+		// close login
+		closeWindow('WIN_LOGIN');	
+	}
+	else
+	{
+
+		createWindow({
+			page: 'CenterEmployeeWindow/index.ejs',
+			name: 'WIN_'+USER_CONFIG.LOGIN_TYPE
+		});
+		// close login
+		closeWindow('WIN_LOGIN');
+	}
+}
+// setup auto updates
+//setupAppUpdates();
+// hide loader
+PageLoader(false);
+
+})
+
+</script>
+
+</body>
+</html>

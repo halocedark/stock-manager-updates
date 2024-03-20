@@ -1,0 +1,329 @@
+<div class="container-fluid" id="addFollowUpAppointementsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_appointement.sectionTitle %></h1>
+	</div>
+	<div class="mt-3 app-block">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="" id="wrapper01">
+			<form action="#" id="addForm">
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label06 %></label>
+					<select name="" class="input-text" id="clinicSelect">
+						
+					</select>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label09 %></label>
+					<input type="text" class="input-text input-text-outline" id="aptNameInput">
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label01 %></label>
+					<select name="" class="input-text" id="classSelect">
+						
+					</select>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label07 %></label>
+					<input type="number" step="1" min="1" value="1" class="input-text input-text-outline mb-2" id="numberOfSessionsInput">
+					<div id="sessionsDiv">
+						<div class="list-inputs">
+							<div class="list-row">
+								<div class="list-item">
+									<input type="text" class="input-text" data-role="SESSION_NAME" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.ph02 %>">
+								</div>
+								<div class="list-item">
+									<input type="date" class="input-text" data-role="SESSION_DATE">
+								</div>
+								<div class="list-item">
+									<input type="time" step="any" class="input-text" data-role="SESSION_TIME">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label03 %></label>
+					<textarea class="input-text input-text-outline" rows="4" id="aptNoteInput"></textarea>
+				</div>
+				<div class="mb-2">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.label08 %></label>
+					<input type="number" step="any" class="input-text input-text-outline" id="aptPriceInput">
+				</div>
+				<div class="">
+					<input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.add_appointement.form01.submitBTN01 %>">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var addFollowUpAppointementsContainer = $('#addFollowUpAppointementsContainer');
+if ( addFollowUpAppointementsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = addFollowUpAppointementsContainer.find('#ERROR_BOX');
+var addForm = addFollowUpAppointementsContainer.find('#addForm');
+// var clinicsSearchInput = addForm.find('#clinicsSearchInput');
+var clinicSelect = addForm.find('#clinicSelect');
+//var classesSearchInput = addForm.find('#classesSearchInput');
+var classSelect = addForm.find('#classSelect');
+var aptNoteInput = addForm.find('#aptNoteInput');
+var numberOfSessionsInput = addForm.find('#numberOfSessionsInput');
+var sessionsDiv = addForm.find('#sessionsDiv');
+var aptPriceInput = addForm.find('#aptPriceInput');
+var aptNameInput = addForm.find('#aptNameInput');
+
+var wrapper01 = addFollowUpAppointementsContainer.find('#wrapper01');
+
+var promise01 = null;
+var promise02 = null;
+// set default date / time
+var now = new Date();
+var AppointementObject = {
+    aptId: sessionData().aptId,
+    clinicId: null,
+    classId: null,
+    aptNote: null,
+    sessions: [],
+    type: 'followup',
+    employee_id: USER_CONFIG.employee_id,
+}
+// clear session data
+sessionData(true)
+// addForm submit
+addForm.off('submit');
+addForm.on('submit', async e =>
+{
+    e.preventDefault();
+    var target = addForm;
+    AppointementObject.clinicId = clinicSelect.find(':selected').val();
+    AppointementObject.clinicName = clinicSelect.find(':selected').text();
+    AppointementObject.classId = classSelect.find(':selected').val();
+    AppointementObject.className = classSelect.find(':selected').text();
+    AppointementObject.aptNote = aptNoteInput.val();
+    AppointementObject.sessions = listSessions();
+    AppointementObject.aptPrice = aptPriceInput.val();
+    AppointementObject.aptName = aptNameInput.val();
+    // display loader
+    SectionLoader(wrapper01);
+    
+    // update
+    if ( AppointementObject.aptId != null )
+    {
+        var response = await APPOINTMENT_MODEL.followup_update(AppointementObject)
+    
+        // hide loader
+        SectionLoader(wrapper01, '');
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        // reset
+        target[0].reset();
+        //
+        AppointementObject.aptId = null;
+        return;
+    }
+    // add
+    var response = await APPOINTMENT_MODEL.followup_store(AppointementObject)
+    
+    // hide loader
+    SectionLoader(wrapper01, '');
+    if ( response.code == 404 )
+    {
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        return;
+    }
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+    // reset
+    target[0].reset();
+
+});
+// add sessions
+numberOfSessionsInput.off('input');
+numberOfSessionsInput.on('input', e =>
+{
+    var count = numberOfSessionsInput.val();
+    addSessions(count);
+});
+classSelect.on('change', e =>
+{
+    var price = parseFloat(classSelect.find(':selected').data('price'));
+    aptPriceInput.val(price.toFixed(2));
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        aptNameInput.val('موعد '+classSelect.find(':selected').text());
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        aptNameInput.val('Rendez-vous de '+classSelect.find(':selected').text());
+});
+// search clinics
+promise01 = CLINIC_MODEL.search('');
+promise01.then(response =>
+{
+    // hide loader
+    TopLoader('', false);
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        clinicSelect.html(`<option value="" >حدد العيادة</option>`);
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        clinicSelect.html(`<option value="" >Sélectionnez la clinique</option>`);
+
+    var i = 0;
+    $.each(data, (k,v) =>
+    {
+        if ( i == 0 )
+            html += `<option value="${v.clinicId}" selected>${v.clinicName}</option>`;
+        else
+            html += `<option value="${v.clinicId}">${v.clinicName}</option>`;	
+        
+        i++;
+    });
+    // add html
+    clinicSelect.append(html);
+});
+// list clinic treatment classes
+promise02 = TREATMENT_CLASS_MODEL.index();
+promise02.then(response =>
+{
+    // hide loader
+    TopLoader('', false);
+    // clear html
+    classSelect.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        classSelect.html(`<option value="" selected>حدد قسم العلاج</option>`);
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        classSelect.html(`<option value="" selected>Sélectionnez la section de traitement</option>`);
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.classId}" data-price="${v.classPrice}">${v.className}</option>`;
+    });
+    // add html
+    classSelect.append(html);
+});
+// display one
+displayOne();
+async function displayOne()
+{
+    await Promise.allSettled([promise01, promise02]);
+    clinicSelect.trigger('change');
+    if ( AppointementObject.aptId == null )
+        return;
+
+    // display loader
+    SectionLoader(wrapper01);
+
+    APPOINTMENT_MODEL.show({
+        aptId: AppointementObject.aptId
+    }).then(response =>
+    {
+        // hide loader
+        SectionLoader(wrapper01, '');
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+
+        setOptionSelected(clinicSelect, data.clinicId);
+        setOptionSelected(classSelect, data.classId);
+        var html = '<div class="list-inputs">';
+        for (var i = 0; i < data.sessions.length; i++) 
+        {
+            var session = data.sessions[i];
+            html += `<div class="list-row">
+                        <div class="list-item">
+                            <input type="text" class="input-text" data-role="SESSION_NAME"  value="${session.session_name}">
+                        </div>
+                        <div class="list-item">
+                            <input type="date" class="input-text" data-role="SESSION_DATE" value="${session.session_date}">
+                        </div>
+                        <div class="list-item">
+                            <input type="time" step="any" class="input-text" data-role="SESSION_TIME" value="${session.session_time}">
+                        </div>
+                    </div>`;
+        }
+        html += '</div>';
+        // add html
+        sessionsDiv.html(html);
+        aptNoteInput.val(data.aptNote);
+        aptPriceInput.val(data.aptPrice);
+        aptNameInput.val(data.aptName);
+        numberOfSessionsInput.val(data.sessions.length);
+    });	
+}
+// add sessions
+function addSessions(count)
+{
+    var html = '<div class="list-inputs">';
+    var cdate = date_time.format(now,'YYYY-MM-DD');
+    var ctime = date_time.format(now,'HH:mm:ss');
+    var placeholder = '';
+    var session_name = '';
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+    {
+        placeholder = "اسم الجلسة...";
+    }
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+    {
+        placeholder = "Nom de session...";
+    }
+    for (var i = 0; i < count; i++) 
+    {
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            session_name = `جلسة (${i+1})`;
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            session_name = `session (${i+1})`;
+        html += `<div class="list-row">
+                    <div class="list-item">
+                        <input type="text" class="input-text" data-role="SESSION_NAME" placeholder="${placeholder}" value="${session_name}">
+                    </div>
+                    <div class="list-item">
+                        <input type="date" class="input-text" data-role="SESSION_DATE" value="${cdate}">
+                    </div>
+                    <div class="list-item">
+                        <input type="time" step="any" class="input-text" data-role="SESSION_TIME" value="${ctime}">
+                    </div>
+                </div>`;
+    }
+    html += '</div>';
+    // add html
+    sessionsDiv.html(html);
+}
+// list sessions
+function listSessions()
+{
+    var list = [];
+    var items = sessionsDiv.find('.list-row');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var row = $(items[i]);
+        var session = {
+            session_name: row.find('[data-role="SESSION_NAME"]').val(),
+            session_date: row.find('[data-role="SESSION_DATE"]').val(),
+            session_time: row.find('[data-role="SESSION_TIME"]').val()
+        };
+        list.push(session);
+    }
+    return list;
+}
+
+})
+
+</script>

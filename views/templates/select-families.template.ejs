@@ -1,0 +1,58 @@
+<span id="<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label119 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced select_families_template_search_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" >
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'family_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        const componentId = `<%- locals.componentId %>`
+        const component = $(`#${componentId}`)
+
+        var select_families_template_search_input = component.find('.select_families_template_search_input')
+
+        const selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'family_select' : `<%- locals.selectId %>`
+        const family_select = component.find(`#${selectId}`)
+
+        // search
+        select_families_template_search_input.on('keyup', select_families_template_displayAll)
+
+        select_families_template_displayAll()
+        async function select_families_template_displayAll()
+        {
+            family_select.html(`<option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>`)
+            var res = await FAMILY_MODEL.search({
+                query: select_families_template_search_input.val()
+            })
+
+            if ( res.code == 200 )
+            {
+                var data = res.data
+                var html = ''
+       
+                $.each(data, (k,v) =>
+                {
+                    html += `<option value="${v.id}">${v.name}</option>`	
+                })
+                // add html
+                family_select.append(html)
+                // dispatch an event
+                dispatchCustomEvent('family-selected', { 
+                    family: {
+                        id: family_select.find(':selected').val(),
+                        name: family_select.find(':selected').text(),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                }, family_select[0])
+            }
+        }
+    })
+
+</script>

@@ -1,0 +1,366 @@
+<div class="container-fluid" id="patientsStatsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+	</div>
+	<div class="mt-2 row gx-4 gy-3">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="app-block">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<canvas id="chartEl01" class="" style="max-height:100%;"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="biggestWeightLossDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text01 %></h6>
+				<div id="pagination1" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="biggestWeightGainDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text02 %></h6>
+				<div id="pagination2" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="oldestClientDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text03 %></h6>
+				<div id="pagination3" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12" id="youngestClientDiv">
+			<div class="app-block">
+				<h6 class="h6 mb-3"><%= UI_DISPLAY_LANG.views.pages.patients_stats.text04 %></h6>
+				<div id="pagination4" class="my-2"></div>
+				<div id="contents">
+					<!--
+					<div class="border-bottom py-3 text-04">
+						عبد النور عدواني
+					</div>
+					<div class="border-bottom py-3 text-04">
+						سمير احثريب
+					</div>
+					<div class="border-bottom py-3 text-04">
+						محمد عبيدي
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var statisticsContainer = $('#patientsStatsContainer');
+if ( statisticsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = statisticsContainer.find('#ERROR_BOX');
+
+var biggestWeightLossDiv = statisticsContainer.find('#biggestWeightLossDiv');
+var biggestWeightGainDiv = statisticsContainer.find('#biggestWeightGainDiv');
+var oldestClientDiv = statisticsContainer.find('#oldestClientDiv');
+var youngestClientDiv = statisticsContainer.find('#youngestClientDiv');
+
+var pagination1 = statisticsContainer.find('#pagination1');
+var pagination2 = statisticsContainer.find('#pagination2');
+var pagination3 = statisticsContainer.find('#pagination3');
+var pagination4 = statisticsContainer.find('#pagination4');
+
+var chartEl01 = statisticsContainer.find('#chartEl01');
+let chart01;
+// patients
+var patients = await listPatientsLocal({
+    clinicId: USER_CONFIG.administration.clinicId
+});
+if ( patients.code == 200 )
+{
+    var data = patients.data;
+    var html = '';
+    // loop wieght loss
+    if ( data.biggest_weight_loss )
+    {
+        $.each(data.biggest_weight_loss, (k,v) =>
+        {
+            if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName}
+                    </div>PAG_SEP`;
+            }
+            else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName}
+                    </div>PAG_SEP`;
+            }
+        });
+        //
+        var options = {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 5
+        };
+        new SmoothPagination(pagination1, biggestWeightLossDiv.find('#contents'), options);
+    }
+    // loop wieght gain
+    if ( data.biggest_weight_gain )
+    {
+        html = '';
+        $.each(data.biggest_weight_gain, (k,v) =>
+        {
+            if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName}
+                    </div>PAG_SEP`;
+            }
+            else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName}
+                    </div>PAG_SEP`;
+            }
+        });
+        //
+        var options = {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 5
+        };
+        new SmoothPagination(pagination2, biggestWeightGainDiv.find('#contents'), options);
+    }
+    // loop oldest in age
+    if ( data.oldest_age )
+    {
+        html = '';
+        $.each(data.oldest_age, (k,v) =>
+        {
+            if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName} <span class="text-muted text-04">عمر (${v.patientAge}) سنة.</span>
+                    </div>`;
+            }
+            else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName} <span class="text-muted text-04">(${v.patientAge}) ans.</span>
+                    </div>`;
+            }
+        });
+        //
+        var options = {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 5
+        };
+        new SmoothPagination(pagination3, oldestClientDiv.find('#contents'), options);
+    }
+    // loop youngest in age
+    if ( data.youngest_age )
+    {
+        html = '';
+        $.each(data.youngest_age, (k,v) =>
+        {
+            if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName} <span class="text-muted text-04">عمر (${v.patientAge}) سنة.</span>
+                    </div>`;
+            }
+            else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            {
+                html += `<div class="border-bottom py-3 text-02">
+                        ${v.patientName} <span class="text-muted text-04">(${v.patientAge}) ans.</span>
+                    </div>`;
+            }
+        });
+        //
+        var options = {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 5
+        };
+        new SmoothPagination(pagination4, youngestClientDiv.find('#contents'), options);
+    }
+    // chart
+    // loop data
+    var labels = [];
+    var fdata = [];
+    for (var i = 0; i < data.current_year_chart.length; i++) 
+    {
+        var v = data.current_year_chart[i];
+        // add months
+        labels.push( translateMonthName(v.date) );
+        // add data
+        fdata.push(v.total);
+    }
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+    {
+        const ctx = chartEl01[0].getContext('2d');
+        if ( chart01 )
+            chart01.destroy();
+        chart01 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    barPercentage: 0.5,
+                    barThickness: 50,
+                    //maxBarThickness: 8,
+                    minBarLength: 2,
+                    label: 'عدد الزبائن',
+                    data: fdata,
+                    backgroundColor: [
+                        'rgba(194, 240, 194, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(50, 205, 50, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: true,
+                        textDirection: 'rtl'
+                    },
+                    title: {
+                        text: "عدد المشتركين خلال اشهر السنة",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    //chartEl01.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+    {
+        const ctx = chartEl01[0].getContext('2d');
+        if ( chart01 )
+            chart01.destroy();
+        chart01 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    barPercentage: 0.5,
+                    barThickness: 50,
+                    //maxBarThickness: 8,
+                    minBarLength: 2,
+                    label: 'nombre de clients',
+                    data: fdata,
+                    backgroundColor: [
+                        'rgba(194, 240, 194, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(50, 205, 50, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: false,
+                        textDirection: 'ltr'
+                    },
+                    title: {
+                        text: "Nombre d'abonnés pendant les mois de l'année",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    //chartEl01.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+}
+
+})
+
+</script>

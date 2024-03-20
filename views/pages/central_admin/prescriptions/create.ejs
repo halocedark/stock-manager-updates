@@ -1,0 +1,683 @@
+<div class="container-fluid" id="addPrescriptionsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_prescription.sectionTitle %></h1>
+	</div>
+	<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+    <div class="mt-3 section app-block">
+		<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label13 %></label>
+		<select name="" class="select-01" id="clinicSelect">
+	
+		</select>
+	</div>
+	<div class="mt-3 app-block">
+		<ul class="list-h" id="TABS_LIST">
+			<li class="list-item list-item-solid flex flex-center active" data-role="TAB" data-tab="#wrapper1">
+				<%= UI_DISPLAY_LANG.views.pages.add_prescription.text02 %>
+			</li>
+			<li class="list-item list-item-solid flex flex-center" data-role="TAB" data-tab="#wrapper2">
+				
+				<%= UI_DISPLAY_LANG.views.pages.add_prescription.text01 %>
+			</li>
+		</ul>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper1">
+		<form action="#" id="addForm">
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label02 %></label>
+				<div>
+					<button id="addPresMedsBTN" class="btn btn-light btn-sm">
+						<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.btn01 %>
+					</button>
+				</div>
+				<div id="medicinesDiv">
+					<!--
+					<div class="row gx-1 gy-2 mt-3" data-role="MED">
+						<div class="col">
+							<input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_NAME" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph01 %>">
+						</div>
+						<div class="col">
+							<input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DOSE" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph02 %>">
+						</div>
+						<div class="col">
+							<input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DURATION" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph03 %>">
+						</div>
+						<div class="col">
+							<input type="number" class="input-text input-text-outline border-bottom-forced" data-role="MED_QUANTITY" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph05 %>" value="1">
+						</div>
+					</div>
+					-->
+				</div>
+			</div>
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label04 %></label>
+				<input type="text" class="input-text mb-2" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph04 %>" id="patientsSearchInput">
+				<select name="" id="patientSelect" class="input-text">
+					
+				</select>
+			</div>
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label05 %></label>
+				<textarea rows="4" class="input-text input-text-outline" id="prescNoteInput"></textarea>
+			</div>
+			<div class="mb-4">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label03 %></label>
+				<div class="mt-2">
+					<img src="assets/img/utils/qr.png" alt="" class="img-01 rounded" id="presQRCodeIMG">
+				</div>
+			</div>
+			<div class="">
+				<input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.submitBTN01 %>">
+			</div>
+		</form>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper2" style="display: none;">
+		<form action="#" id="addForm2">
+			<div class="mb-2">
+				<div class="max-width-340px">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_product %></label>
+                    <!-- <input type="text" class="input-text" id="codeInput" value=""> -->
+                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-suggestions-box.template.ejs`, {
+                        componentId: '1',
+                        eventsReceiverId: 'addPrescriptionsContainer',
+                        selectionEventName: 'product-selected',
+                        searchInputId: 'productSelect',
+                        suggestions: {
+                            api: {
+                                model: "PRODUCT_MODEL",
+                            },
+                            selections: {
+                                name: 'productName',
+                                value: 'productCode',
+                            }
+                        }
+                    }) -%>
+                </div>
+				<div>
+					<button id="addPresMedsBTN2" class="btn btn-light btn-sm">
+						<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.btn01 %>
+					</button>
+				</div>
+				<div id="medicinesDiv2">
+					
+				</div>
+			</div>
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label04 %></label>
+				<input type="text" class="input-text mb-2" placeholder="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.ph04 %>" id="patientsSearchInput2">
+				<select name="" id="patientSelect2" class="input-text">
+					
+				</select>
+			</div>
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label05 %></label>
+				<textarea rows="4" class="input-text input-text-outline" id="prescNoteInput2"></textarea>
+			</div>
+			<div class="mb-4">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.label03 %></label>
+				<div class="mt-2">
+					<img src="assets/img/utils/qr.png" alt="" class="img-01 rounded" id="presQRCodeIMG2">
+				</div>
+			</div>
+			<div class="">
+				<input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.add_prescription.form01.submitBTN01 %>">
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var addPrescriptionsContainer = $('#addPrescriptionsContainer');
+if ( addPrescriptionsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = addPrescriptionsContainer.find('#ERROR_BOX');
+var clinicSelect = addPrescriptionsContainer.find('#clinicSelect');
+
+var addForm = addPrescriptionsContainer.find('#addForm');
+var addPresMedsBTN = addForm.find('#addPresMedsBTN');
+var medicinesDiv = addForm.find('#medicinesDiv');
+var prescNoteInput = addForm.find('#prescNoteInput');
+var presQRCodeIMG = addForm.find('#presQRCodeIMG');
+var patientsSearchInput = addForm.find('#patientsSearchInput');
+var patientSelect = addForm.find('#patientSelect');
+
+var addForm2 = addPrescriptionsContainer.find('#addForm2');
+var searchProductsInput = addForm2.find('#searchProductsInput');
+var productSelect = addForm2.find('#productSelect');
+var addPresMedsBTN2 = addForm2.find('#addPresMedsBTN2');
+var medicinesDiv2 = addForm2.find('#medicinesDiv2');
+var prescNoteInput2 = addForm2.find('#prescNoteInput2');
+var presQRCodeIMG2 = addForm2.find('#presQRCodeIMG2');
+var patientsSearchInput2 = addForm2.find('#patientsSearchInput2');
+var patientSelect2 = addForm2.find('#patientSelect2');
+
+var TABS_LIST = addPrescriptionsContainer.find('#TABS_LIST');
+
+var PrescObject = {
+    prescriptionId: sessionData().prescriptionId,
+    prescriptionHashId: null,
+    patientId: sessionData().patientId,
+    patientName: sessionData().patientName,
+    prescriptionQRCode: null,
+    prescriptionNote: null,
+    medicines: []
+};
+var SelectedProduct = {}
+// clear session
+sessionData(true)
+
+var promise01 = null;
+var promise02 = null;
+var promise03 = null;
+// search clinics
+await displayClinics();
+// append selected patient
+if ( PrescObject.patientId )
+{
+    patientSelect.append(`<option value="${PrescObject.patientId}">${PrescObject.patientName}</option>`)
+    patientSelect2.append(`<option value="${PrescObject.patientId}">${PrescObject.patientName}</option>`)
+    setOptionSelected( patientSelect,  PrescObject.patientId)
+    setOptionSelected( patientSelect2,  PrescObject.patientId)
+}
+// switch wrappers
+TABS_LIST.off('click');
+TABS_LIST.on('click', e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'TAB' )
+    {
+        var tab = $(target.data('tab'));
+        tab.slideDown(200).siblings('.WRAPPER').slideUp(200);
+        target.addClass('active').siblings().removeClass('active');
+    }
+});
+// select clinic
+clinicSelect.off('change');
+clinicSelect.on('change', e =>
+{
+    patientsSearchInput.trigger('keyup');
+    searchProductsInput.trigger('keyup');
+});
+// add / update
+addForm.off('submit');
+addForm.on('submit', async e =>
+{
+    e.preventDefault();
+    var target = addForm;
+    PrescObject.patientId = patientSelect.find(':selected').val();
+    PrescObject.prescriptionNote = prescNoteInput.val();
+    PrescObject.medicines = getMedicines();
+    PrescObject.employee_id = USER_CONFIG.employee_id;
+    PrescObject.clinicId = clinicSelect.find(':selected').val();
+    PrescObject.prescriptionDirection = ST_DIRECTION_OUTSIDE;
+
+    // update
+    if ( PrescObject.prescriptionId != null )
+    {
+        // translate
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("جاري حفظ البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Enregistrement des données...");
+        
+        PRESCRIPTION_MODEL.update(PrescObject).then(response =>
+        {
+            CreateToast('PS', response.message, '')
+            // hide loader
+            TopLoader('', false);
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0)
+                .find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0)
+            .find('#text').text(response.message);
+            // reset
+            target[0].reset();
+            PrescObject.prescriptionId = null;
+        });
+        return;
+    }
+    // add
+    // generate qrcode
+    PrescObject.prescriptionHashId = uniqid();
+    var page = `${PROJECT_URL}view/prescription/${FUI_DISPLAY_LANG.lang}/?phash=${PrescObject.prescriptionHashId}`;
+    var qrcode = await generateQRCode( page );
+    presQRCodeIMG.attr('src', qrcode);
+    PrescObject.prescriptionQRCode = qrcode;
+    // translate
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        TopLoader("جاري حفظ البيانات...");
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        TopLoader("Enregistrement des données...");
+    PRESCRIPTION_MODEL.store(PrescObject).then(response =>
+    {
+        CreateToast('PS', response.message, '')
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0)
+            .find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0)
+        .find('#text').text(response.message);
+        // reset
+        target[0].reset();
+        external_clearMedicines()
+    });
+});
+// add / update
+addForm2.off('submit');
+addForm2.on('submit', async e =>
+{
+    e.preventDefault();
+    var target = addForm2;
+    PrescObject.patientId = patientSelect2.find(':selected').val();
+    PrescObject.prescriptionNote = prescNoteInput2.val();
+    PrescObject.medicines = getMedicines2();
+    PrescObject.employee_id = USER_CONFIG.employee_id;
+    PrescObject.clinicId = clinicSelect.find(':selected').val();
+    PrescObject.prescriptionDirection = ST_DIRECTION_INSIDE;
+    // update
+    if ( PrescObject.prescriptionId != null )
+    {
+        // translate
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+            TopLoader("جاري حفظ البيانات...");
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+            TopLoader("Enregistrement des données...");
+        
+        PRESCRIPTION_MODEL.update(PrescObject).then(response =>
+        {
+            CreateToast('PS', response.message, '')
+            // hide loader
+            TopLoader('', false);
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0)
+                .find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0)
+            .find('#text').text(response.message);
+            // reset
+            target[0].reset();
+            PrescObject.prescriptionId = null;
+        });
+        return;
+    }
+    // add
+    // generate qrcode
+    PrescObject.prescriptionHashId = uniqid();
+    var page = `${PROJECT_URL}view/prescription/${FUI_DISPLAY_LANG.lang}/?phash=${PrescObject.prescriptionHashId}`;
+    var qrcode = await generateQRCode( page );
+    presQRCodeIMG2.attr('src', qrcode);
+    PrescObject.prescriptionQRCode = qrcode;
+    // translate
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        TopLoader("جاري حفظ البيانات...");
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        TopLoader("Enregistrement des données...");
+    PRESCRIPTION_MODEL.store(PrescObject).then(response =>
+    {
+        CreateToast('PS', response.message, '')
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0)
+            .find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0)
+        .find('#text').text(response.message);
+        // reset
+        target[0].reset();
+        internal_clearMedicines()
+    });
+    
+});
+// add medicines
+addPresMedsBTN.off('click');
+addPresMedsBTN.on('click', e =>
+{
+    e.preventDefault();
+    external_addMedicines([
+        {
+            id: 0,
+            name: '',
+            dose: '',
+            duration: '',
+            quantity: 1,
+            price: 0
+        }
+    ]);
+});
+// add medicines
+addPresMedsBTN2.off('click');
+addPresMedsBTN2.on('click', e =>
+{
+    e.preventDefault();
+    internal_addMedicines([
+        {
+            id: SelectedProduct.productId,
+            name: SelectedProduct.productName,
+            dose: SelectedProduct.productDesc,
+            duration: '',
+            quantity: 1,
+            price: SelectedProduct.productPrice
+        }
+    ]);
+
+    productSelect.val('')
+});
+// medicinesDiv click
+medicinesDiv.off('click');
+medicinesDiv.on('click', e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'MED_DELETE' )
+    {
+        var parent = target.closest('[data-role="MED"]');
+        parent.remove();
+    }
+});
+// medicinesDiv2 click
+medicinesDiv2.off('click');
+medicinesDiv2.on('click', e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'MED_DELETE' )
+    {
+        var parent = target.closest('[data-role="MED"]');
+        parent.remove();
+    }
+});
+// search patients
+patientsSearchInput.off('keyup');
+patientsSearchInput.on('keyup', e =>
+{
+    var SearchObject = {
+        clinicId: clinicSelect.find(':selected').val(),
+        query: patientsSearchInput.val()
+    };
+
+    // display loader
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        TopLoader("جاري البحث...");
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        TopLoader("En train de rechercher...");
+    
+    promise01 = PATIENT_MODEL.searchLocal( SearchObject )
+    promise01.then(response =>
+    {
+        // hide loader
+        TopLoader('', false);
+        patientSelect.html('');
+        patientSelect2.html('');
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+        var html = '';
+        $.each(data, (k,v) =>
+        {
+            html += `<option value="${v.patientId}">${v.patientName}</option>`;
+        });
+        // add html
+        patientSelect.html(html);
+        patientSelect2.html(html);
+    });
+});
+patientsSearchInput.trigger('keyup');
+patientsSearchInput2.off('keyup');
+patientsSearchInput2.on('keyup', e =>
+{
+    var query = patientsSearchInput2.val();
+    patientsSearchInput.val(query);
+    patientsSearchInput.trigger('keyup');
+});
+// product-selected
+$(document).off('product-selected').on('product-selected', e =>
+{
+    var detail = e.originalEvent.detail
+    var suggestion = detail.suggestion
+
+    SelectedProduct = suggestion.data
+})
+// search clinics
+async function displayClinics()
+{
+    // search clinics
+    // display loader
+    SectionLoader(clinicSelect.closest('.section'));
+    promise03 = CLINIC_MODEL.search('');
+    var response = await promise03;
+    // hide loader
+    SectionLoader(clinicSelect.closest('.section'), '');
+    if ( response.code == 200 )
+    {
+        var data = response.data;
+        var html = '';
+        $.each(data, (k,v) =>
+        {
+            html += `<option value="${v.clinicId}">${v.clinicName}</option>`;
+        });
+        // add html
+        clinicSelect.html(html);
+    }
+
+    return promise03;
+}
+// get medicines
+function getMedicines()
+{
+    var list = [];
+    var items = medicinesDiv.find('[data-role="MED"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var item = $(items[i]);
+        var name = item.find('[data-role="MED_NAME"]').val();
+        var dose = item.find('[data-role="MED_DOSE"]').val();
+        var duration = item.find('[data-role="MED_DURATION"]').val();
+        var quantity = item.find('[data-role="MED_QUANTITY"]').val();
+        list.push({
+            medName: name,
+            medDose: dose,
+            medDuration: duration,
+            medQuantity: quantity
+        });
+    }
+
+    return list;
+}
+// get medicines2
+function getMedicines2()
+{
+    var list = [];
+    var items = medicinesDiv2.find('[data-role="MED"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var item = $(items[i]);
+        var id = item.data('productid');
+        var name = item.find('[data-role="MED_NAME"]').val();
+        var dose = item.find('[data-role="MED_DOSE"]').val();
+        var duration = item.find('[data-role="MED_DURATION"]').val();
+        var quantity = item.find('[data-role="MED_QUANTITY"]').val();
+        var price = item.find('[data-role="MED_PRICE"]').val();
+        list.push({
+            productId: id,
+            medName: name,
+            medDose: dose,
+            medDuration: duration,
+            medQuantity: quantity,
+            medPrice: price
+        });
+    }
+
+    return list;
+}
+// add medicines
+function internal_addMedicines(options)
+{
+    var html = '';
+    for (var i = 0; i < options.length; i++) 
+    {
+        var option = options[i];
+        html += `<div class="row gx-1 gy-2 mt-1" data-role="MED" data-productid="${option.id}">
+                        <div class="col-lg-5 col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_NAME" placeholder="${FUI_DISPLAY_LANG.views.pages.global.medicine_name}" value="${option.name}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DOSE" placeholder="${FUI_DISPLAY_LANG.views.pages.global.dose}" value="${option.dose}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DURATION" placeholder="${FUI_DISPLAY_LANG.views.pages.global.note}" value="${option.duration}">
+                        </div>	
+                        <div class="col-lg-1 col-md-1 col-sm-12">
+                            <input type="number" min="1" class="input-text input-text-outline border-bottom-forced" data-role="MED_QUANTITY" placeholder="${FUI_DISPLAY_LANG.views.pages.global.text10}" value="${option.quantity}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12 d-none">
+                            <input type="number" min="0" step="any" class="input-text input-text-outline border-bottom-forced" data-role="MED_PRICE" placeholder="${FUI_DISPLAY_LANG.views.pages.global.text9}" value="${option.price}">
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-12">
+                            <div class="d-inline-flex w-100 h-100 flex-center">
+                                <div class="btn-close" data-role="MED_DELETE"></div>
+                            </div>
+                        </div>
+                    </div>`;	
+
+    }
+    
+    medicinesDiv2.append(html);
+    // clear selected product
+    SelectedProduct = {}
+}
+function internal_clearMedicines()
+{
+    medicinesDiv2.html('')
+}
+function external_addMedicines(options)
+{
+    var html = '';
+    for (var i = 0; i < options.length; i++) 
+    {
+        var option = options[i];
+        html += `<div class="row gx-1 gy-2 mt-1" data-role="MED" data-productid="${option.id}">
+                        <div class="col-lg-5 col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_NAME" placeholder="${FUI_DISPLAY_LANG.views.pages.global.medicine_name}" value="${option.name}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DOSE" placeholder="${FUI_DISPLAY_LANG.views.pages.global.dose}" value="${option.dose}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <input type="text" class="input-text input-text-outline border-bottom-forced" data-role="MED_DURATION" placeholder="${FUI_DISPLAY_LANG.views.pages.global.note}" value="${option.duration}">
+                        </div>	
+                        <div class="col-lg-1 col-md-1 col-sm-12">
+                            <input type="number" min="1" class="input-text input-text-outline border-bottom-forced" data-role="MED_QUANTITY" placeholder="${FUI_DISPLAY_LANG.views.pages.global.text10}" value="${option.quantity}">
+                        </div>
+                        <div class="col-lg col-md col-sm-12 d-none">
+                            <input type="number" min="0" step="any" class="input-text input-text-outline border-bottom-forced" data-role="MED_PRICE" placeholder="${FUI_DISPLAY_LANG.views.pages.global.text9}" value="${option.price}">
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-12">
+                            <div class="d-inline-flex w-100 h-100 flex-center">
+                                <div class="btn-close" data-role="MED_DELETE"></div>
+                            </div>
+                        </div>
+                    </div>`;	
+
+    }
+    
+    medicinesDiv.append(html);
+    // clear selected product
+    SelectedProduct = {}
+}
+function external_clearMedicines()
+{
+    medicinesDiv.html('')
+}
+// display one
+displayOne();
+async function displayOne(prescriptionId)
+{
+    if ( PrescObject.prescriptionId == null )
+        return;
+
+    
+    PRESCRIPTION_MODEL.show(PrescObject.prescriptionId).then(async response =>
+    {
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+        setOptionSelected(clinicSelect, data.clinicId);
+        clinicSelect.trigger('change');
+        if ( promise01 )
+            await promise01;
+
+        if ( promise02 )
+            await promise02;
+        // display on form
+        // append medicines
+        if ( data.medicines )
+        {
+            var medArr = [];
+            for (var i = 0; i < data.medicines.length; i++) 
+            {
+                var med = data.medicines[i];
+                medArr.push({
+                    id: med.productId,
+                    name: med.medName,
+                    dose: med.medDose,
+                    duration: med.medDuration,
+                    quantity: med.medQuantity,
+                    price: med.medPrice
+                });
+            }
+            if ( data.prescriptionDirection == ST_DIRECTION_INSIDE ) internal_addMedicines(medArr)
+            else if ( data.prescriptionDirection == ST_DIRECTION_OUTSIDE ) external_addMedicines(medArr)
+        }
+        if ( data.prescriptionDirection == ST_DIRECTION_OUTSIDE )
+        {
+            prescNoteInput.val(data.prescriptionNote);
+            presQRCodeIMG.attr('src', data.prescriptionQRCode);
+            setOptionSelected(patientSelect, data.patientId);
+            $(TABS_LIST.find('[data-role="TAB"]')[0]).trigger('click');
+        }
+        else if ( data.prescriptionDirection == ST_DIRECTION_INSIDE )
+        {
+            prescNoteInput2.val(data.prescriptionNote);
+            presQRCodeIMG2.attr('src', data.prescriptionQRCode);
+            setOptionSelected(patientSelect2, data.patientId);	
+            $(TABS_LIST.find('[data-role="TAB"]')[1]).trigger('click');
+        }
+    });
+}
+// set default
+setDefaults();
+async function setDefaults()
+{
+    if ( !PrescObject.patientId )
+        return;
+    await Promise.allSettled([promise01]);
+
+    var html = `<option value="${PrescObject.patientId}">${PrescObject.patientName}</option>`;
+    patientSelect.html(html);
+    patientSelect2.html(html);
+    setOptionSelected(patientSelect, PrescObject.patientId);
+    setOptionSelected(patientSelect2, PrescObject.patientId);
+}
+
+})
+
+</script>

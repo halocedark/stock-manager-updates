@@ -1,0 +1,395 @@
+<div class="container-fluid" id="all_center_clients_depts_container">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_products_invoices.sectionTitle %></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+
+		<div class="py-4 px-3 mb-3 bg-white border rounded">
+
+            <div class="row gx-4 gy-3 mb-3">
+                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN" data-perm="delete_center_depts">
+						<%= UI_DISPLAY_LANG.views.pages.global.delete_selected_button %>
+					</button>
+				</div> -->
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                        dataIgnoreDefaultValue: true,
+                    }) -%>
+				</div>
+                <div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="total_depts">0.00</span>
+                        <a href="#" id="debt_payment_button" class="no-link py-2 px-2 panel_toggler_button"  data-perm="pay_registered_clients_online_invoices_depts" data-target="#panel_toggler_button_dept_payment_panel"><%= UI_DISPLAY_LANG.views.pages.global.debt_payment_button %></a>
+                    </div>
+                    <ul class="list-group list-group-flush" id="dept_actions_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+				</div>
+
+			</div>
+
+            <div class="row">
+
+                <div class="col-lg-4 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-centers-with-clients.template.ejs`, {
+                        componentId: 'centers_with_clients_component',
+                        eventsReceiverId: 'all_center_clients_depts_container',
+                        selectId: 'client_select',
+                        columnsClass: 'col-md-6',
+                        centerSelectId: 'center_select',
+                        clientSelectId: 'client_select',
+                    }) -%>
+				</div>
+
+                <!-- <div class="col-lg-2 col-md-2">
+                    <div class="fs-16">
+                        <a href="#" id="debt_payment_button" class="no-link py-2 px-2 border rounded panel_toggler_button"  data-perm="pay_center_clients_depts" data-target="#panel_toggler_button_dept_payment_panel"><%= UI_DISPLAY_LANG.views.pages.global.debt_payment_button %></a>
+                    </div>
+                </div> -->
+
+            </div>
+
+		</div>
+
+        <div class="d-none" id="panel_toggler_button_dept_payment_panel">
+
+            <div class="row mx-0">
+
+                <div class="col-lg-4 col-md-6 py-4 px-3 mb-3 bg-white border rounded">
+
+                    <div class="">
+                        <button class="btn-close panel_toggler_button_panel_close" data-target="#panel_toggler_button_dept_payment_panel">
+        
+                        </button>
+                    </div>
+        
+                    <form id="dept_payment_form">
+        
+                        <input type="hidden" id="id_input" name="sender_id">
+                        
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label1 %></label>
+                            <input type="text" class="input-text input-text-outline" readonly id="name_input" name="sender_name">
+                        </div>
+        
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label49 %></label>
+                            <input type="number" step="any" min="1" class="input-text input-text-outline" id="amount_input" name="amount">
+                        </div>
+        
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label48 %></label>
+                            <input type="text" class="input-text input-text-outline" id="reason_input" name="reason">
+                        </div>
+        
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label27 %></label>
+                            <textarea name="" class="input-text input-text-outline" id="note_input" rows="4" name="note"></textarea>
+                        </div>
+        
+                        <div class="">
+                            <input type="submit" class="btn btn-primary btn-sm shadow" value="<%= UI_DISPLAY_LANG.views.pages.global.debt_payment_button %>">
+                        </div>
+        
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+		<div id="pagination" class="flex flex-center my-3"></div>
+		<div class="table-div bg-white border rounded">
+			<div class="utable shadowed" id="table_element">
+                <div class="thead">
+                    <div class="td">#</div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th1 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th20 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th21 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th22 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th23 %></div>
+                    <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                </div>
+                <div class="tbody">
+                 
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#all_center_clients_depts_container');
+if ( page_container[0] == undefined )
+    return;
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination = page_container.find('#pagination');
+var table_element = page_container.find('#table_element');
+
+var search_input = page_container.find('#search_input');
+var search_btn = page_container.find('#search_btn');
+var date_start_input = page_container.find('#date_start_input');
+var date_end_input = page_container.find('#date_end_input');
+
+var center_select = page_container.find('#center_select');
+var client_select = page_container.find('#client_select');
+
+// dept payment
+var dept_payment_form = page_container.find('#dept_payment_form')
+var id_input = dept_payment_form.find('#id_input')
+var name_input = dept_payment_form.find('#name_input')
+var amount_input = dept_payment_form.find('#amount_input')
+var reason_input = dept_payment_form.find('#reason_input')
+var note_input = dept_payment_form.find('#note_input')
+
+var total_depts = page_container.find('#total_depts');
+var dept_actions_extra_data_list = page_container.find('#dept_actions_extra_data_list');
+
+// table_element click
+table_element.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target[0].nodeName == 'TD' )
+    {
+        var parent = target.closest('tr');
+        var nextTR = parent.next();
+        nextTR.slideToggle(200)
+        parent.toggleClass('expanded');
+    }
+});
+// delete selected
+deleteSelectedBTN.on('click', async e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        deleteSelectedBTN.addClass('disabled')
+        var response = await PATIENT_MODEL.dept_action_batchDelete({
+            collection: selectedRows()
+        });
+        deleteSelectedBTN.removeClass('disabled')
+        // hide loader
+        TopLoader('', false);
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        search_input.trigger('keyup')
+    });
+});
+// search between dates
+search_btn.on('click', async e =>
+{
+    search_input.trigger('keyup')
+})
+// search
+detectTypingEnd(search_input, val =>
+{
+    displayAll({
+        method_type: 'dept_action_local_search',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            clinicId: center_select.find(':selected').val(),
+            patientId: client_select.find(':selected').val(),
+        }
+    })
+})
+
+client_select.on('change', async e =>
+{
+
+    // display total_depts
+    var data = checkJSON( decodeURIComponent( atob( client_select.find(':selected').data('object') ) ) )
+
+    // reset dept form
+    dept_payment_form[0].reset()
+    //
+    search_input.trigger('keyup')
+
+    if ( isNull(data.id) ) return
+
+    total_depts.text(moneyFormat(data.total_depts)).data('total', data.total_depts).attr('data-total', data.total_depts)
+    // fill dept payment form
+    fillForm(dept_payment_form, {
+        sender_id: data.patientId,
+        sender_name: data.patientName,
+        amount: data.total_depts,
+    })
+})
+// center-client-selected
+client_select.off('center-client-selected').on('center-client-selected', e =>
+{
+    var detail = e.originalEvent.detail
+    var center_client = detail.center_client
+
+    // reset dept form
+    dept_payment_form[0].reset()
+    //
+    search_input.trigger('keyup')
+
+    if ( isNull(center_client) ) return
+    
+    // display total_depts
+    total_depts.text(moneyFormat(center_client.data.total_depts)).data('total', center_client.data.total_depts).attr('data-total', center_client.data.total_depts)
+    // fill dept payment form
+    fillForm(dept_payment_form, {
+        sender_id: center_client.data.patientId,
+        sender_name: center_client.data.patientName,
+        amount: center_client.data.total_depts,
+    })
+})
+search_input.trigger('keyup')
+// dept payment
+dept_payment_form.on('submit', async e =>
+{
+    e.preventDefault()
+
+    var target = dept_payment_form
+
+    // check if client selected
+    if ( isNull(client_select.find(':selected').val()) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.error_client_not_selected, '')
+        return
+    }
+
+    // check if has depts
+    if ( parseFloat(total_depts.data('total')) <= 0 )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.no_depts_to_pay, '')
+        return
+    }
+    // check if amount > dept
+    if ( parseFloat(amount_input.val()) > parseFloat(total_depts.data('total')) )
+    {
+        CreateToast('PS', FUI_DISPLAY_LANG.views.messages.payment_amount_bigger_than_dept, '')
+        return
+    }
+
+    SectionLoader(dept_payment_form)
+    var res = await PATIENT_MODEL.dept_pay({
+        sender_id: id_input.val(),
+        sender_name: name_input.val(),
+        amount: amount_input.val(),
+        reason: reason_input.val(),
+        note: note_input.val(),
+        receiver_id: USER_CONFIG.employee_id,
+        receiver_name: USER_CONFIG.employee_name,
+        owner_type: 'employees',
+    })
+    SectionLoader(dept_payment_form, '')
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    CreateToast('PS', res.message, '')
+    if ( res.code == 404 ) return
+    //
+    target[0].reset()
+    client_select.parent().find('input[type="text"]').trigger('keyup')
+})
+// display all
+async function displayAll(params)
+{
+    total_depts.text(0)
+    dept_actions_extra_data_list.html('')
+    table_element.find('.tbody').html('');
+    SectionLoader(table_element)
+    if ( params.method_type == 'dept_action_local_search' )
+        var res = await PATIENT_MODEL.dept_action_local_search(params)
+
+    SectionLoader(table_element, '')
+    if ( res.code == 404 )
+        return;
+    
+    var data = res.data;
+    var html = '';
+    var in_amount_total = 0
+    var out_amount_total = 0
+    var last_data = firstArrayElement(data)
+    $.each(data, (k,v) =>
+    {
+        in_amount_total += parseFloat(v.in_amount)
+        out_amount_total += parseFloat(v.out_amount)
+
+        html+= `<div class="tr" data-role="row" data-id="${v.id}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">${v.patientName}</div>
+                        <div class="td">${v.reason}</div>
+                        <div class="td">${v.note}</div>
+                        <div class="td">
+                            (<span class="text-success">${ (v.in_amount > 0) ? '+'+moneyFormat(v.in_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">
+                            (<span class="text-danger">${ (v.out_amount > 0) ? '-'+moneyFormat(v.out_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">${v.created_at}</div>
+                    </div>PAG_SEP`
+    })
+    // add html
+    new SmoothPagination(pagination, table_element.find('.tbody'), {
+        data: html.split('PAG_SEP'),
+        resultsPerPage: 12
+    });
+    // display extra data
+    total_depts.text(moneyFormat(in_amount_total)).data('total', in_amount_total).attr('data-total', in_amount_total)
+    var last_amount = (last_data.in_amount > 0) ? `(<span class="text-success">+${moneyFormat(last_data.in_amount)}</span>)` : `(<span class="text-danger">-${moneyFormat(last_data.out_amount)}</span>)`
+    dept_actions_extra_data_list.html(`
+        <li class="list-group-item"><span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text24 }:</span> (<span class="text-success">${ (in_amount_total > 0) ? '+'+moneyFormat(in_amount_total) : '0.00' }</span>)</li>
+        <li class="list-group-item"><span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text25 }:</span> (<span class="text-danger">${ (out_amount_total > 0) ? '-'+moneyFormat(out_amount_total) : '0.00' }</span>)</li>
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text26 }: </span>
+            ${ FUI_DISPLAY_LANG.views.pages.global.text28 } ${last_amount}, 
+            ${ FUI_DISPLAY_LANG.views.pages.global.in_date } <span class="text-primary">${last_data.created_at}</span>
+        </li>
+    `)
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = table_element.find('[data-role="row"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]');
+
+        if ( check.is(':checked') )
+        {
+            list.push({
+                id: parent.data('id')
+            })
+        }
+    }
+
+    return list;
+}
+
+
+})
+
+</script>

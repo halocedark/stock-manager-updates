@@ -1,0 +1,397 @@
+<div class="container-fluid" id="createWaitingListContainer">
+	<div class="wrapper d-none">
+		
+	</div>
+	<div class="mt-3">
+
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+
+		<div class="row gx-4 gy-4">
+			
+            <div class="col-lg-4 col-md-6">
+
+                <div class="app-block">
+
+                    <form action="#" id="create_form">
+                    
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label29 %></label>
+                            <input type="number" step="1" class="input-text input-text-outline" id="wait_number_input" value="1">
+                        </div>
+        
+                        <div class="mb-2">
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label12 %></label>
+                            <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" id="search_patient_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+                            <select name="" id="patientId_select" class="select-01"></select>
+                        </div>
+
+                        <div class="mb-2">
+
+                            <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_video_or_upload %></label>
+                            <input type="file" class="input-text input-text-outline" id="video_file" accept="video/*">
+                            <div class="progress mt-2 d-none">
+                                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+
+                            <div id="videos_carousel" class="carousel slide mt-3" data-bs-ride="carousel">
+                                <div class="carousel-inner" style="padding:0 2em;">
+                                    <div class="carousel-item active">
+                                        
+                                    </div>
+                                    <div class="carousel-item">
+                                        
+                                    </div>
+                                    <div class="carousel-item">
+                                        
+                                    </div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#videos_carousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#videos_carousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                        </div>
+        
+                        <div class="">
+                            <input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>">
+                        </div>
+                        
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg col-md-6">
+
+                <div class="app-block" data-perm="view_waiting_lists">
+
+                    <div class="table-nav">
+                        <div class="row gx-2 gy-4">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-field-01">
+                                    <div class="form-field-icon-holder" id="searchBTN">
+                                        <img src="assets/img/utils/search.svg" class="form-field-icon" alt="">	
+                                    </div>
+                                    <div class="form-field-input-holder">
+                                        <input type="text" id="searchInput" class="form-field-input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <button class="btn btn-danger btn-sm" id="deleteSelectedBTN" data-perm="delete_waiting_lists"><%= UI_DISPLAY_LANG.views.pages.global.delete_selected_button %></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pagination" class="flex flex-center my-3"></div>
+
+                    <div class="utable shadowed" id="table_element">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th17 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th16 %></div>
+                            <div class="td"></div>
+                        </div>
+                        <div class="tbody">
+                            <!--
+                            <div class="tr">
+                                <div class="td">
+                                    <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+                                </div>
+                                <div class="td">${v.wait_number}</div>
+                                <div class="td">${v.patientName}</div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+		</div>
+	</div>
+</div>
+<script>
+
+$(async function()
+{
+
+var page_container = $('#createWaitingListContainer')
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var create_form = page_container.find('#create_form')
+var create_form_submit = page_container.find('input[type="submit"]')
+var wait_number_input = create_form.find('#wait_number_input')
+var search_patient_input = create_form.find('#search_patient_input')
+var patientId_select = create_form.find('#patientId_select')
+var video_file = create_form.find('#video_file')
+var videos_carousel = create_form.find('#videos_carousel')
+
+var searchBTN = page_container.find('#searchBTN')
+var searchInput = page_container.find('#searchInput')
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN')
+var pagination = page_container.find('#pagination')
+var table_element = page_container.find('#table_element')
+
+var WaitingListObject = {}
+// search patient
+search_patient_input.on('keyup', async e =>
+{
+    var res = await PATIENT_MODEL.searchLocal({
+        clinicId: USER_CONFIG.administration.clinicId,
+        query: search_patient_input.val(),
+    })
+
+    patientId_select.html('')
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.patientId}">${v.patientName}</option>`
+    })
+
+    patientId_select.html(html)
+})
+search_patient_input.trigger('keyup')
+
+// table_element
+table_element.on('click', e =>
+{
+    var target = $(e.target)
+
+    if ( target.data('role') == 'delete' )
+    {
+        var parent = target.closest('[data-role="row"]')
+        var id = parent.data('id')
+
+        PromptConfirmDialog().then(async c =>
+        {
+            parent.addClass('disabled')
+            var res = await WAITING_LIST_MODEL.delete({
+                id: id
+            })
+            parent.removeClass('disabled')
+
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+            if ( res.code == 404 ) return
+
+            displayAll({
+                clinicId: USER_CONFIG.administration.clinicId,
+                query: searchInput.val(),
+                request_type: 'local_search'
+            })
+        })
+    }
+})
+// delete selected
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        deleteSelectedBTN.addClass('disabled')
+        var res = await WAITING_LIST_MODEL.batchDelete({
+            list: selectedRows()
+        })
+        deleteSelectedBTN.removeClass('disabled')
+
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+        if ( res.code == 404 ) return
+
+        displayAll({
+            clinicId: USER_CONFIG.administration.clinicId,
+            query: searchInput.val(),
+            request_type: 'local_search'
+        })
+    })
+})
+// create_form
+create_form.on('submit', async e =>
+{
+    e.preventDefault()
+    
+    WaitingListObject.clinicId = USER_CONFIG.administration.clinicId
+    WaitingListObject.patientId = patientId_select.find(':selected').val()
+    WaitingListObject.wait_number = wait_number_input.val()
+
+    create_form_submit.addClass('disabled')
+    var res = await WAITING_LIST_MODEL.store(WaitingListObject)
+    create_form_submit.removeClass('disabled')
+
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    if ( res.code == 404 ) return
+
+    create_form[0].reset()
+    displayAll({
+        clinicId: USER_CONFIG.administration.clinicId,
+        query: searchInput.val(),
+        request_type: 'local_search'
+    })
+})
+// upload a video
+video_file.on('change', e =>
+{
+    if ( video_file[0].files.length == 0 ) return
+
+    PromptConfirmDialog().then(async c =>
+    {
+        video_file.next().removeClass('d-none')
+        var form_data = new FormData
+
+        form_data.append('file', video_file[0].files[0] )
+        form_data.append('directory', '/uploads/WaitingList/videos/')
+        var res = await FILE_MODEL.upload(form_data, progress =>
+        {
+            console.log(progress.percentComplete)
+            video_file.next().find('.progress-bar').css('width', `${progress.percentComplete}%`)
+            .text( progress.percentComplete.toFixed(2) )
+        })
+
+        video_file.next().addClass('d-none')
+    })
+})
+// select video
+videos_carousel.on('click', e =>
+{
+    var target = $(e.target)
+
+    if ( target.data('role') == 'video' )
+    {
+        e.preventDefault()
+        var parent = target.closest('[data-role="row"]')
+        target.addClass('selected-box').parent().siblings().children().removeClass('selected-box')
+        WaitingListObject.video = {
+            name: parent.data('name'),
+            fullpath: parent.data('fullpath'),
+            url: parent.data('url'),
+        }
+    }
+})
+// search list
+searchBTN.on('click', e =>
+{
+    displayAll({
+        clinicId: USER_CONFIG.administration.clinicId,
+        query: searchInput.val(),
+        request_type: 'local_search'
+    })
+})
+searchInput.on('keyup', e =>
+{
+    displayAll({
+        clinicId: USER_CONFIG.administration.clinicId,
+        query: searchInput.val(),
+        request_type: 'local_search'
+    })
+})
+// display videos
+displayVideos()
+async function displayVideos()
+{
+    var res = await FILE_MODEL.index({
+        directory: '/uploads/WaitingList/videos/'
+    })
+    
+    videos_carousel.find('.carousel-inner').html('')
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html+= `<div class="carousel-item" data-role="row" data-fullpath="${v.fullpath}" data-name="${v.name}" data-url="${v.url}">                      
+                    <video src="${v.url}" controls muted class="d-block w-100" data-role="video"></video>
+                </div>`
+    })
+
+    videos_carousel.find('.carousel-inner').html(html)
+    videos_carousel.find('.carousel-inner .carousel-item').first().addClass('active')
+    
+}
+// display all
+displayAll({
+    clinicId: USER_CONFIG.administration.clinicId,
+    query: searchInput.val(),
+    request_type: 'local_search'
+})
+async function displayAll(params)
+{
+    // set last wait number
+    wait_number_input.val( 1 )
+    SectionLoader(table_element)
+    if ( params.request_type == 'local_search' )
+        var res = await WAITING_LIST_MODEL.local_search(params)
+    SectionLoader(table_element, '')
+    table_element.find('.tbody').html('')
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<div class="tr" data-role="row" data-id="${v.id}" data-wait-number="${v.wait_number}">
+                    <div class="td">
+                        <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                    </div>
+                    <div class="td">${v.wait_number}</div>
+                    <div class="td">${v.patientName}</div>
+                    <div class="td pointer">
+                        <button class="btn btn-danger btn-sm" data-role="delete" data-perm="delete_waiting_lists">
+                            <span class="no-pointer"><i class="fas fa-times"></i></span>
+                        </button>
+                    </div>
+                </div>PAG_SEP`
+    })
+
+    new SmoothPagination(pagination, table_element.find('.tbody'), {
+        data: html.split('PAG_SEP')
+    })
+    // set last wait number
+    wait_number_input.val( lastWaitNumber() )
+}
+// get last wait number
+function lastWaitNumber()
+{
+    var last_number = 1
+
+    if ( table_element.find('[data-role="row"]').length == 0 ) return last_number
+
+    last_number = parseInt(table_element.find('[data-role="row"]').last().data('wait-number'))
+
+    return ++last_number
+}
+// selected rows
+function selectedRows()
+{
+    var list = []
+    var items = table_element.find('[data-role="row"]')
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]')
+        if ( check.is(':checked') )
+            list.push({ id: parent.data('id') })
+    }
+
+    return list
+}
+
+})
+
+</script>

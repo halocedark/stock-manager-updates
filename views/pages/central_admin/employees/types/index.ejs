@@ -1,0 +1,281 @@
+<div class="container-fluid" id="view_employee_types_container">
+
+	<div class="wrapper d-none d-flex">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_appointements.sectionTitle %></h1>
+        <div class="width-10px"></div>
+        <div class="d-flex align-items-center">
+			<a href="#" class="fs-14 fw-500 btn btn-success" data-perm="create_employee_types" onclick="CreateEmployeeTypeDialog__CentralAdmin()">
+				<%= UI_DISPLAY_LANG.views.pages.global.add_new_button %>
+            </a>
+		</div>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-3">
+
+		<div class="table-nav">
+			
+			<div class="row mb-2">
+
+				<div class="col-lg-12 col-md-12 col-sm-12" data-perm="delete_employee_types">
+					<button class="btn btn-danger btn-sm" id="deleteSelectedBTN"><%= UI_DISPLAY_LANG.views.pages.global.delete_selected_button %></button>
+				</div>
+
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                        dataIgnoreDefaultValue: true,
+                    }) -%>
+				</div>
+				<div class="col-lg col-md col-sm-12">
+                    <div class="fs-20 mb-2">
+                        <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="types_total">0</span>
+                    </div>
+                    <ul class="list-group list-group-flush" id="types_extra_data_list">
+                        <!-- <li class="list-group-item">An item</li> -->
+                    </ul>
+                </div> 
+
+			</div>
+
+            <div class="row">
+
+                <div class="col-lg-2 col-md-3 col-sm-12">
+                    <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-target-center.template.ejs', {
+                        componentId: 'select_target_center_component',
+                        selectId: 'target_center_select',
+                    }) -%>
+                </div>
+
+            </div>
+
+		</div>
+
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="utable shadowed" id="tableElement">
+			<div class="thead">
+				<div class="td">#</div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th1 %></div>
+				<div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th12 %></div>
+				<div class="td"></div>
+			</div>
+			<div class="tbody">
+				<!--
+				<div class="tr">
+					<div class="td">
+						<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-classid="">
+					</div>
+					<div class="td">clinicname</div>
+					<div class="td">classname</div>
+					<div class="td">classdesc</div>
+					<div class="td">date</div>
+					<div class="td">
+						<button class="btn btn-primary btn-sm pointer" data-role="UPDATE" data-aptid="">
+							<span class="no-pointer"><i class="fas fa-edit"></i></span>
+						</button>		
+					</div>
+				</div>
+				-->
+			</div>
+		</div>
+        
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#view_employee_types_container')
+
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+const deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+const pagination = page_container.find('#pagination');
+const tableElement = page_container.find('#tableElement');
+
+const search_input = page_container.find('#search_input');
+const search_btn = page_container.find('#search_btn');
+const date_start_input = page_container.find('#date_start_input');
+const date_end_input = page_container.find('#date_end_input');
+
+const target_center_select = page_container.find('#target_center_select');
+
+const types_total = page_container.find('#types_total');
+const types_extra_data_list = page_container.find('#types_extra_data_list');
+
+// tableElement
+tableElement.on('click', async e =>
+{
+    var target = $(e.target)
+    const parent = target.closest('[data-role="row"]')
+
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var res =await EMPLOYEE_MODEL.type_show({
+            employee_type_id: parent.data('id')
+        })
+        
+        if ( res.code == 404 )
+        {
+            CreateToast('PS', FUI_DISPLAY_LANG.views.messages.no_data_found, '')
+            return
+        }
+
+        CreateEmployeeTypeDialog__CentralAdmin(res.data)
+    }
+})
+// delete selected
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        deleteSelectedBTN.addClass('disabled')
+
+        var res = await EMPLOYEE_MODEL.type_batchDelete({
+            collection: selectedRows()
+        });
+        
+        deleteSelectedBTN.removeClass('disabled')
+
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+
+        CreateToast('PS', res.message, '')
+        //
+        if ( res.code == 404 ) return
+        
+        search_input.trigger('keyup')
+    });
+})
+// search
+search_btn.on('click', e =>
+{
+    search_input.trigger('keyup')
+})
+detectTypingEnd(search_input, val =>
+{
+    displayAll({
+        method_type: 'type_search',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            orderBy: 'employee_type_id',
+            order: 'desc',
+            employee_type_target_center: target_center_select.find(':selected').val(),
+        }
+    })
+})
+search_input.trigger('keyup')
+//CreateEmployeeTypeDialog__CentralAdmin:created
+$(document).on('CreateEmployeeTypeDialog__CentralAdmin:created', e =>
+{
+    console.log(e)
+    search_input.trigger('keyup')
+})
+//CreateEmployeeTypeDialog__CentralAdmin:updated
+$(document).on('CreateEmployeeTypeDialog__CentralAdmin:updated', e =>
+{
+    console.log(e)
+    search_input.trigger('keyup')
+})
+
+// display all
+async function displayAll(params)
+{
+    // total
+    types_total.text(0)
+
+    types_extra_data_list.html('')
+    SectionLoader(tableElement)
+    // clear html
+    tableElement.find('.tbody').html('')
+    if ( params.method_type == 'type_search' ) var res = await EMPLOYEE_MODEL.type_search(params)
+    
+    SectionLoader(tableElement, '')
+
+    if ( res.code == 404 )
+        return;
+
+    var data = res.data;
+    var html = '';
+    var last_data = firstArrayElement(data)
+    // total
+    types_total.text(data.length)
+    $.each(data, (k,v) =>
+    {
+        html += `
+        <div class="tr" data-role="row" data-id="${v.employee_type_id}">
+            <div class="td">
+                <input type="checkbox" class="form-check-input pointer" data-role="CHECK">   
+            </div>
+            <div class="td">
+                <div class="mb-2">${v.employee_type_name_ar}</div>   
+                <div class="">(${v.employee_type_name_fr})</div> 
+            </div>
+            <div class="td">
+                ${ FUI_DISPLAY_LANG.views.pages.global.center_types2[v.employee_type_target_center.toLowerCase()] }    
+            </div>
+            <div class="td">
+                <div class="mb-2">${v.created_at}</div>
+                <button class="btn btn-primary btn-sm pointer" data-role="UPDATE" data-perm="update_employee_types">
+                    <span class="no-pointer"><i class="fas fa-edit"></i></span>
+                </button>   
+            </div>
+        </div>PAG_SEP
+        `;
+    })
+    // add html
+    new SmoothPagination(pagination, tableElement.find('.tbody'), {
+        data: html.split('PAG_SEP')
+    });
+    
+    // extra data
+    types_extra_data_list.html(`
+        <li class="list-group-item">
+            <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+            <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+            <span>${last_data.name}, </span>
+            <span class="text-primary">${last_data.created_at}</span> 
+        </li>
+    `)
+
+}
+// selected rows
+function selectedRows()
+{
+    var list = []
+    var items = tableElement.find('[data-role="row"]')
+    for (var i = 0; i < items.length; i++) 
+    {
+        const parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]')
+
+        if ( check.is(':checked') )
+        {
+            list.push({ employee_type_id: parent.data('id') })
+        }
+    }
+
+    return list
+}
+
+
+})
+
+</script>

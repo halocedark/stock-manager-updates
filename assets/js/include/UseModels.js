@@ -1,0 +1,123 @@
+let SOCKET_MODEL
+
+let CACHE_MODEL
+
+let STATE_MODEL
+let SETTINGS_MODEL
+
+let MEDICAL_ANALYSIS_MODEL
+let MEDICAL_ANALYSIS_CATEGORY_MODEL
+let TREASURY_MODEL
+let CLINIC_MODEL
+let EMPLOYEE_MODEL
+let EMPLOYEE_ACTION_MODEL
+let RINGING_BELL_MODEL
+let PRESCRIPTION_MODEL
+let PATIENT_MODEL
+let PATIENT_STAT_MODEL
+let PATIENT_MEDICAL_ANALYSIS_MODEL
+let CERTIFICATE_MODEL
+let HEALTHY_KITCHEN_POST_MODEL
+let TREATMENT_CLASS_MODEL
+let APPOINTMENT_MODEL
+let ONLINE_APPOINTMENT_MODEL
+let MESSAGE_MODEL
+let PRODUCT_MODEL
+let SUPPLIER_MODEL
+let ORDER_MODEL
+let FORMAL_ORDER_MODEL
+let CONSOMMABLE_MODEL
+let CASHOUT_RECORD_MODEL
+let DAILY_REPORT_MODEL
+let MEMBER_MODEL
+let TESTIMONIAL_MODEL
+let ADVERTISEMENT_MODEL
+let VIDEO_MODEL
+let FILE_MODEL
+let WAITING_LIST_MODEL
+let SMS_TEMPLATE_MODEL
+let FUNDBOX_MODEL
+let CONTENT_TEMPLATE_MODEL
+let CATEGORY_MODEL
+let FAMILY_MODEL
+let NOTIFICATION_MODEL
+let DRIVER_JOB_MODEL
+let CHRONIC_DISEASE_MODEL
+let CHAT_MODEL
+let EMOJY_MODEL
+let MEDIA_MODEL
+let FOLDER_MODEL
+let DOCIT_GROUP_MODEL
+let DOCIT_USER_MODEL
+let DOCIT_SHARE_PERMISSION_MODEL
+let STATISTICS_MODEL
+let WALLET_MODEL
+let VISITOR_MODEL
+let CUSTOMER_MODEL
+let CONTRACTOR_MODEL
+
+$(function()
+{
+
+//
+//
+SOCKET_MODEL = new SocketModel()
+
+CACHE_MODEL = new CacheModel()
+
+STATE_MODEL = new StateModel()
+
+SETTINGS_MODEL = new SettingsModel()
+
+MEDICAL_ANALYSIS_MODEL = new MedicalAnalysisModel() 
+MEDICAL_ANALYSIS_CATEGORY_MODEL = new MedicalAnalysisCategoryModel() 
+TREASURY_MODEL = new TreasuryModel()
+CLINIC_MODEL = new ClinicModel()
+EMPLOYEE_MODEL = new EmployeeModel()
+EMPLOYEE_ACTION_MODEL = new EmployeeActionModel()
+RINGING_BELL_MODEL = new RingingBellModel()
+PRESCRIPTION_MODEL = new PrescriptionModel()
+PATIENT_MODEL = new PatientModel()
+PATIENT_STAT_MODEL = new PatientStatModel()
+PATIENT_MEDICAL_ANALYSIS_MODEL = new PatientMedicalAnalysisModel()
+CERTIFICATE_MODEL = new CertificateModel()
+HEALTHY_KITCHEN_POST_MODEL = new HealthyKitchenPostModel()
+TREATMENT_CLASS_MODEL = new TreatmentClassModel()
+APPOINTMENT_MODEL = new AppointmentModel()
+ONLINE_APPOINTMENT_MODEL = new OnlineAppointmentModel()
+MESSAGE_MODEL = new MessageModel()
+PRODUCT_MODEL = new ProductModel()
+SUPPLIER_MODEL = new SupplierModel()
+ORDER_MODEL = new OrderModel()
+FORMAL_ORDER_MODEL = new FormalOrderModel()
+CONSOMMABLE_MODEL = new ConsommableModel()
+CASHOUT_RECORD_MODEL = new CashoutRecordModel()
+DAILY_REPORT_MODEL = new DailyReportModel()
+MEMBER_MODEL = new MemberModel()
+TESTIMONIAL_MODEL = new TestimonialModel()
+ADVERTISEMENT_MODEL = new AdvertisementModel()
+VIDEO_MODEL = new VideoModel()
+FILE_MODEL = new FileModel()
+WAITING_LIST_MODEL = new WaitingListModel()
+SMS_TEMPLATE_MODEL = new SMSTemplateModel()
+FUNDBOX_MODEL = new FundBoxModel()
+CONTENT_TEMPLATE_MODEL = new ContentTemplateModel()
+CATEGORY_MODEL = new CategoryModel()
+FAMILY_MODEL = new FamilyModel()
+NOTIFICATION_MODEL = new NotificationModel()
+DRIVER_JOB_MODEL = new DriverJobModel()
+CHRONIC_DISEASE_MODEL = new ChronicDiseaseModel()
+CHAT_MODEL = new ChatModel()
+EMOJY_MODEL = new EmojyModel()
+MEDIA_MODEL = new MediaModel()
+FOLDER_MODEL = new FolderModel()
+DOCIT_GROUP_MODEL = new DocitGroupModel()
+DOCIT_USER_MODEL = new DocitUserModel()
+DOCIT_SHARE_PERMISSION_MODEL = new DocitSharePermissionModel()
+STATISTICS_MODEL = new StatisticsModel()
+WALLET_MODEL = new WalletModel()
+VISITOR_MODEL = new VisitorModel()
+CUSTOMER_MODEL = new CustomerModel()
+CONTRACTOR_MODEL = new ContractorModel()
+    
+})

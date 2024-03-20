@@ -1,0 +1,98 @@
+<div class="has-direction-locale px-3 py-3 h-100 position-relative overflow-x-hidden overflow-y-auto max-height-100">
+
+    <div id="create_healthy_kitchen_post_dialog__form">
+
+        <div class="row gx-4 gy-4 mb-3">
+
+            <div class="col-md-6">
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label110 %></label>
+                    <input type="text" class="input-text input-text-outline" id="create_healthy_kitchen_post_dialog__form__name_input">
+                </div>	
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label111 %></label>
+                    <textarea id="create_healthy_kitchen_post_dialog__form__description_input" rows="5" class="input-text input-text-outline"></textarea>
+                </div>
+
+            </div>
+
+            <div class="col-md-6 d-flex justify-content-center align-items-center flex-column">
+
+                <div class="mb-2 w-100">
+                    <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/select-file.template.ejs`, {
+                        componentId: 'create_healthy_kitchen_post_dialog__form__select_file_component',
+                        fileInputId: 'create_healthy_kitchen_post_dialog__form__file_input',
+                        options: {
+                            isDismissable: false,
+                            accept: 'image/*',
+                        }
+                    }) -%>
+                </div>
+
+                <div class="w-100 height-280px">
+                    <img src="" class="w-100 h-100 js_image_src_placeholder" id="create_healthy_kitchen_post_dialog__form__image_preview" data-placeholder="../assets/img/utils/placeholder.jpg" alt="">
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label20 %></label>
+                <div>
+                    <input type="text" class="input-text input-text-outline mb-3" id="create_healthy_kitchen_post_dialog__form__ingredient_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder21 %>">
+                    <div class="overflow-y-auto overflow-x-hidden max-height-200px" id="create_healthy_kitchen_post_dialog__form__ingredients_list">
+                    
+                        <!-- <div class="form-field-01 js_deletable_list_item mb-2" data-role="item" data-name="${options.name}">
+                            <div class="form-field-icon-holder text-color-27 width-50px">
+                                <i class="fas fa-utensil-spoon"></i>
+                            </div>
+                            <div class="form-field-input-holder">
+                                <div class="form-field-input d-flex align-items-center"></div>
+                                <div class="d-flex flex-shrink-0 justify-content-center align-items-center width-50px h-100 js_deletable_list_item__delete_button cursor-pointer rounded">
+                                    <span class="no-pointer"><i class="fas fa-times"></i></span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label21 %></label>
+                <div>
+                    <input type="text" class="input-text input-text-outline mb-3" id="create_healthy_kitchen_post_dialog__form__preparation_step_input" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder21 %>">
+                    <div class="overflow-y-auto overflow-x-hidden max-height-200px" id="create_healthy_kitchen_post_dialog__form__preparation_steps_list">
+                    
+                        <!-- <div class="form-field-01 js_deletable_list_item mb-2" data-role="item" data-name="${options.name}">
+                            <div class="form-field-icon-holder text-color-27 width-50px">
+                                <i class="fas fa-walking"></i>
+                            </div>
+                            <div class="form-field-input-holder">
+                                <div class="form-field-input d-flex align-items-center"></div>
+                                <div class="d-flex flex-shrink-0 justify-content-center align-items-center width-50px h-100 js_deletable_list_item__delete_button cursor-pointer rounded">
+                                    <span class="no-pointer"><i class="fas fa-times"></i></span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="">
+            <button type="submit" class="btn btn-success d-block w-100 rounded-0" id="create_healthy_kitchen_post_dialog__form__submit">
+                <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+            </button>
+        </div>
+
+    </div>
+
+</div>

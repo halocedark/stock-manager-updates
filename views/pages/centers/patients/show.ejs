@@ -1,0 +1,1510 @@
+<div class="container-fluid" id="show_patient_profile_container">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_patients.sectionTitle %></h1>
+	</div>
+
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+
+	<div class="mt-5 WRAPPER">
+
+        <div class="row gy-3">
+
+            <div class="col-lg-6 col-md-6">
+
+                <div class="bg-color-22 px-3 py-3 border-radius-15 max-width-340px mb-4">
+
+                    <div class="d-flex align-items-center mb-3">
+                        
+                        <div class="dropdown">
+                            <div class="bg-white d-inline-flex justify-content-center align-items-center border-radius-10 cursor-pointer text-color-10 px-2 py-1" type="button" id="patient_card_more_actions_menu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+        
+                            <ul class="dropdown-menu" id="patient_card_more_actions__menu" aria-labelledby="patient_card_more_actions_menu">
+                                <li data-perm="update_patient">
+                                    <a class="dropdown-item fs-14" href="#" data-role="UPDATE" >
+                                        <%= UI_DISPLAY_LANG.views.pages.global.edit_profile %>
+                                    </a>
+                                </li>
+                                <li data-perm="create_patient_medical_data">
+                                    <a class="dropdown-item fs-14" href="#" data-role="create_patient_medical_data" >
+                                        <%= UI_DISPLAY_LANG.views.pages.global.create_more_medical_data_button %>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+        
+                    </div>
+        
+                    <div class="d-flex">
+        
+                        <div class="flex-grow-1">
+                            <div class="mb-2">
+                                <div class="fs-14 text-color-17"><%= UI_DISPLAY_LANG.views.pages.global.text73 %> :</div>
+                            </div>
+        
+                            <div class="fs-17 fw-500" id="patientName_element">عبد النور عدواني</div>
+                            <div class="fs-14 text-color-17" id="patientPhone_element">(0673479803)</div>
+                        </div>
+        
+                        <div class="flex-grow-1 has-text-centered">
+                            <img src="../assets/img/utils/patient.png" id="patientAvatar_element" class="width-50px height-50px rounded-circle" alt="">
+                        </div>
+        
+                    </div>
+        
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+
+                <div class="mb-4 tabbed-list-1 d-flex js_list_tabs_navs" id="profile_list_tabs_navs">
+
+                    <div class="border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd active js_list_tab_nav"  data-target="#personal_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-info"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab1 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#contact_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-address-book"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab2 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#health_details_tab" >
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab3 %>
+                            </div>
+                        </div>
+    
+                    </div>
+
+                    <div class="border-radius-15 px-4 py-3 mx-3 has-text-centered list-item cursor-pointer bg-color-hover-23a1dd js_list_tab_nav"  data-target="#create_appointment_tab">
+    
+                        <div class="no-pointer">
+                            <div class="mb-3">
+                                <div class="width-50px height-50px rounded-circle d-inline-flex justify-content-center align-items-center list-item-icon fs-30">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+        
+                            <div class="fs-14">
+                                <%= UI_DISPLAY_LANG.views.pages.global.tabs.tab4 %>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+
+            </div>
+
+        </div>
+		
+        <div class="border px-3 py-3 rounded bg-white mb-4">
+			
+            <div id="personal_details_tab" data-role="tab_content">
+
+                <div class="row gy-3">
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text74 %></h4>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label38 %>: </label>
+                            <span class="" id="patientCode_element">21616464</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label3 %>: </label>
+                            <span class="" id="patientPass_element">1144</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label57 %>: </label>
+                            <span class="" id="patientGender_element">Male</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label56 %>: </label>
+                            <span class="" id="patientAge_element">29</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label60 %>: </label>
+                            <span class="" id="patientBirthDate_element">1993-10-18 </span>
+                            <span class="" id="patientBirthPlace_element">Tolga</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label58 %>: </label>
+                            <span class="" id="patientState_element">Married</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label70 %>: </label>
+                            <span class="" id="height_element">1.80 cm</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label71 %>: </label>
+                            <span class="" id="weight_element">75 kg</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label72 %>: </label>
+                            <span class="" id="best_weight_element">70 kg</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label101 %>: </label>
+                            <span class="" id="registeredAt_element">2023-08-26 8:30</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text19 %></h4>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label97 %>: </label>
+                            <span class="" id="patientWilaya_element">El oued</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label98 %>: </label>
+                            <span class="" id="patientBaladia_element">Hassani Abdelkrim</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label50 %>: </label>
+                            <span class="" id="patientAddress_element">Abdelhamid ben badis</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text75 %></h4>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label99 %>: </label>
+                            <span class="" id="patientJob_element">Web Developer</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label68 %>: </label>
+                            <span class="" id="studyLevel_element">Some highschool</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label73 %>: </label>
+                            <span class="" id="signup_reason_element">Weightloss</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="contact_details_tab" data-role="tab_content" style="display: none;">
+
+                <div class="row gy-3">
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text76 %></h4>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label64 %>: </label>
+                            <span class="" id="patientWhatsapp_element">+2130673479803</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label65 %>: </label>
+                            <span class="" id="patientFB_element">https://www.facebook.com/****</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label66 %>: </label>
+                            <span class="" id="patientTelegram_element">*******</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="health_details_tab" data-role="tab_content" style="display: none;">
+
+                <div class="row gy-3">
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h4 class="h4 mb-4"><%= UI_DISPLAY_LANG.views.pages.global.text77 %></h4>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label100 %>: </label>
+                            <span class="" id="hasDiabetes_element">No</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label62 %>: </label>
+                            <span class="" id="hasBloodPressure_element">Yes</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="fw-700 fs-17 text-color-12"><%= UI_DISPLAY_LANG.views.pages.global.label63 %>: </label>
+                            <span class="" id="hasChronicDisease_element">Yes</span>
+                            <div class="fs-14 alert alert-info alert-1 mt-2 d-none"></div> 
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="create_appointment_tab" data-role="tab_content" style="display: none;"></div>
+
+		</div>
+
+        <div class="row gx-0 gy-5">
+
+            <div class="col-lg-12 col-md-12 app-block d-none" id="products_invoices" data-perm="view_patient_product_invoices">
+
+                <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav66 %></h4>
+
+                <div class="py-4 px-3 mb-3 border rounded">
+                    <div class="row gx-4 gy-3">
+                        <div class="col-lg col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'products_invoices_search_btn',
+                                searchInputId: 'products_invoices_search_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'products_invoices_date_start_input',
+                                dateEndId: 'products_invoices_date_end_input',
+                            }) -%>
+                        </div>
+                    </div>
+                </div>
+                <div id="products_invoices_pagination" class="flex flex-center my-3"></div>
+                <div class="table-div bg-white border rounded">
+                    <table class="table-01" id="products_invoices_tableElement">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th01 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th02 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.all_products_invoices.th04 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.global.th32 %></th>
+                                <th><%= UI_DISPLAY_LANG.views.pages.global.th16 %></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--
+                            <tr class="expand-row">
+                                <td>
+                                    <input type="checkbox" class="form-check-input" data-role="CHECK" data-orderid="">
+                                </td>
+                                <td> HG38020496 </td>
+                                <td> 2022-06-17 </td>
+                                <td> - </td>
+                                <td> $11.99 </td>
+                                <td style="width:20px">
+                                    <svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+                                </td>
+                            </tr>
+                            <tr class="expand-row__row" style="display:none;">
+                                <td colspan="10">
+                                    <table class="table-01">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Dept (DA)</th>
+                                                <th>Dept (%)</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <td>Renew Premium Web Hosting (crstra-saffromfood.com)</td>
+                                            <td>3</td>
+                                            <td>1880.00</td>
+                                            <td>880.00</td>
+                                            <td>32.12%</td>
+                                            <td>1880.00</td>
+                                        </tbody>
+                                    </table>
+                                    <div class="order-price-table">
+                                        <div class="order-price-table-contents">
+                                            <div>
+                                                <strong>product price</strong>
+                                                <span>11.25$</span>
+                                            </div>
+                                            <div>
+                                                <strong>dept (%)</strong>
+                                                <span>0.00%</span>
+                                            </div>
+                                            <div>
+                                                <strong>sell price</strong>
+                                                <span>11.25</span>
+                                            </div>
+                                            <div class="border-top my-1"></div>
+                                            <div>
+                                                <strong>total</strong>
+                                                <span>11.25</span>
+                                            </div>	
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 col-md-12 app-block d-none" id="dept_actions" data-perm="view_patient_dept_actions">
+
+                <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav54 %></h4>
+
+                <div class="py-4 px-3 mb-3 border rounded">
+
+                    <div class="row gx-4 gy-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'dept_actions_search_btn',
+                                searchInputId: 'dept_actions_search_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'dept_actions_date_start_input',
+                                dateEndId: 'dept_actions_date_end_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <div class="fs-20 mb-2">
+                                <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="total_depts">0.00</span>
+                            </div>
+                            <ul class="list-group list-group-flush" id="dept_actions_extra_data_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="dept_actions_pagination" class="flex flex-center my-3"></div>
+                <div class="table-div bg-white border rounded">
+                    <div class="utable shadowed" id="dept_actions_tableElement">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th1 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th20 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th21 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th22 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th23 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                        </div>
+                        <div class="tbody">
+                         
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-12 col-md-12 app-block d-none" id="prescriptions_history" data-perm="view_patient_prescriptions_history">
+
+                <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav6 %></h4>
+
+                <div class="py-4 px-3 mb-3 border rounded">
+
+                    <div class="row gx-4 gy-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'prescriptions_history_search_btn',
+                                searchInputId: 'prescriptions_history_search_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'prescriptions_history_date_start_input',
+                                dateEndId: 'prescriptions_history_date_end_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <div class="fs-20 mb-2">
+                                <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="prescriptions_history_total">0</span>
+                            </div>
+                            <ul class="list-group list-group-flush" id="prescriptions_history_extra_data_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="prescriptions_history_pagination" class="flex flex-center my-3"></div>
+                <div class="table-div bg-white border rounded">
+                    <div class="utable shadowed" id="prescriptions_history_tableElement">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th1 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th12 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th42 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.attributes.medicines %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                        </div>
+                        <div class="tbody">
+                            <!-- <div class="tr" data-role="row" data-id="${v.prescriptionId}">
+                                <div class="td">
+                                    <div class="mb-2">${v.patientName}</div>
+                                    <div class="">${v.patientPhone}</div>
+                                </div>
+                                <div class="td">
+                                    ${v.clinicName}
+                                </div>
+                                <div class="td">
+                                    ${v.employee_name}
+                                </div>
+                                <div class="td">
+                                    <div class="text-04 mb-2">${FUI_DISPLAY_LANG.views.pages.global.attributes.medicines}: (${medicines})</div>
+                                    <div class="">
+                                        <ul class="list-group list-group-flush">
+                                            ${medicines_list}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="td">
+                                    ${v.prescriptionDate} ${v.prescriptionTime} 
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-12 col-md-12 app-block d-none" id="consommables_history" data-perm="view_patient_consommables_history">
+
+                <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav51 %></h4>
+
+                <div class="py-4 px-3 mb-3 border rounded">
+
+                    <div class="row gx-4 gy-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'consommables_history_search_btn',
+                                searchInputId: 'consommables_history_search_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'consommables_history_date_start_input',
+                                dateEndId: 'consommables_history_date_end_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <div class="fs-20 mb-2">
+                                <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="consommables_history_total">0</span>
+                            </div>
+                            <ul class="list-group list-group-flush" id="consommables_history_extra_data_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="consommables_history_pagination" class="flex flex-center my-3"></div>
+                <div class="table-div bg-white border rounded">
+                    <div class="utable shadowed" id="consommables_history_tableElement">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th1 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th12 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th26 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th27 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                        </div>
+                        <div class="tbody">
+                            <!-- <div class="tr" data-role="row" data-id="${v.id}">
+                                <div class="td">
+                                    <div class="mb-2">${v.patientName}</div>
+                                    <div class="">${v.patientPhone}</div>
+                                </div>
+                                <div class="td">
+                                    ${v.administration_name}
+                                </div>
+                                <div class="td">
+                                    <div class="mb-2">${v.consommable_code}</div>
+                                    <div class="">${v.consommable_name}</div>
+                                </div>
+                                <div class="td">
+                                    (<span class="text-success">${v.consommable_quantity}</span>)
+                                </div>
+                                <div class="td">
+                                    ${v.created_at}
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-12 col-md-12 app-block d-none" id="appointments_history" data-perm="view_patient_appointments_history">
+
+                <h4 class="h4 mb-3"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav73 %></h4>
+
+                <div class="row mb-4">
+
+                    <div class="col-lg-6 col-md-6 COL_WRAPPER">
+
+                        <div class="py-4 px-3 mb-3 border border-success rounded">
+
+                            <h3 class="h3 mb-3 text-success"><%= UI_DISPLAY_LANG.views.pages.global.text70 %></h3>
+        
+                            <ul class="list-group list-group-flush" id="previous_apt_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+        
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 COL_WRAPPER">
+
+                        <div class="py-4 px-3 mb-3 border border-info rounded">
+
+                            <h3 class="h3 mb-3 text-info"><%= UI_DISPLAY_LANG.views.pages.global.text71 %></h3>
+        
+                            <ul class="list-group list-group-flush" id="next_apt_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+        
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="py-4 px-3 mb-3 border rounded">
+
+                    <div class="row gx-4 gy-3">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'appointments_history_search_btn',
+                                searchInputId: 'appointments_history_search_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'appointments_history_date_start_input',
+                                dateEndId: 'appointments_history_date_end_input',
+                            }) -%>
+                        </div>
+                        <div class="col-lg col-md col-sm-12">
+                            <div class="fs-20 mb-2">
+                                <span class="fw-700"><%= UI_DISPLAY_LANG.views.pages.global.text22 %>:</span> <span class="text-success" id="appointments_history_total">0</span>
+                            </div>
+                            <ul class="list-group list-group-flush" id="appointments_history_extra_data_list">
+                                <!-- <li class="list-group-item">An item</li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="appointments_history_pagination" class="flex flex-center my-3"></div>
+                <div class="table-div bg-white border rounded">
+                    <div class="utable shadowed" id="appointments_history_tableElement">
+                        <div class="thead">
+                            <div class="td">#</div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th47 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th48 %></div>
+                            <div class="td" data-perm="view_patient_appointment_price"><%= UI_DISPLAY_LANG.views.pages.global.th37 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th16 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th21 %></div>
+                            <div class="td"><%= UI_DISPLAY_LANG.views.pages.global.th6 %></div>
+                        </div>
+                        <div class="tbody">
+                         
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+	</div>
+
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#show_patient_profile_container')
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+
+var PatientObject = sessionData(true)
+
+// patientInfoDiv.on('click', async e =>
+// {
+//     var target = $(e.target);
+//     if ( target.data('role') == 'create_patient_medical_data' )
+//     {
+//         e.preventDefault;
+
+//         goToPage('create-patient-medical-data', PatientObject)
+//     }
+//     else if ( target.data('role') == 'view_patient_medical_data' )
+//     {
+//         e.preventDefault;
+
+//         goToPage('all-patient-medical-data', PatientObject)
+//     }
+//     else if ( target.data('role') == 'create_appointment' )
+//     {
+//         e.preventDefault;
+
+//         goToPage('create-private-appointments', PatientObject)
+//     }
+//     else if ( target.data('role') == 'PRINT_BTN' )
+//     {
+//         e.preventDefault;
+//         var textDir = ( FUI_DISPLAY_LANG.lang == 'ar' ) ? 'rtl' : 'ltr';
+//         printHTMLToPdf(patientInfoDiv[0].outerHTML, textDir);
+//     }
+// });
+// display info
+displayInfo()
+async function displayInfo()
+{
+    var data = PatientObject
+    // display loader
+    // SectionLoader(patientInfoDiv);
+    if ( Object.keys(PatientObject).length < 10 )
+    {
+        var response = await PATIENT_MODEL.show(PatientObject.patientId);
+        // hide loader
+        // SectionLoader(patientInfoDiv, '');
+        // clear html
+        // patientInfoDiv.html('');
+        if ( response.code == 404 )
+            return;
+
+        var data = response.data;
+    }
+
+    // Profile //
+    const profile_list_tabs_navs = page_container.find('#profile_list_tabs_navs')
+
+    profile_list_tabs_navs.off('tab-changed').on('tab-changed', e =>
+    {
+        var detail = e.originalEvent.detail
+        var tab = detail.tab
+
+        if ( tab.id == 'create_appointment_tab' )
+        {
+            CreateAppointmentDialog__CentralAdmin(PatientObject)
+        }
+    })
+
+    // Info Card
+    const patientName_element = page_container.find('#patientName_element')
+    const patientPhone_element = page_container.find('#patientPhone_element')
+    const patientAvatar_element = page_container.find('#patientAvatar_element')
+
+    const patient_card_more_actions__menu = page_container.find('#patient_card_more_actions__menu')
+
+    // Select action
+    patient_card_more_actions__menu.off('click').on('click', async e =>
+    {
+        var target = $(e.target)
+
+        if ( target.data('role') == 'UPDATE' )
+        {
+            goToPage('create-patients', PatientObject)
+        }
+        else if ( target.data('role') == 'create_patient_medical_data' )
+        {
+            goToPage('create-patient-medical-data', PatientObject)
+        }
+    })
+
+    patientName_element.text( checkNull(data.patientName) )
+    patientPhone_element.text( `(${checkNull(data.patientPhone)})` )
+    patientAvatar_element.attr( 'src', imgFallback(data.patientAvatar, '../assets/img/utils/patient.png') )
+    // Personal Details
+    const patientCode_element = page_container.find('#patientCode_element')
+    const patientPass_element = page_container.find('#patientPass_element')
+    const patientGender_element = page_container.find('#patientGender_element')
+    const patientAge_element = page_container.find('#patientAge_element')
+    const patientBirthDate_element = page_container.find('#patientBirthDate_element')
+    const patientBirthPlace_element = page_container.find('#patientBirthPlace_element')
+    const patientState_element = page_container.find('#patientState_element')
+    const height_element = page_container.find('#height_element')
+    const weight_element = page_container.find('#weight_element')
+    const best_weight_element = page_container.find('#best_weight_element')
+    const registeredAt_element = page_container.find('#registeredAt_element')
+    const patientWilaya_element = page_container.find('#patientWilaya_element')
+    const patientBaladia_element = page_container.find('#patientBaladia_element')
+    const patientAddress_element = page_container.find('#patientAddress_element')
+    const patientJob_element = page_container.find('#patientJob_element')
+    const studyLevel_element = page_container.find('#studyLevel_element')
+    const signup_reason_element = page_container.find('#signup_reason_element')
+
+    patientCode_element.text( checkNull(data.patientCode) )
+    patientPass_element.text( checkNull(data.patientPass) )
+    patientGender_element.text( checkNull(data.patientGender) )
+    patientAge_element.text( checkNull(data.patientAge) )
+    patientBirthDate_element.text( checkNull(data.patientBirthDate) )
+    patientBirthPlace_element.text( checkNull(data.patientBirthPlace) )
+    patientState_element.text( checkNull(data.patientState) )
+    height_element.text( checkNull(data.height) )
+    weight_element.text( checkNull(data.weight) )
+    best_weight_element.text( checkNull(data.best_weight) )
+    registeredAt_element.text( `${data.patientDate} ${data.patientTime}` )
+    patientWilaya_element.text( checkNull(data.patientWilaya) )
+    patientBaladia_element.text( checkNull(data.patientBaladia) )
+    patientAddress_element.text( checkNull(data.patientAddress) )
+    patientJob_element.text( checkNull(data.patientJob) )
+    studyLevel_element.text( checkNull(data.studyLevel) )
+    signup_reason_element.text( checkNull(data.signup_reason) )
+
+    // Contact Details
+    const patientWhatsapp_element = page_container.find('#patientWhatsapp_element')
+    const patientFB_element = page_container.find('#patientFB_element')
+    const patientTelegram_element = page_container.find('#patientTelegram_element')
+
+    patientWhatsapp_element.text( checkNull(data.patientWhatsapp) )
+    patientFB_element.text( checkNull(data.patientFB) )
+    patientTelegram_element.text( checkNull(data.patientTelegram) )
+    // Health Details
+    const hasDiabetes_element = page_container.find('#hasDiabetes_element')
+    const hasBloodPressure_element = page_container.find('#hasBloodPressure_element')
+    const hasChronicDisease_element = page_container.find('#hasChronicDisease_element')
+
+    hasDiabetes_element.text( (data.hasDiabetes == ST_NO) ? FUI_DISPLAY_LANG.views.pages.global.other_status.no : FUI_DISPLAY_LANG.views.pages.global.other_status.yes )
+    hasBloodPressure_element.text( (data.hasBloodPressure == ST_NO) ? FUI_DISPLAY_LANG.views.pages.global.other_status.no : FUI_DISPLAY_LANG.views.pages.global.other_status.yes )
+    hasChronicDisease_element.text( (data.hasChronicDisease == ST_NO) ? FUI_DISPLAY_LANG.views.pages.global.other_status.no : FUI_DISPLAY_LANG.views.pages.global.other_status.yes )
+
+    // display chronic diseases if yes
+    if ( data.hasChronicDisease == ST_YES )
+    {
+        var chronicDiseasesString = (data.chronicDiseases) ? $.map(data.chronicDiseases, (v, k) => { return v.name  }).toString() : null
+        hasChronicDisease_element.next().removeClass('d-none').text(chronicDiseasesString)
+    }
+
+    // Products Invoices
+    products_invoices = page_container.find('#products_invoices')
+    products_invoices_search_btn = products_invoices.find('#products_invoices_search_btn')
+    products_invoices_search_input = products_invoices.find('#products_invoices_search_input')
+    products_invoices_date_start_input = products_invoices.find('#products_invoices_date_start_input')
+    products_invoices_date_end_input = products_invoices.find('#products_invoices_date_end_input')
+    products_invoices_pagination = products_invoices.find('#products_invoices_pagination')
+    products_invoices_tableElement = products_invoices.find('#products_invoices_tableElement')
+
+    products_invoices_date_start_input.val( CURRENT_DATE )
+    products_invoices_date_end_input.val( CURRENT_DATE )
+
+    products_invoices_tableElement.off('click')
+    products_invoices_tableElement.on('click', async e =>
+    {
+        var target = $(e.target);
+        if ( target[0].nodeName == 'TD' )
+        {
+            var parent = target.closest('tr');
+            var nextTR = parent.next();
+            nextTR.slideToggle(200)
+            parent.toggleClass('expanded');
+        }
+    })
+    // search between dates
+    products_invoices_search_btn.off('click').on('click', async e =>
+    {
+        displayAllProductsInvoices({
+            method_type: 'direction_center_to_client_selling__client_local_search',
+            user_id: PatientObject.patientId,
+            query: products_invoices_search_input.val(),
+            advanced: {
+                start: products_invoices_date_start_input.val(),
+                end: products_invoices_date_start_input.val(),
+            }
+        })
+    });
+    // search
+    products_invoices_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllProductsInvoices({
+            method_type: 'direction_center_to_client_selling__client_local_search',
+            user_id: PatientObject.patientId,
+            query: products_invoices_search_input.val()
+        })
+    });
+    // display all
+    displayAllProductsInvoices({
+        method_type: 'direction_center_to_client_selling__client_local_search',
+        user_id: PatientObject.patientId,
+        query: products_invoices_search_input.val()
+    })
+    async function displayAllProductsInvoices(params)
+    {
+        products_invoices_tableElement.find('tbody').html('');
+        SectionLoader(products_invoices_tableElement)
+        if ( params.method_type == 'direction_center_to_client_selling__client_local_search' )
+            var res = await ORDER_MODEL.direction_center_to_client_selling__client_local_search(params)
+
+        SectionLoader(products_invoices_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            products_invoices.addClass('d-none')
+            return
+        }
+        // show wrapper
+        products_invoices.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        for (var i = 0; i < data.length; i++) 
+        {
+            var order = data[i];
+            // loop items
+            if ( order.order_items )
+            {
+                var itemsHTML = '<ul class="list-group list-group-flush list-group-numbered">';
+                var itemsHTML2 = '';
+                var order_item_dept_rate = 0.00;
+                var order_item_price = 0.00;
+                for (var j = 0; j < order.order_items.length; j++) 
+                {
+                    var item = order.order_items[j];
+                    order_item_dept_rate += parseFloat(item.item_dept.order_item_dept_rate);
+                    order_item_price += parseFloat(item.order_item_price);
+                    itemsHTML += `<li class="list-group-item text-04">${item.item_name}</li>`;
+                    itemsHTML2 += `<tr>
+                                    <td>${item.item_name}</td>
+                                    <td>${item.order_item_quantity}</td>
+                                    <td>${item.order_item_price}</td>
+                                    <td>${item.order_item_final_amount}</td>
+                                    </tr>`;
+                }
+                itemsHTML += '</ul>';
+            }
+
+            html += `<tr class="expand-row">
+                        <td>
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-orderid="${order.order_id}">
+                        </td>
+                        <td>${order.order_hash}</td>
+                        <td>${order.order_date}|${order.order_time}</td>
+                        <td>${order.order_total_amount}</td>
+                        <td>${order.order_amount_paid}</td>
+                        <td>${order.order_receiver_name}</td>
+                        <td style="width:15px">
+                            <svg part="svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" aria-labelledby="ic-caret-up" focusable="false" viewBox="0 0 24 24" class="expand-icon" dataV17f0a767=""><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"></path></g></svg>
+                        </td>
+                    </tr>PAG_SEP
+                    <tr class="expand-row__row" style="display:none;">
+                        <td colspan="10">
+                            <table class="table-01">
+                                <thead>
+                                    <tr>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th26}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th27}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th28}</th>
+                                        <th>${FUI_DISPLAY_LANG.views.pages.global.th29}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHTML2}
+                                </tbody>
+                            </table>
+                            <div class="order-price-table">
+                                <div class="order-price-table-contents">
+                                    ${itemsHTML}	
+                                </div>
+                                <div class="order-price-table-contents">
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th30}</strong>
+                                        <span>${parseFloat(order.order_total_amount).toFixed(2)}</span>
+                                    </div>
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th31}</strong>
+                                        <span>${parseFloat(order.order_dept_amount).toFixed(2)}</span>
+                                    </div>
+                                    <div class="border-top my-1"></div>
+                                    <div class="order-price-table-td">
+                                        <strong>${FUI_DISPLAY_LANG.views.pages.global.th32}</strong>
+                                        <span>${parseFloat(order.order_amount_paid).toFixed(2)}</span>
+                                    </div>	
+                                </div>
+                            </div>
+                        </td>
+                    </tr>PAG_SEP`;	
+        }
+        // add html
+        new SmoothPagination(products_invoices_pagination, products_invoices_tableElement.find('tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+    }
+    
+    // Dept actions
+    dept_actions = page_container.find('#dept_actions')
+    dept_actions_search_btn = dept_actions.find('#dept_actions_search_btn')
+    dept_actions_search_input = dept_actions.find('#dept_actions_search_input')
+    dept_actions_date_start_input = dept_actions.find('#dept_actions_date_start_input')
+    dept_actions_date_end_input = dept_actions.find('#dept_actions_date_end_input')
+    dept_actions_pagination = dept_actions.find('#dept_actions_pagination')
+    dept_actions_tableElement = dept_actions.find('#dept_actions_tableElement')
+
+    var total_depts = page_container.find('#total_depts');
+    var dept_actions_extra_data_list = page_container.find('#dept_actions_extra_data_list');
+
+    dept_actions_date_start_input.val( CURRENT_DATE )
+    dept_actions_date_end_input.val( CURRENT_DATE )
+
+    // search between dates
+    dept_actions_search_btn.off('click').on('click', async e =>
+    {
+        displayAllDeptActions({
+            method_type: 'dept_action_local_search',
+            patientId: PatientObject.patientId,
+            query: dept_actions_search_input.val(),
+            advanced: {
+                start: dept_actions_date_start_input.val(),
+                end: dept_actions_date_end_input.val(),
+            }
+        })
+    });
+    // search
+    dept_actions_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllDeptActions({
+            method_type: 'dept_action_local_search',
+            patientId: PatientObject.patientId,
+            query: dept_actions_search_input.val()
+        })
+    });
+    // display all
+    displayAllDeptActions({
+        method_type: 'dept_action_local_search',
+        patientId: PatientObject.patientId,
+        query: dept_actions_search_input.val()
+    })
+    async function displayAllDeptActions(params)
+    {
+        // total_depts
+        total_depts.text(moneyFormat(PatientObject.total_depts)).data('total', PatientObject.total_depts).attr('data-total', PatientObject.total_depts)
+        //
+        dept_actions_extra_data_list.html('')
+        dept_actions_tableElement.find('.tbody').html('');
+        SectionLoader(dept_actions_tableElement)
+        if ( params.method_type == 'dept_action_local_search' )
+            var res = await PATIENT_MODEL.dept_action_local_search(params)
+
+        SectionLoader(dept_actions_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            dept_actions.addClass('d-none')
+            return
+        }
+        // show wrapper
+        dept_actions.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        var in_amount_total = 0
+        var out_amount_total = 0
+        var last_data = firstArrayElement(data)
+        $.each(data, (k,v) =>
+        {
+            in_amount_total += parseFloat(v.in_amount)
+            out_amount_total += parseFloat(v.out_amount)
+
+            html+= `<div class="tr" data-role="row" data-id="${v.id}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">${v.patientName}</div>
+                        <div class="td">${v.reason}</div>
+                        <div class="td">${v.note}</div>
+                        <div class="td">
+                            (<span class="text-success">${ (v.in_amount > 0) ? '+'+moneyFormat(v.in_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">
+                            (<span class="text-danger">${ (v.out_amount > 0) ? '-'+moneyFormat(v.out_amount) : '0.00' }</span>)
+                        </div>
+                        <div class="td">${v.created_at}</div>
+                    </div>PAG_SEP`
+        })
+        // add html
+        new SmoothPagination(dept_actions_pagination, dept_actions_tableElement.find('.tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+        // display extra data
+        var last_amount = (last_data.in_amount > 0) ? `(<span class="text-success">+${moneyFormat(last_data.in_amount)}</span>)` : `(<span class="text-danger">-${moneyFormat(last_data.out_amount)}</span>)`
+        dept_actions_extra_data_list.html(`
+            <li class="list-group-item"><span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text24 }:</span> (<span class="text-success">${ (in_amount_total > 0) ? '+'+moneyFormat(in_amount_total) : '0.00' }</span>)</li>
+            <li class="list-group-item"><span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text25 }:</span> (<span class="text-danger">${ (out_amount_total > 0) ? '-'+moneyFormat(out_amount_total) : '0.00' }</span>)</li>
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text26 }: </span>
+                ${ FUI_DISPLAY_LANG.views.pages.global.text28 } ${last_amount}, 
+                ${ FUI_DISPLAY_LANG.views.pages.global.in_date } <span class="text-primary">${last_data.created_at}</span>
+            </li>
+        `)
+    }
+    // Prescriptions history
+    prescriptions_history = page_container.find('#prescriptions_history')
+    prescriptions_history_search_btn = prescriptions_history.find('#prescriptions_history_search_btn')
+    prescriptions_history_search_input = prescriptions_history.find('#prescriptions_history_search_input')
+    prescriptions_history_date_start_input = prescriptions_history.find('#prescriptions_history_date_start_input')
+    prescriptions_history_date_end_input = prescriptions_history.find('#prescriptions_history_date_end_input')
+    prescriptions_history_pagination = prescriptions_history.find('#prescriptions_history_pagination')
+    prescriptions_history_tableElement = prescriptions_history.find('#prescriptions_history_tableElement')
+
+    var prescriptions_history_total = page_container.find('#prescriptions_history_total');
+    var prescriptions_history_extra_data_list = page_container.find('#prescriptions_history_extra_data_list');
+
+    prescriptions_history_date_start_input.val( CURRENT_DATE )
+    prescriptions_history_date_end_input.val( CURRENT_DATE )
+
+    // search between dates
+    prescriptions_history_search_btn.off('click').on('click', async e =>
+    {
+        displayAllPrescriptionsHistory({
+            method_type: 'patient_local_search',
+            patientId: PatientObject.patientId,
+            query: prescriptions_history_search_input.val(),
+            advanced: {
+                start: prescriptions_history_date_start_input.val(),
+                end: prescriptions_history_date_end_input.val(),
+            }
+        })
+    });
+    // search
+    prescriptions_history_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllPrescriptionsHistory({
+            method_type: 'patient_local_search',
+            patientId: PatientObject.patientId,
+            query: prescriptions_history_search_input.val()
+        })
+    });
+    // display all
+    displayAllPrescriptionsHistory({
+        method_type: 'patient_local_search',
+        patientId: PatientObject.patientId,
+        query: prescriptions_history_search_input.val()
+    })
+    async function displayAllPrescriptionsHistory(params)
+    {
+        // total_depts
+        prescriptions_history_total.text(0).data('total', 0).attr('data-total', 0)
+        //
+        prescriptions_history_extra_data_list.html('')
+        prescriptions_history_tableElement.find('.tbody').html('');
+        SectionLoader(prescriptions_history_tableElement)
+        if ( params.method_type == 'patient_local_search' )
+            var res = await PRESCRIPTION_MODEL.patient_local_search(params)
+
+        SectionLoader(prescriptions_history_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            prescriptions_history.addClass('d-none')
+            return
+        }
+        // show wrapper
+        prescriptions_history.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        var total = data.length
+        // display total
+        prescriptions_history_total.text(total)
+
+        var last_data = firstArrayElement(data)
+        $.each(data, (k,v) =>
+        {
+            var medicines = (v.medicines) ? v.medicines.length : 0;
+            var medicines_list = ''
+
+            if ( v.medicines )
+            {
+                for (let i = 0; i < v.medicines.length; i++)
+                {
+                    const medicine = v.medicines[i];
+                    medicines_list += `<li class="list-group-item">${medicine.medName}</li>`
+                }
+            }
+
+            html+= `<div class="tr" data-role="row" data-id="${v.prescriptionId}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">
+                            <div class="mb-2">${v.patientName}</div>
+                            <div class="">${v.patientPhone}</div>
+                        </div>
+                        <div class="td">
+                            ${v.clinicName}
+                        </div>
+                        <div class="td">
+                            ${v.employee_name}
+                        </div>
+                        <div class="td">
+                            <div class="text-04 mb-2">${FUI_DISPLAY_LANG.views.pages.global.attributes.medicines}: (${medicines})</div>
+                            <div class="">
+                                <ul class="list-group list-group-flush overflow-x-hidden overflow-y-auto max-height-100px pointer">
+                                    ${medicines_list}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="td">
+                            ${v.prescriptionDate} ${v.prescriptionTime} 
+                        </div>
+                    </div>PAG_SEP`
+        })
+        // add html
+        new SmoothPagination(prescriptions_history_pagination, prescriptions_history_tableElement.find('.tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+        // display extra data
+        prescriptions_history_extra_data_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+                ${ FUI_DISPLAY_LANG.views.pages.global.created_by } ${last_data.employee_name}, 
+                ${ FUI_DISPLAY_LANG.views.pages.global.in_date } <span class="text-primary">${last_data.prescriptionDate} ${last_data.prescriptionTime}</span>
+            </li>
+        `)
+    }
+    // Consommables history
+    consommables_history = page_container.find('#consommables_history')
+    consommables_history_search_btn = consommables_history.find('#consommables_history_search_btn')
+    consommables_history_search_input = consommables_history.find('#consommables_history_search_input')
+    consommables_history_date_start_input = consommables_history.find('#consommables_history_date_start_input')
+    consommables_history_date_end_input = consommables_history.find('#consommables_history_date_end_input')
+    consommables_history_pagination = consommables_history.find('#consommables_history_pagination')
+    consommables_history_tableElement = consommables_history.find('#consommables_history_tableElement')
+
+    var consommables_history_total = page_container.find('#consommables_history_total');
+    var consommables_history_extra_data_list = page_container.find('#consommables_history_extra_data_list');
+
+    consommables_history_date_start_input.val( CURRENT_DATE )
+    consommables_history_date_end_input.val( CURRENT_DATE )
+
+    // search between dates
+    consommables_history_search_btn.off('click').on('click', async e =>
+    {
+        displayAllConsommablesHistory({
+            method_type: 'patient_local_search',
+            patientId: PatientObject.patientId,
+            query: consommables_history_search_input.val(),
+            advanced: {
+                start: consommables_history_date_start_input.val(),
+                end: consommables_history_date_end_input.val(),
+            }
+        })
+    });
+    // search
+    consommables_history_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllConsommablesHistory({
+            method_type: 'patient_local_search',
+            patientId: PatientObject.patientId,
+            query: consommables_history_search_input.val()
+        })
+    });
+    // display all
+    displayAllConsommablesHistory({
+        method_type: 'patient_local_search',
+        patientId: PatientObject.patientId,
+        query: consommables_history_search_input.val()
+    })
+    async function displayAllConsommablesHistory(params)
+    {
+        // total_depts
+        consommables_history_total.text(0).data('total', 0).attr('data-total', 0)
+        //
+        consommables_history_extra_data_list.html('')
+        consommables_history_tableElement.find('.tbody').html('');
+        SectionLoader(consommables_history_tableElement)
+        if ( params.method_type == 'patient_local_search' )
+            var res = await CONSOMMABLE_MODEL.patient_local_search(params)
+
+        SectionLoader(consommables_history_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            consommables_history.addClass('d-none')
+            return
+        }
+        // show wrapper
+        consommables_history.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        var quantity_total = 0
+        var last_data = firstArrayElement(data)
+        $.each(data, (k,v) =>
+        {
+            quantity_total += parseInt(v.consommable_quantity)
+
+            html+= `<div class="tr" data-role="row" data-id="${v.id}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">
+                            <div class="">${v.patientName}</div>
+                        </div>
+                        <div class="td">
+                            ${v.administration_name}
+                        </div>
+                        <div class="td">
+                            <div class="mb-2">${v.consommable_code}</div>
+                            <div class="">${v.consommable_name}</div>
+                        </div>
+                        <div class="td">
+                            (<span class="text-success">${v.consommable_quantity}</span>)
+                        </div>
+                        <div class="td">
+                            ${v.created_at}
+                        </div>
+                    </div>PAG_SEP`
+        })
+        // add html
+        new SmoothPagination(consommables_history_pagination, consommables_history_tableElement.find('.tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+        // display extra data
+        consommables_history_total.text(quantity_total)
+        consommables_history_extra_data_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+                ${ FUI_DISPLAY_LANG.views.pages.global.created_by } ${last_data.employee_name}, 
+                ${ FUI_DISPLAY_LANG.views.pages.global.in_date } <span class="text-primary">${last_data.created_at}</span>
+            </li>
+        `)
+    }
+
+    // Appointments History
+    appointments_history = page_container.find('#appointments_history')
+
+    const previous_apt_list = page_container.find('#previous_apt_list')
+    const next_apt_list = page_container.find('#next_apt_list')
+
+    appointments_history_search_btn = appointments_history.find('#appointments_history_search_btn')
+    appointments_history_search_input = appointments_history.find('#appointments_history_search_input')
+    appointments_history_date_start_input = appointments_history.find('#appointments_history_date_start_input')
+    appointments_history_date_end_input = appointments_history.find('#appointments_history_date_end_input')
+    appointments_history_pagination = appointments_history.find('#appointments_history_pagination')
+    appointments_history_tableElement = appointments_history.find('#appointments_history_tableElement')
+
+    var appointments_history_total = page_container.find('#appointments_history_total');
+    var appointments_history_extra_data_list = page_container.find('#appointments_history_extra_data_list');
+
+    appointments_history_date_start_input.val( CURRENT_DATE )
+    appointments_history_date_end_input.val( CURRENT_DATE )
+
+    // last appointment
+    if ( PatientObject.appointments.previous )
+    {
+        previous_apt_list.closest('.COL_WRAPPER').removeClass('d-none')
+        previous_apt_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.text72}</span>: 
+                <span>${PatientObject.appointments.previous.className}</span>
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.text39}</span>: 
+                <span>${PatientObject.appointments.previous.aptNote}</span>
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.date_and_time}</span>: 
+                <span>${PatientObject.appointments.previous.aptDate} ${PatientObject.appointments.previous.aptTime}</span> 
+                <span>(${PatientObject.appointments.previous.aptDate_diff.auto})</span>
+            </li>
+        `)
+    }
+    else
+    {
+        previous_apt_list.closest('.COL_WRAPPER').addClass('d-none')
+    }
+    
+    // next appointment
+    if ( PatientObject.appointments.next )
+    {
+        next_apt_list.closest('.COL_WRAPPER').removeClass('d-none')
+        next_apt_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.text72}</span>: 
+                <span>${PatientObject.appointments.next.className}</span>
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.text39}</span>: 
+                <span>${PatientObject.appointments.next.aptNote}</span>
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${FUI_DISPLAY_LANG.views.pages.global.date_and_time}</span>: 
+                <span>${PatientObject.appointments.next.aptDate} ${PatientObject.appointments.next.aptTime}</span> 
+                <span>(${PatientObject.appointments.next.aptDate_diff.auto_remaining})</span>
+            </li>
+        `)
+
+    }
+    else
+    {
+        next_apt_list.closest('.COL_WRAPPER').addClass('d-none')
+    }
+    
+    // search between dates
+    appointments_history_search_btn.off('click').on('click', async e =>
+    {
+        displayAllAppointmentsHistory({
+            method_type: 'private_patient_search',
+            patientId: PatientObject.patientId,
+            query: appointments_history_search_input.val(),
+            advanced: {
+                start: appointments_history_date_start_input.val(),
+                end: appointments_history_date_end_input.val(),
+            }
+        })
+    });
+    // search
+    appointments_history_search_input.off('keyup').on('keyup', async e =>
+    {
+        displayAllAppointmentsHistory({
+            method_type: 'private_patient_search',
+            patientId: PatientObject.patientId,
+            query: appointments_history_search_input.val()
+        })
+    });
+    // display all
+    displayAllAppointmentsHistory({
+        method_type: 'private_patient_search',
+        patientId: PatientObject.patientId,
+        query: appointments_history_search_input.val()
+    })
+
+    async function displayAllAppointmentsHistory(params)
+    {
+        // total
+        appointments_history_total.text(0)
+        //
+        appointments_history_extra_data_list.html('')
+        appointments_history_tableElement.find('.tbody').html('');
+        SectionLoader(appointments_history_tableElement)
+        if ( params.method_type == 'private_patient_search' )
+            var res = await APPOINTMENT_MODEL.private_patient_search(params)
+
+        SectionLoader(appointments_history_tableElement, '')
+        if ( res.code == 404 )
+        {
+            // hide wrapper
+            appointments_history.addClass('d-none')
+            return
+        }
+        // show wrapper
+        appointments_history.removeClass('d-none')
+        var data = res.data;
+        var html = '';
+        var last_data = firstArrayElement(data)
+        appointments_history_total.text(data.length)
+        $.each(data, (k,v) =>
+        {
+            html += `<div class="tr" data-role="row" data-aptid="${v.aptId}" data-patient-id="${v.patientId}" data-patient-name="${v.patientName}" data-special_case_id="${v.special_case_id}" data-employee_id="${v.employee_id}">
+                        <div class="td">
+                            <input type="checkbox" class="form-check-input pointer" data-role="CHECK">
+                        </div>
+                        <div class="td">
+                            <div>${v.aptName}</div>
+                        </div>
+                        <div class="td">${v.className}</div>
+                        <div class="td" data-perm="view_patient_appointment_price">${v.aptPrice}</div>
+                        <div class="td">
+                            <div>${v.patientName}</div>
+                            <div class="text-muted text-04">(${v.patientPhone})</div>
+                        </div>
+                        <div class="td">${v.aptNote}</div>
+                        <div class="td">
+                            <div>${v.aptDate} ${v.aptTime}</div>
+                        </div>
+                    </div>PAG_SEP`
+        })
+        // add html
+        new SmoothPagination(appointments_history_pagination, appointments_history_tableElement.find('.tbody'), {
+            data: html.split('PAG_SEP'),
+            resultsPerPage: 6
+        });
+       // display extra data
+       appointments_history_extra_data_list.html(`
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text36 }: </span>
+                <span>${FUI_DISPLAY_LANG.views.pages.global.for_} </span>
+                <span>${last_data.patientName}, </span>
+                <span class="text-primary">${last_data.aptDate} ${last_data.aptTime}</span> 
+            </li>
+            <li class="list-group-item">
+                <span class="fw-500">${ FUI_DISPLAY_LANG.views.pages.global.text39 }: </span>
+                <span>${last_data.aptNote} </span>
+            </li>
+        `)
+    }
+
+}
+
+
+})
+
+</script>

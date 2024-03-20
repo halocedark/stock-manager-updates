@@ -1,0 +1,67 @@
+<span id="select_supplier_template" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label39 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_supplier_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'select_supplier_template_center_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- eventsReceiverId %>`
+
+        var select_supplier_template = $('#select_supplier_template')
+        var select_supplier_template_search_input = select_supplier_template.find('#select_supplier_template_search_input')
+        var select_supplier_template_center_select = select_supplier_template.find('#select_supplier_template_center_select')
+
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_supplier_template_center_select' : `<%- locals.selectId %>`
+
+        var select_supplier_template_center_select = select_supplier_template.find(`#${selectId}`)
+        // search
+        detectTypingEnd(select_supplier_template_search_input, () =>
+        {
+            select_supplier_template_displayAll()
+        }, 500)
+        // select_supplier_template_search_input.on('keyup', select_supplier_template_displayAll)
+
+        select_supplier_template_displayAll()
+        async function select_supplier_template_displayAll()
+        {
+            var res = await SUPPLIER_MODEL.search({
+                query: select_supplier_template_search_input.val()
+            })
+            select_supplier_template_center_select.html('')
+            if ( res.code == 200 )
+            {
+                var data = res.data
+                var html = ''
+
+                $.each(data, (k,v) =>
+                {
+                    var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                    html += `<option value="${v.supplier_id}" data-object="${data}">${v.supplier_name}</option>`	
+                })
+                // add html
+                select_supplier_template_center_select.html(html)
+                // dispatch an event
+                var event = new CustomEvent('supplier-selected', { 
+                    detail: { 
+                        supplier: {
+                            id: select_supplier_template_center_select.find(':selected').val(),
+                            name: select_supplier_template_center_select.find(':selected').text(),
+                            data: checkJSON( decodeURIComponent( atob( select_supplier_template_center_select.find(':selected').data('object') ) ) ),
+                        },
+                        eventsReceiverId: eventsReceiverId 
+                    } 
+                });
+
+                document.dispatchEvent(event)
+            }
+        }
+    })
+
+</script>

@@ -1,0 +1,97 @@
+<span id="select_departments_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label26 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_departments_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'select_departments_template_center_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        const defaultOptions = {
+            currentCenterOnly: false,
+        }
+
+        var options = checkJSON(`<%- (locals.options) ? JSON.stringify(locals.options) : '' %>`)
+
+        options = {...defaultOptions, ...options}
+
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_departments_template_center_select' : `<%- locals.selectId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'department-selected' : `<%- locals.selectionEventName %>`
+
+        var select_departments_template = $('#select_departments_template_'+componentId)
+        var select_departments_template_search_input = select_departments_template.find('#select_departments_template_search_input')
+        var select_departments_template_center_select = select_departments_template.find(`#${selectId}`)
+
+        // search
+        detectTypingEnd(select_departments_template_search_input, () =>
+        {
+            select_departments_template_displayAll()
+        }, 500)
+        // select_departments_template_search_input.on('keyup', select_departments_template_displayAll)
+
+        select_departments_template_displayAll()
+        async function select_departments_template_displayAll()
+        {
+            if ( options.currentCenterOnly )
+            {
+                var res = await TREATMENT_CLASS_MODEL.searchLocal({
+                    SearchObject: {
+                        query: select_departments_template_search_input.val(),
+                        clinicId: USER_CONFIG.administration.clinicId,
+                    }
+                })
+            }
+            else
+            {
+                var res = await TREATMENT_CLASS_MODEL.search({
+                    query: select_departments_template_search_input.val()
+                })
+            }
+            
+            select_departments_template_center_select.html(`<option value=""><%= UI_DISPLAY_LANG.views.pages.global.placeholder11 %></option>`)
+            if ( res.code == 200 )
+            {
+                var data = res.data
+                var html = ''
+
+                $.each(data, (k,v) =>
+                {
+                    var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                    html += `<option value="${v.classId}" data-object="${data}">${v.className}</option>`	
+                })
+                // add html
+                select_departments_template_center_select.append(html)
+                // dispatch an event
+                var event = new CustomEvent(selectionEventName, { 
+                    detail: { 
+                        department: {
+                            id: select_departments_template_center_select.find(':selected').val(),
+                            name: select_departments_template_center_select.find(':selected').text(),
+                            data: checkJSON( decodeURIComponent( atob( select_departments_template_center_select.find(':selected').data('object') ) ) ),
+                        },
+                        eventsReceiverId: eventsReceiverId 
+                    } 
+                });
+
+                document.dispatchEvent(event)
+                //
+                dispatchCustomEvent(selectionEventName, { 
+                    department: {
+                            id: select_departments_template_center_select.find(':selected').val(),
+                            name: select_departments_template_center_select.find(':selected').text(),
+                            data: checkJSON( decodeURIComponent( atob( select_departments_template_center_select.find(':selected').data('object') ) ) ),
+                        },
+                    eventsReceiverId: eventsReceiverId 
+                }, select_departments_template_center_select[0])
+            }
+        }
+    })
+
+</script>

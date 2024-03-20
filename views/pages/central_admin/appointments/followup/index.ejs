@@ -1,0 +1,410 @@
+<div class="container-fluid" id="followupAppointmentsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.all_appointements.sectionTitle %></h1>
+	</div>
+	<div class="alert alert-info mt-3 mb-2" style="display:none;" id="ERROR_BOX">
+		<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+		<div class="alert-text" id="text"></div>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper01">
+		<div class="table-nav">
+			<div class="mb-2">
+				<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.all_appointements.label02 %></label>
+				<select name="" class="input-text" id="clinicSelect">
+					
+				</select>
+			</div>
+			<input type="text" class="input-text input-text-outline border-bottom-forced" id="searchAptInput" placeholder="<%= UI_DISPLAY_LANG.views.pages.all_appointements.ph01 %>">
+		</div>
+		<div id="pagination1" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement1">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card hover-shadow" data-role="APT" data-aptid="" style="cursor: pointer;">
+					<div class="card-body no-pointer">
+						<div class="h5">قسم الحجامة</div>
+						<div class="text-02">(4) جلسات</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper02" style="display: none;">
+		<button class="btn btn-light btn-sm mb-4" data-role="BACK_TO_MAIN_UI_BTN" style="width:120px;">
+			<i class="fas fa-arrow-left"></i>
+		</button>
+		<div id="pagination2" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement2">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card hover-shadow" data-role="APT" data-aptid="" style="cursor: pointer;">
+					<div class="card-body no-pointer">
+						<div class="h5">قسم الحجامة</div>
+						<div class="text-02">(4) جلسات</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper03" style="display: none;">
+		<button class="btn btn-light btn-sm mb-4" data-role="BACK_TO_SESSIONS_BTN" style="width:120px;">
+			<i class="fas fa-arrow-left"></i>
+		</button>
+		<div class="mb-3">
+			<div class="text-01" id="sessionName">
+				
+			</div>
+		</div>
+		<div class="list-04" id="tableElement4">
+			<!--
+			<div class="list-item d-flex">
+				<div class="mx-2">
+					<input type="checkbox" class="form-check-input pointer" data-role="CHECK" data-patientid="">
+				</div>
+				<div class="text-02" style="flex-grow: 2;">
+					
+				</div>
+				<div class="mx-2" style="width:50px;flex-grow: 8;">
+					<button class="btn btn-light bg-white btn-sm pointer" data-role="DELETE_PATIENT" data-patientid="">
+						<i class="fas fa-trash no-pointer"></i>
+					</button>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var followupAppointmentsContainer = $('#followupAppointmentsContainer');
+if ( followupAppointmentsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = followupAppointmentsContainer.find('#ERROR_BOX');
+
+// var clinicsSearchInput = followupAppointmentsContainer.find('#clinicsSearchInput');
+var clinicSelect = followupAppointmentsContainer.find('#clinicSelect');
+var searchAptInput = followupAppointmentsContainer.find('#searchAptInput');
+var pagination1 = followupAppointmentsContainer.find('#pagination1');
+var tableElement1 = followupAppointmentsContainer.find('#tableElement1');
+
+var searchSessionsInput = followupAppointmentsContainer.find('#searchSessionsInput');
+var pagination2 = followupAppointmentsContainer.find('#pagination2');
+var tableElement2 = followupAppointmentsContainer.find('#tableElement2');
+
+var tableElement4 = followupAppointmentsContainer.find('#tableElement4');
+
+var BACK_TO_MAIN_UI_BTN = followupAppointmentsContainer.find('[data-role="BACK_TO_MAIN_UI_BTN"]');
+var BACK_TO_SESSIONS_BTN = followupAppointmentsContainer.find('[data-role="BACK_TO_SESSIONS_BTN"]');
+
+var wrapper01 = followupAppointmentsContainer.find('#wrapper01');
+var wrapper02 = followupAppointmentsContainer.find('#wrapper02');
+var wrapper03 = followupAppointmentsContainer.find('#wrapper03');
+var sessionName = wrapper03.find('#sessionName');
+
+var SESSION = {};
+var APT = {};
+let clinics_promise
+// back to main ui
+BACK_TO_MAIN_UI_BTN.off('click');
+BACK_TO_MAIN_UI_BTN.on('click', e =>
+{
+    wrapper01.slideDown(200).siblings('.WRAPPER').slideUp(200);
+});
+// back to sessions ui
+BACK_TO_SESSIONS_BTN.off('click');
+BACK_TO_SESSIONS_BTN.on('click', e =>
+{
+    wrapper02.slideDown(200).siblings('.WRAPPER').slideUp(200);
+});
+// tableElement1 click
+tableElement1.off('click');
+tableElement1.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'UPDATE' )
+    {
+        var aptId = target.data('aptid');
+        goToPage('all-followup-appointments', {
+            aptId: aptId
+        })
+    }
+    else if ( target.data('role') == 'APT' )
+    {
+        var aptId = target.data('aptid');
+        APT.name = target.data('name');
+        APT.id = aptId;
+        displayAptSessions();
+    }
+    else if ( target.data('role') == 'ADD_PATIENTS_BTN' )
+    {
+        var aptId = target.data('aptid');
+        var aptName = target.data('aptname');
+        var options = {
+            clinicId: clinicSelect.find(':selected').val(),
+            aptId: aptId,
+            aptName: aptName,
+        };
+        AddAppointementPatientsDialog(options, args =>
+        {
+            searchAptInput.trigger('keyup')
+        });
+    }
+});
+// tableElement2 click
+tableElement2.off('click');
+tableElement2.on('click', async e =>
+{
+    var target = $(e.target);
+    
+    if ( target.data('role') == 'SESSION' )
+    {
+        var session_id = target.data('sessionid');
+        SESSION.name = target.data('name');
+        SESSION.id = session_id;
+        displaySessionPatients();
+    }
+});
+// tableElement4 click
+tableElement4.off('click');
+tableElement4.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'SET_PATIENT_ABSENT' )
+    {
+        PromptConfirmDialog().then(async c =>
+        {
+            var patientId = target.data('patientid');
+            var AppointementObject = {
+                session_id: SESSION.id,
+                patientId: patientId,
+                status: ATT_ABSENT
+            };
+            // display loader
+            SectionLoader(tableElement4);
+            var response = await APPOINTMENT_MODEL.followup_setPatientAttendance(AppointementObject);
+            // hide loader
+            SectionLoader(tableElement4, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            //
+            displaySessionPatients();	
+        });
+    }
+});
+// search apt
+searchAptInput.off('keyup');
+searchAptInput.on('keyup', async e =>
+{
+    var SearchObject = {
+        clinicId: clinicSelect.find(':selected').val(),
+        query: searchAptInput.val()
+    };
+    //display loader
+    SectionLoader(tableElement1);
+    var response = await APPOINTMENT_MODEL.followup_local_search(SearchObject);
+    // hide loader
+    SectionLoader(tableElement1, '');
+    // clear html
+    tableElement1.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        {
+            html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card hover-shadow" data-role="APT" data-aptid="${v.aptId}" style="cursor: pointer;" data-name="${v.aptName}">
+                            <div class="card-body no-pointer">
+                                <div class="h5">${v.aptName}</div>
+                                <div class="text-02">(${v.sessions.length}) جلسات</div>
+                                <div class="text-02">(${v.patients.length}) مرضى</div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <a href="#" data-role="UPDATE" data-perm="update_followup_appointment" class="text-dark no-link" data-aptid="${v.aptId}">
+                                    <i class="fas fa-edit no-pointer"></i>
+                                </a>
+                                <a href="#" data-role="ADD_PATIENTS_BTN" class="mx-2" data-aptid="${v.aptId}" data-aptname="${v.aptName}">اظافة زبائن</a>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card hover-shadow" data-role="APT" data-aptid="${v.aptId}" style="cursor: pointer;" data-name="${v.aptName}">
+                            <div class="card-body no-pointer">
+                                <div class="h5">${v.aptName}</div>
+                                <div class="text-02">(${v.sessions.length}) sessions</div>
+                                <div class="text-02">(${v.patients.length}) malades</div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <a href="#" data-role="UPDATE" data-perm="update_followup_appointment" class="text-dark no-link" data-aptid="${v.aptId}">
+                                    <i class="fas fa-edit no-pointer"></i>
+                                </a>
+                                <a href="#" data-role="ADD_PATIENTS_BTN" class="mx-2" data-aptid="${v.aptId}" data-aptname="${v.aptName}">ajouter des clients</a>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }
+    });
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination1, tableElement1, options);
+});
+// search clinics
+clinics_promise = CLINIC_MODEL.search('')
+clinics_promise.then(response =>
+{
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.clinicId}">${v.clinicName}</option>`;	
+    });
+    // add html
+    clinicSelect.html(html);
+});
+// select clinic
+clinicSelect.off('change');
+clinicSelect.on('change', e =>
+{
+    displayAllApt();
+});
+// display all apt
+await clinics_promise
+displayAllApt()
+function displayAllApt()
+{
+    searchAptInput.trigger('keyup');
+}
+// display apt sessions
+async function displayAptSessions()
+{
+    // display wrapper02
+    wrapper02.slideDown(200).siblings('.WRAPPER').slideUp(200);
+    // display loader
+    SectionLoader(tableElement2);
+    var response = await APPOINTMENT_MODEL.followup_sessions_index(APT.id);
+    // hide loader
+    SectionLoader(tableElement2, '');
+    // clear html
+    tableElement2.html('');
+    if ( response.code == 404 )
+    {
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        return;
+    }
+
+    var data = response.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        var aptDateFormat = (v.aptDateFormat == 0) ? 'اليوم' : `${v.aptDateFormat} أيام`;
+        if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            aptDateFormat = (v.aptDateFormat == 0) ? "aujourd'hui" : `${v.aptDateFormat} jours`;
+        }
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        {
+            html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card hover-shadow" data-role="SESSION" data-sessionid="${v.session_id}" style="cursor: pointer;" data-name="${v.session_name}">
+                            <div class="card-body no-pointer">
+                                <div class="h5">${v.session_name}</div>
+                                <div class="text-02">عدد الزبائن: (${v.patients.length})</div>
+                                <div class="text-02">في: ${v.session_date}</div>
+                                <div class="text-02">على الساعة: ${v.session_time}</div>
+                                <div class="text-04 text-muted">(${aptDateFormat})</div>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card hover-shadow" data-role="SESSION" data-sessionid="${v.session_id}" style="cursor: pointer;" data-name="${v.session_name}">
+                            <div class="card-body no-pointer">
+                                <div class="h5">${v.session_name}</div>
+                                <div class="text-02">les clients: (${v.patients.length})</div>
+                                <div class="text-02">dans: ${v.session_date}</div>
+                                <div class="text-02">à l'heure: ${v.session_time}</div>
+                                <div class="text-04 text-muted">(${aptDateFormat})</div>
+                            </div>
+                        </div>
+                    </div>PAG_SEP`;	
+        }
+    });
+    // add html
+    var options = {
+        data: html.split('PAG_SEP')
+    };
+    new SmoothPagination(pagination2, tableElement2, options);
+}
+// display session patients
+async function displaySessionPatients()
+{
+    // display wrapper03
+    wrapper03.slideDown(200).siblings('.WRAPPER').slideUp(200);
+    // display loader
+    SectionLoader(tableElement4);
+    var response = await APPOINTMENT_MODEL.followup_sessions_patients(SESSION.id);
+    // hide loader
+    SectionLoader(tableElement4, '');
+    // clear html
+    tableElement4.html('');
+    if ( response.code == 404 )
+    {
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        return;
+    }
+
+    var data = response.data;
+    var html = '';
+    // set session name
+    sessionName.html(`${APT.name} | ${SESSION.name}`);
+    $.each(data, (k,v) =>
+    {
+        var attStatusTag = `${ (v.attendenceStatus == ATT_ABSENT) ? '<div class="tag-1 danger">غائب</div>' : '' }`;
+        if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            attStatusTag = `${ (v.attendenceStatus == ATT_ABSENT) ? '<div class="tag-1 danger">absent</div>' : '' }`;
+        }
+        html += `<div class="list-item d-flex flex-align-center">
+                    <div class="mx-2" style="width:50px;">
+                        <button class="btn btn-light btn-sm pointer" data-role="SET_PATIENT_ABSENT" data-patientid="${v.patientId}" style="background:none;">
+                            <i class="fas fa-trash no-pointer"></i>
+                        </button>
+                    </div>
+                    <div class="text-02 mx-4 ${ (v.attendenceStatus == ATT_ABSENT) ? 'text-line-through' : '' }" style="flex-grow: 1;">
+                        <div>${v.patientName}</div>
+                        <div>${v.patientPhone}</div>
+                    </div>
+                    <span>${attStatusTag}</span>
+                </div>`;		
+    });
+    // add html
+    tableElement4.html(html);
+}
+
+})
+
+</script>

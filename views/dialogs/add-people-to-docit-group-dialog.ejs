@@ -1,0 +1,78 @@
+<div class="has-direction-locale px-3 py-3 h-100 overflow-x-hidden overflow-y-auto max-height-100">
+
+    <div>
+
+        <h4 class="h4 mb-4" id="add_people_to_docit_group_dialog__group_name"></h4>
+
+        <div class="row gy-3">
+
+            <div class="col-md-12">
+
+                <form id="add_people_to_docit_group_dialog__create_form" class="mb-3">
+
+                    <div class="mb-4">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/external/docit/select-users.template.ejs`, {
+                            componentId: 'add_people_to_docit_group_dialog__create_form__select_users_template',
+                            selectId: 'add_people_to_docit_group_dialog__create_form__user_select',
+                            options: {
+                                multiple: true,
+                            }
+                        }) -%>
+                    </div>
+    
+                    <div class="">
+                        <button type="submit" class="btn btn-success rounded">
+                            <%= UI_DISPLAY_LANG.views.pages.global.actions.add %>
+                        </button>
+                    </div>
+
+                </form>
+
+                <div class="" data-perm="view_people_of_docit_groups">
+                    <a class="fs-14 js_panel_toggler_button" href="#" data-target="#add_people_to_docit_group_dialog__people_panel" >
+                        <%= UI_DISPLAY_LANG.views.pages.global.view_people %>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="col-md-12 d-none" id="add_people_to_docit_group_dialog__people_panel">
+
+                <div class="has-text-aligned-locale-inverted">
+                    <div class="close-button-sm js_panel_close_button" data-target="#add_people_to_docit_group_dialog__people_panel">
+                        <i class="xfb xfb-close-sm-thin"></i>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="">
+                        <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox2.template.ejs`, {
+                            searchBtnId: 'add_people_to_docit_group_dialog__search_btn',
+                            searchInputId: 'add_people_to_docit_group_dialog__search_input',
+                            searchInputPlaceholder: UI_DISPLAY_LANG.views.pages.global.placeholder5,
+                            searchBtnStyle: 'width: 10%;height:100%;',
+                            searchBtnIconStyle: 'width: 17px;',
+                            searchBoxStyle: 'background-color: #F0F2F5; min-height: unset !important; height:40px; max-width:95%; border: none; border-radius: 20px;',
+                            searchInputStyle: 'background-color: #F0F2F5;',
+                            searchInputHolderStyle: 'border:none;',
+                        }) -%>
+                    </div>
+
+                </div>
+
+                <div class="" id="add_people_to_docit_group_dialog__tableElement"></div>
+
+                <div class="text-center mt-5">
+                    <a href="#" class="text-color-32 pointer" id="add_people_to_docit_group_dialog__load_more_button">
+                        <%= UI_DISPLAY_LANG.views.pages.global.load_more_button %>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

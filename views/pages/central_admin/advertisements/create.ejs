@@ -1,0 +1,206 @@
+<div class="container-fluid" id="addAdvertisementsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_advertisements.sectionTitle %></h1>
+	</div>
+	<div class="mt-3 app-block">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+		<div class="" id="wrapper01">
+			<form action="#" id="addForm">
+				<div class="mb-3 section">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.label01 %></label>
+					<select name="" class="select-01" id="adTypeSelect">
+						
+					</select>
+				</div>
+				<div class="mb-4">
+					<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.label02 %></label>
+					<input type="text" class="input-text input-text-outline" id="adNameInput">
+				</div>
+				<div class="mb-3">
+					<div class="form-field-01">
+						<div class="form-field-input-holder">
+							<div class="form-field-label"><%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.label03 %></div>
+							<input type="date" id="adDateInput" class="form-field-input">
+						</div>
+					</div>
+				</div>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="isActiveCheck" checked>
+						<label class="form-check-label" for="isActiveCheck">
+							<%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.label05 %>
+						</label>
+					</div>
+				</div>
+				<div class="mb-5">
+					<div class="row gx-4 gy-3">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.label04 %></label>
+							<input type="file" class="input-text" accept="image/*" id="adImageFileInput">
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="resizableDiv" class="p-4 rounded border" style="height: 320px;max-width: 100%;overflow: hidden;">
+								<div class="border rounded bg-info" id="adPreviewDiv" style="width:300px;height:50px;">
+									<img src="../assets/img/utils/placeholder.svg" class="w-100 h-100 d-none" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="">
+					<input type="submit" class="btn btn-primary btn-sm" value="<%= UI_DISPLAY_LANG.views.pages.add_advertisements.form01.submitBTN01 %>">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var addAdvertisementsContainer = $('#addAdvertisementsContainer');
+if ( addAdvertisementsContainer[0] == undefined )
+    return;
+
+var ERROR_BOX = addAdvertisementsContainer.find('#ERROR_BOX');
+var addForm = addAdvertisementsContainer.find('#addForm');
+var adTypeSelect = addForm.find('#adTypeSelect');
+var adNameInput = addForm.find('#adNameInput');
+var adDateInput = addForm.find('#adDateInput');
+var isActiveCheck = addForm.find('#isActiveCheck');
+var adImageFileInput = addForm.find('#adImageFileInput');
+var adPreviewDiv = addForm.find('#adPreviewDiv');
+var resizableDiv = addForm.find('#resizableDiv');
+
+var wrapper01 = addAdvertisementsContainer.find('#wrapper01');
+
+adDateInput.val(CURRENT_DATE);
+
+resizableDiv.resizable();
+
+var AdvertisementObject = {
+    ad_id: sessionData().ad_id
+};
+// clear session data
+sessionData(true)
+// addForm submit
+addForm.off('submit');
+addForm.on('submit', e =>
+{
+    e.preventDefault();
+    var target = addForm;
+    AdvertisementObject.type_id = adTypeSelect.find(':selected').val();
+    AdvertisementObject.ad_name = adNameInput.val();
+    AdvertisementObject.ad_date = adDateInput.val();
+    AdvertisementObject.isActive = (isActiveCheck.is(':checked')) ? ST_YES : ST_NO;
+    if ( adImageFileInput[0].files.length > 0 )
+        AdvertisementObject.ad_image = adImageFileInput[0].files[0];
+
+    SectionLoader(wrapper01);
+    // update
+    if ( AdvertisementObject.ad_id != null )
+    {
+        ADVERTISEMENT_MODEL.update(AdvertisementObject).then(response =>
+        {
+            SectionLoader(wrapper01, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            target[0].reset();
+            AdvertisementObject.ad_id = null;
+            adDateInput.val(CURRENT_DATE);
+        });
+        return;
+    }
+    // add
+    ADVERTISEMENT_MODEL.store(AdvertisementObject).then(response =>
+    {
+        SectionLoader(wrapper01, '');
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        target[0].reset();
+        adDateInput.val(CURRENT_DATE);
+    });
+});
+// select ad type
+adTypeSelect.off('change');
+adTypeSelect.on('change', e =>
+{
+    var selected = adTypeSelect.find(':selected');
+    var width = selected.data('width');
+    var height = selected.data('height');
+
+    adPreviewDiv.css('width', width)
+    .css('height', height);
+});
+// list types
+SectionLoader(adTypeSelect.closest('.section'));
+var response = await ADVERTISEMENT_MODEL.types_list();
+SectionLoader(adTypeSelect.closest('.section'), '');
+if ( response.code == 200 )
+{
+    var data = response.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        if ( FUI_DISPLAY_LANG.lang == 'ar' )
+        {
+            html += `<option value="${v.type_id}" data-width="${v.type_width}" data-height="${v.type_height}">${v.type_name_ar}</option>`;
+        }
+        else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+        {
+            html += `<option value="${v.type_id}" data-width="${v.type_width}" data-height="${v.type_height}">${v.type_name_fr}</option>`;
+        }
+    });
+    adTypeSelect.html(html);
+    adTypeSelect.trigger('change');	
+}
+// select image
+adImageFileInput.off('change');
+adImageFileInput.on('change', e =>
+{
+    if ( adImageFileInput[0].files.length == 0 )
+        return;
+
+    adPreviewDiv.find('img').attr('src', adImageFileInput[0].files[0].path);
+});
+// display one
+displayOne();
+async function displayOne()
+{
+    if ( AdvertisementObject.ad_id == null )
+        return;
+
+    var response = await ADVERTISEMENT_MODEL.show(AdvertisementObject.ad_id);
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var ad_image_url = (data.ad_image_object) ? JSON.parse(data.ad_image_object).url : '../assets/img/utils/placeholder.svg';
+
+    setOptionSelected(adTypeSelect, data.type_id);
+    if ( data.isActive == ST_YES )
+        toggleCheck(isActiveCheck, true);
+    else if ( data.isActive == ST_NO )
+        toggleCheck(isActiveCheck, false);
+
+    adNameInput.val( data.ad_name );
+    adDateInput.val(data.ad_date);
+    adPreviewDiv.find('img').attr('src', ad_image_url);
+}
+
+})
+
+</script>

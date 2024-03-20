@@ -1,0 +1,792 @@
+<div class="container-fluid" id="statisticsContainer">
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+	</div>
+	<div class="mt-3">
+		<div class="row gx-4 gy-4">
+			<div class="col-lg-12 col-md-12 col-sm-12 app-block">
+				<div class="row gx-2 gy-3">
+					<div class="col-md-4">
+						<div id="calendarDiv" dir="ltr"></div>
+					</div>
+					<div class="col-md">
+						<div class="row gx-2 gy-2 h-100 my-0">
+							<div class="col-md-6 col-sm-12 mt-0">
+								<div class="stat-1" id="treasuryStat">
+									<div class="stat-header">
+										<div class="stat-icon-holder">
+											<img src="assets/img/utils/money-safe.png" alt="" class="stat-icon">	
+										</div>
+										<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text01 %></div>
+									</div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount" data-tooletip-top="">0.00 <span class="currency"> <%= UI_DISPLAY_LANG.views.pages.statistics.currency %></span></div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip"></div>
+									</div>
+									<div class="text-04"><%= UI_DISPLAY_LANG.views.pages.statistics.text13 %></div>
+									<div class="text-04">(<%= UI_DISPLAY_LANG.views.pages.statistics.text14 %>)</div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount1" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip1"></div>
+									</div>
+									<div class="text-04">(<%= UI_DISPLAY_LANG.views.pages.statistics.text15 %>)</div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount2" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip2"></div>
+									</div>
+									<div class="stat-status d-none">
+										<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+										<div class="stat-indicators">
+											<div class="stat-rate">
+												<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+												<span id="statInRate">0.00%</span>
+											</div>
+											<div class="stat-rate">
+												<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+												<span id="statOutRate">0.00%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12 mt-0">
+								<div class="stat-1" id="appointmentsStat" style="background-color: #EDF3FA;box-shadow: 0 2px 5px #dce9f7f5;">
+									<div class="stat-header">
+										<div class="stat-icon-holder">
+											<img src="assets/img/navbar/timetable.png" alt="" class="stat-icon">	
+										</div>
+										<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text05 %></div>
+									</div>
+									<div class="text-04"><%= UI_DISPLAY_LANG.views.pages.statistics.text09 %></div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount1" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip1"></div>
+									</div>
+									<div class="text-04"><%= UI_DISPLAY_LANG.views.pages.statistics.text10 %></div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount2" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip2"></div>
+									</div>
+									<div class="stat-status d-none">
+										<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+										<div class="stat-indicators">
+											<div class="stat-rate">
+												<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+												<span id="statInRate">0.00%</span>
+											</div>
+											<div class="stat-rate">
+												<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+												<span id="statOutRate">0.00%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="stat-1" id="patientsStat" style="background-color: #e8e1fd8a;box-shadow: 0 2px 5px #b69ff959;">
+									<div class="stat-header">
+										<div class="stat-icon-holder">
+											<img src="assets/img/navbar/patients.png" alt="" class="stat-icon">	
+										</div>
+										<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text03 %></div>
+									</div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip"></div>
+									</div>
+									<div class="stat-status d-none">
+										<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+										<div class="stat-indicators">
+											<div class="stat-rate">
+												<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+												<span id="statInRate">0.00%</span>
+											</div>
+											<div class="stat-rate">
+												<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+												<span id="statOutRate">0.00%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="stat-1" id="productsStat" style="background-color: #E8FBEB;box-shadow: 0 2px 5px #c7f7cf;">
+									<div class="stat-header">
+										<div class="stat-icon-holder">
+											<img src="assets/img/navbar/medicines.png" alt="" class="stat-icon">	
+										</div>
+										<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text06 %></div>
+									</div>
+									<div class="d-flex flex-space-between flex-align-center">
+										<div class="stat-amount" id="statAmount" data-tooletip-top="">0.00</div>
+										<div class="stat-amount-tooltip" id="statAmountTooltip"></div>
+									</div>
+									<div class="stat-status d-none">
+										<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+										<div class="stat-indicators">
+											<div class="stat-rate">
+												<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+												<span id="statInRate">0.00%</span>
+											</div>
+											<div class="stat-rate">
+												<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+												<span id="statOutRate">0.00%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg col-md col-sm-12 app-block mx-2 d-none">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<canvas id="chartEl01" class="" style="max-height:100%;"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mt-3">
+		<div class="row gx-4 gy-4">
+			<div class="col-lg-8 col-md-6 col-sm-12 app-block">
+				<div class="row gx-4 gy-4">
+					<div class="col-md-8 col-sm-12">
+						<div class="d-inline-flex flex-center w-100 h-100">
+							<canvas id="chartEl02" class=""></canvas>
+						</div>
+					</div>
+					<div class="col-md col-sm-12">
+						<div class="row gx-2 gy-2 h-100 my-0">
+							<div class="col-md-12 col-sm-12">
+								<div class="d-inline-flex flex-center w-100 h-100">
+									<div class="stat-1" id="ordersStat" style="background-color:#ffccdd73;box-shadow: 0 2px 5px #f9c1d4; height: auto;">
+										<div class="stat-header">
+											<div class="stat-icon-holder">
+												<img src="assets/img/utils/invoice.png" alt="" class="stat-icon">	
+											</div>
+											<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text07 %></div>
+										</div>
+										<div class="d-flex flex-space-between flex-align-center">
+											<div class="stat-amount" id="statAmount" data-tooletip-top="">0.00 </div>
+											<div class="stat-amount-tooltip" id="statAmountTooltip"></div>
+										</div>
+										<div class="stat-status d-none">
+											<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+											<div class="stat-indicators">
+												<div class="stat-rate">
+													<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+													<span id="statInRate">0.00%</span>
+												</div>
+												<div class="stat-rate">
+													<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+													<span id="statOutRate">0.00%</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+							</div>
+							<div class="col-md-12 col-sm-12">
+								<div class="d-inline-flex flex-center w-100 h-100">
+									<div class="stat-1" id="prescsStat" style="background-color:#f5ba7654;box-shadow: 0 2px 5px #f5ba76ad; height: auto;">
+										<div class="stat-header">
+											<div class="stat-icon-holder">
+												<img src="assets/img/navbar/prescription.png" alt="" class="stat-icon">	
+											</div>
+											<div class="stat-title"><%= UI_DISPLAY_LANG.views.pages.statistics.text08 %></div>
+										</div>
+										<div class="d-flex flex-space-between flex-align-center">
+											<div class="stat-amount" id="statAmount" data-tooletip-top="">0.00</div>
+											<div class="stat-amount-tooltip" id="statAmountTooltip"></div>
+										</div>
+										<div class="stat-status d-none">
+											<div class="stat-datetime"><%= UI_DISPLAY_LANG.views.pages.statistics.text04 %></div>
+											<div class="stat-indicators">
+												<div class="stat-rate">
+													<img src="assets/img/utils/increase.png" class="stat-arrow" alt="">
+													<span id="statInRate">0.00%</span>
+												</div>
+												<div class="stat-rate">
+													<img src="assets/img/utils/decrease.png" class="stat-arrow" alt="">
+													<span id="statOutRate">0.00%</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md col-sm-12 app-block mx-2">
+				<div class="d-inline-flex flex-center w-100 h-100" style="max-height: 100%;">
+					<canvas id="chartEl03" class="" style="max-height: 100%;"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(async function()
+{
+
+var statisticsContainer = $('#statisticsContainer')
+if ( !statisticsContainer[0] ) return
+
+var ERROR_BOX = statisticsContainer.find('#ERROR_BOX');
+
+var treasuryStat = statisticsContainer.find('#treasuryStat');
+var patientsStat = statisticsContainer.find('#patientsStat');
+var appointmentsStat = statisticsContainer.find('#appointmentsStat');
+var productsStat = statisticsContainer.find('#productsStat');
+var ordersStat = statisticsContainer.find('#ordersStat');
+var prescsStat = statisticsContainer.find('#prescsStat');
+
+var chartEl01 = statisticsContainer.find('#chartEl01');
+var chartEl02 = statisticsContainer.find('#chartEl02');
+var chartEl03 = statisticsContainer.find('#chartEl03');
+// init calendar
+new Calendar({
+    id: '#calendarDiv',
+    calendarSize: 'small',
+    theme: 'basic',
+    disableMonthYearPickers: true,
+    disableDayClick: true,
+    disableMonthArrowClick: true,
+    width: 500
+});
+
+// display loaders
+SectionLoader(treasuryStat);
+SectionLoader(patientsStat);
+SectionLoader(appointmentsStat);
+SectionLoader(productsStat);
+SectionLoader(productsStat);
+SectionLoader(ordersStat);
+SectionLoader(prescsStat);
+// treasury
+var treasury = await listAllTreasuryInfoLocal({
+    clinicId: USER_CONFIG.administration.clinicId
+});
+// hide loader
+SectionLoader(treasuryStat, '');
+if ( treasury.code == 200 )
+{
+    var data = treasury.data;
+    var expenses_today = data.expenses.today;
+    var currency = (FUI_DISPLAY_LANG.lang == 'ar') ? CURRENCY.ar : CURRENCY.fr;
+    var statAmountHTML = `${formatMoney(parseFloat(data.treasury_amount))}
+                    <span class="currency">${currency}</span>`;
+    treasuryStat.find('#statAmount').html(statAmountHTML);
+    treasuryStat.find('#statAmountTooltip').text( data.treasury_amount );
+
+    treasuryStat.find('#statAmount1').text( formatMoney( parseFloat(expenses_today.in) )+' '+currency );
+    treasuryStat.find('#statAmountTooltip1').text( expenses_today.in );	
+    treasuryStat.find('#statAmount2').text( formatMoney( parseFloat(expenses_today.out) )+' '+currency );
+    treasuryStat.find('#statAmountTooltip2').text( expenses_today.out );	
+}
+
+// patients
+var patients = await listPatientsLocal({
+    clinicId: USER_CONFIG.administration.clinicId
+});
+var patCMonthRate = 0;
+// hide loader
+SectionLoader(patientsStat, '');
+if ( patients.code == 200 )
+{
+    var data = patients.data;
+    var current = (data.today) ? data.today.length : 0;
+    var prior = (data.yesterday) ? data.yesterday.length : 0;
+    var total = (data.all) ? data.all.length : 0;
+    var inRate = current - (total - current);
+    inRate = (inRate / total) * 100;
+    var outRate = (total - prior) - prior;
+    outRate = (outRate / total) * 100;
+    
+    if ( current == 0 )
+        inRate = 0.00;
+    if ( prior == 0 )
+        outRate = 0.00;
+
+    patCMonthRate = inRate;
+
+    patientsStat.find('#statAmount').text( trimNumber(current) );
+    patientsStat.find('#statAmountTooltip').text( current );
+}
+
+// apts
+var apts = await listAppointementsLocal({
+    clinicId: USER_CONFIG.administration.clinicId
+});
+var aptCMonthRate = 0;
+// hide loader
+SectionLoader(appointmentsStat, '');
+if ( apts.code == 200 )
+{
+    var data = apts.data;
+    var current = (data.today) ? data.today.length : 0;
+    var prior = (data.yesterday) ? data.yesterday.length : 0;
+    var total = (data.all) ? data.all.length : 0;
+    var followup_today = (data.followup_today) ? data.followup_today.length : 0;
+    var general_today = (data.general_today) ? data.general_today.length : 0;
+    var inRate = current - (total - current);
+    inRate = (inRate / total) * 100;
+    var outRate = (total - prior) - prior;
+    outRate = (outRate / total) * 100;
+    
+    if ( current == 0 )
+        inRate = 0.00;
+    if ( prior == 0 )
+        outRate = 0.00;
+    
+    aptCMonthRate = inRate;
+
+    appointmentsStat.find('#statAmount1').text( trimNumber(followup_today) );
+    appointmentsStat.find('#statAmountTooltip1').text( followup_today );	
+    appointmentsStat.find('#statAmount2').text( trimNumber(general_today) );
+    appointmentsStat.find('#statAmountTooltip2').text( general_today );	
+}
+
+// products
+var products = await listProductsLocal({
+    clinicId: USER_CONFIG.administration.clinicId
+});
+var prodCMonthRate = 0;
+// hide loader
+SectionLoader(productsStat, '');
+if ( products.code == 200 )
+{
+    var data = products.data;
+    var current = (data.today) ? data.today.length : 0;
+    var prior = (data.yesterday) ? data.yesterday.length : 0;
+    var total = (data.all) ? data.all.length : 0;
+    var inRate = current - (total - current);
+    inRate = (inRate / total) * 100;
+    var outRate = (total - prior) - prior;
+    outRate = (outRate / total) * 100;
+    
+    if ( current == 0 )
+        inRate = 0.00;
+    if ( prior == 0 )
+        outRate = 0.00;
+    
+    prodCMonthRate = inRate;
+
+    productsStat.find('#statAmount').text( trimNumber(current) );
+    productsStat.find('#statAmountTooltip').text( current );
+}
+
+// orders
+var orders = await listOrdersLocal({
+    clinicId:USER_CONFIG.administration.clinicId
+});
+var ordCMonthRate = 0;
+// hide loader
+SectionLoader(ordersStat, '');
+if ( orders.code == 200 )
+{
+    var data = orders.data;
+    var current = (data.today) ? data.today.length : 0;
+    var prior = (data.yesterday) ? data.yesterday.length : 0;
+    var total = (data.all) ? data.all.length : 0;
+    var inRate = current - (total - current);
+    inRate = (inRate / total) * 100;
+    var outRate = (total - prior) - prior;
+    outRate = (outRate / total) * 100;
+    
+    if ( current == 0 )
+        inRate = 0.00;
+    if ( prior == 0 )
+        outRate = 0.00;
+    
+    ordCMonthRate = inRate;
+
+    ordersStat.find('#statAmount').text( trimNumber(current) );
+    ordersStat.find('#statAmountTooltip').text( current );
+    // loop data
+    var labels = [];
+    var fdata = [];
+    for (var i = 0; i < data.currentYearStats.length; i++) 
+    {
+        var v = data.currentYearStats[i];
+        // add months
+        labels.push( translateMonthName(v.date) );
+        // add data
+        fdata.push(v.total);
+    }
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+    {
+        const ctx = chartEl02[0].getContext('2d');
+        const chart02 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    barPercentage: 0.5,
+                    barThickness: 50,
+                    //maxBarThickness: 8,
+                    minBarLength: 2,
+                    label: 'عدد فواتير شراء المنتجات',
+                    data: fdata,
+                    backgroundColor: [
+                        'rgba(109, 157, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(109, 157, 255, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: true,
+                        textDirection: 'rtl'
+                    },
+                    title: {
+                        text: "تحليل فواتير شراء المنتجات",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    //chartEl01.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+    {
+        const ctx = chartEl02[0].getContext('2d');
+        const chart02 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    barPercentage: 0.5,
+                    barThickness: 50,
+                    //maxBarThickness: 8,
+                    minBarLength: 2,
+                    label: "Nombre de factures d'achat de produits",
+                    data: fdata,
+                    backgroundColor: [
+                        'rgba(109, 157, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(109, 157, 255, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: false,
+                        textDirection: 'ltr'
+                    },
+                    title: {
+                        text: "Analyser les factures d'achats de produits",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    //chartEl01.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+}
+
+// prescriptions
+var prescs = await listPrescriptionsLocal({
+    clinicId:USER_CONFIG.administration.clinicId
+});
+var prescCMonthRate = 0;
+// hide loader
+SectionLoader(prescsStat, '');
+if ( prescs.code == 200 )
+{
+    var data = prescs.data;
+    var current = (data.today) ? data.today.length : 0;
+    var prior = (data.yesterday) ? data.yesterday.length : 0;
+    var total = (data.all) ? data.all.length : 0;
+    var inRate = current - (total - current);
+    inRate = (inRate / total) * 100;
+    var outRate = (total - prior) - prior;
+    outRate = (outRate / total) * 100;
+    
+    if ( current == 0 )
+        inRate = 0.00;
+    if ( prior == 0 )
+        outRate = 0.00;
+    
+    prescCMonthRate = inRate;
+
+    prescsStat.find('#statAmount').text( trimNumber(current) );
+    prescsStat.find('#statAmountTooltip').text( current );
+    // loop data
+    var labels = [];
+    var fdata = [];
+    for (var i = 0; i < data.currentYearStats.length; i++) 
+    {
+        var v = data.currentYearStats[i];
+        // add months
+        labels.push( translateMonthName(v.date) );
+        // add data
+        fdata.push(v.total);
+    }
+    if ( FUI_DISPLAY_LANG.lang == 'ar' )
+    {
+        const ctx = chartEl03[0].getContext('2d');
+        const chart03 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'عدد الوصفات الطبية',
+                    data: fdata,
+                    fill: false,
+                    borderColor: 'rgb(245, 186, 118)',
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: true,
+                        textDirection: 'rtl'
+                    },
+                    title: {
+                        text: "تحليل الوصفات الطبية المنشأة",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    chartEl03.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+    else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+    {
+        const ctx = chartEl03[0].getContext('2d');
+        const chart03 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Nombre d'ordonnances",
+                    data: fdata,
+                    fill: false,
+                    borderColor: 'rgb(245, 186, 118)',
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: false,
+                        textDirection: 'ltr'
+                    },
+                    title: {
+                        text: "Analyse des ordonnances établies",
+                        font: {
+                            weight: 'bold',
+                            size: "16px"
+                        },
+                        display:true,
+                        position: "top"
+                    }
+                },
+                onResize: function(e)
+                {
+                    // set canvas width
+                    chartEl03.css('width', '100%');
+                }
+            }
+        });	
+        // set canvas width
+        //chartEl02.css('width', '100%');
+    }
+}
+// init chart1
+if ( FUI_DISPLAY_LANG.lang == 'ar' )
+{
+    const ctx = chartEl01[0].getContext('2d');
+    const chart01 = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'المرضى '+patCMonthRate.toFixed(0)+'%',
+                'المواعيد '+aptCMonthRate.toFixed(0)+'%',
+                'المنتجات '+prodCMonthRate.toFixed(0)+'%',
+                'الفواتير '+ordCMonthRate.toFixed(0)+'%',
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [
+                    patCMonthRate.toFixed(0), 
+                    aptCMonthRate.toFixed(0), 
+                    prodCMonthRate.toFixed(0),
+                    ordCMonthRate.toFixed(0)
+                ],
+                backgroundColor: [
+                    'rgb(232, 225, 253)',
+                    'rgb(237, 243, 250)',
+                    'rgb(232, 251, 235)',
+                    'rgb(255, 204, 221)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'right',
+                    rtl: true,
+                    textDirection: 'rtl'
+                },
+                title: {
+                    text: "تحليل احصائيات المرضى، المواعيد والمنتجات",
+                    font: {
+                        weight: 'bold',
+                        size: "16px"
+                    },
+                    display:true,
+                    position: "top"
+                }
+            },
+            onResize: function(e)
+            {
+                // set canvas width
+                chartEl01.css('width', '100%');
+            }
+        }
+    });	
+    // set canvas width
+    chartEl01.css('width', '100%');
+}
+else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+{
+    const ctx = chartEl01[0].getContext('2d');
+    const chart01 = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Les patients '+patCMonthRate.toFixed(0)+'%',
+                'Rendez-vous '+aptCMonthRate.toFixed(0)+'%',
+                'Des produits '+prodCMonthRate.toFixed(0)+'%',
+                'Factures '+ordCMonthRate.toFixed(0)+'%',
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [
+                    patCMonthRate.toFixed(0), 
+                    aptCMonthRate.toFixed(0), 
+                    prodCMonthRate.toFixed(0),
+                    ordCMonthRate.toFixed(0)
+                ],
+                backgroundColor: [
+                    'rgb(232, 225, 253)',
+                    'rgb(237, 243, 250)',
+                    'rgb(232, 251, 235)',
+                    'rgb(255, 204, 221)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'left',
+                    rtl: false,
+                    textDirection: 'ltr'
+                },
+                title: {
+                    text: "Analyse des statistiques patients, rendez-vous et produits",
+                    font: {
+                        weight: 'bold',
+                        size: "16px"
+                    },
+                    display:true,
+                    position: "top"
+                }
+            },
+            onResize: function(e)
+            {
+                // set canvas width
+                chartEl01.css('width', '100%');
+            }
+        }
+    });	
+    // set canvas width
+    chartEl01.css('width', '100%');
+}
+
+})
+
+</script>

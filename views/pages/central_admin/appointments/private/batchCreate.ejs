@@ -1,0 +1,329 @@
+<div class="container-fluid" id="batchCreateAppointementsContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"><%= UI_DISPLAY_LANG.views.pages.add_appointement.sectionTitle %></h1>
+	</div>
+    <div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+        <img src="assets/img/utils/info.png" class="alert-icon" alt="">
+        <div class="alert-text" id="text"></div>
+    </div>
+
+	<div class="mt-5">
+		
+        <div class="row gx-2 gy-5">
+
+            <div class="col-md-2">
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_date %></label>
+                    <input type="date" class="input-text input-text-outline" id="aptDate_input">
+                </div>
+
+                <div class="mb-2">
+                    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.select_time %></label>
+                    <input type="time" step="any" class="input-text input-text-outline" id="aptTime_input">
+                </div>
+
+                <button class="btn btn-primary btn-sm" id="create_appointments_button">
+                    <%= UI_DISPLAY_LANG.views.pages.global.save_changes_button %>
+                </button>
+
+            </div>
+
+            <div class="col-md">
+
+                <div class="table-nav">
+
+                    <div class="row gy-3 mb-2">
+
+                        <div class="col-md-12">
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                                searchBtnId: 'search_btn',
+                                searchInputId: 'search_input',
+                            }) -%>
+                        </div>
+
+                        <div class="col-md-6">  
+                            <label for="" class="mb-3"><%= UI_DISPLAY_LANG.views.pages.global.label104 %></label>
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'date_start_input',
+                                dateEndId: 'date_end_input',
+                                columnLayouts: 'col-md-6',
+                                dataIgnoreDefaultValue: true,
+                            }) -%>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="" class="mb-3"><%= UI_DISPLAY_LANG.views.pages.global.label105 %></label>
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'last_apt_date_start_input',
+                                dateEndId: 'last_apt_date_end_input',
+                                columnLayouts: 'col-md-6',
+                                dataIgnoreDefaultValue: true,
+                            }) -%>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="" class="mb-3"><%= UI_DISPLAY_LANG.views.pages.global.label106 %></label>
+                            <%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                                dateStartId: 'last_weight_date_start_input',
+                                dateEndId: 'last_weight_date_end_input',
+                                columnLayouts: 'col-md-6',
+                                dataIgnoreDefaultValue: true,
+                            }) -%>
+                        </div>
+
+                    </div>
+
+                    <div class="row gy-3">
+
+                        <div class="col-md col-sm-12">
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-centers.template.ejs', {
+                                componentId: 'filter',
+                                selectId: 'center_select',
+                                eventsReceiverId: 'batchCreateAppointementsContainer',
+                            }) -%>
+                        </div>
+
+                        <div class="col-md col-sm-12">
+                            <%- include(SETTINGS.UI_Settings.MAIN_DIR_NAME+'views/templates/select-departments.template.ejs', {
+                                componentId: 'filter',
+                                selectId: 'department_select',
+                                eventsReceiverId: 'batchCreateAppointementsContainer',
+                            }) -%>
+                        </div>
+
+                    </div>
+        
+                </div>
+
+                <div class="">
+
+                    <div id="pagination" class="my-3 flex flex-center"></div>
+
+                    <div id="table_element" class="js_table_element">
+                        <div class="thead mb-4">
+                            <div class="fs-20 text-color-8 cursor-pointer js_table_element_select_all_button">#</div>
+                        </div>
+                        <div class="tbody  row gy-3 overflow-x-hidden overflow-y-auto max-height-500px">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+	</div>
+
+</div>
+
+<script>
+
+$(async function()
+{
+
+var page_container = $('#batchCreateAppointementsContainer')
+if ( !page_container[0] ) return
+
+var ERROR_BOX = page_container.find('#ERROR_BOX')
+
+var center_select = page_container.find('#center_select')
+var department_select = page_container.find('#department_select')
+
+var aptDate_input = page_container.find('#aptDate_input')
+var aptTime_input = page_container.find('#aptTime_input')
+
+var search_btn = page_container.find('#search_btn')
+var search_input = page_container.find('#search_input')
+
+var date_start_input = page_container.find('#date_start_input')
+var date_end_input = page_container.find('#date_end_input')
+
+var last_apt_date_start_input = page_container.find('#last_apt_date_start_input')
+var last_apt_date_end_input = page_container.find('#last_apt_date_end_input')
+
+var last_weight_date_start_input = page_container.find('#last_weight_date_start_input')
+var last_weight_date_end_input = page_container.find('#last_weight_date_end_input')
+
+var pagination = page_container.find('#pagination')
+var table_element = page_container.find('#table_element')
+var create_appointments_button = page_container.find('#create_appointments_button')
+
+// list clinics
+var res = await CLINIC_MODEL.search('')
+if ( res.code == 200 )
+{
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<option value="${v.clinicId}">${v.clinicName}</option>`
+    })
+    // add html
+    center_select.html(html)
+}
+
+// search patients
+search_btn.on('click', e =>
+{
+    search_input.trigger('keyup')
+})
+detectTypingEnd(search_input, val =>
+{
+    displayPatients({
+        method_type: 'advancedSearch',
+        query: val,
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val(),
+            last_apt_date_start: last_apt_date_start_input.val(),
+            last_apt_date_end: last_apt_date_end_input.val(),
+            last_weight_date_start: last_weight_date_start_input.val(),
+            last_weight_date_end: last_weight_date_end_input.val(),
+            orderBy: 'patientId',
+            order: 'desc',
+            clinicId: center_select.find(':selected').val(),
+            classId: department_select.find(':selected').val(),
+        }
+    })
+})
+// select center
+center_select.on('change', e =>
+{
+    search_input.trigger('keyup')
+})
+// select department
+department_select.on('change', e =>
+{
+    search_input.trigger('keyup')
+})
+// create appointments
+create_appointments_button.on('click', async e =>
+{
+    create_appointments_button.addClass('disabled')
+    var res = await APPOINTMENT_MODEL.batchStore({
+        list: selectedPatients()
+    })
+    create_appointments_button.removeClass('disabled')
+    ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(res.message)
+    CreateToast("PS", res.message, '')
+})
+// display patients
+search_input.trigger('keyup')
+async function displayPatients(params)
+{
+    SectionLoader(table_element)
+    if ( params.method_type == 'advancedSearch' )
+        var res = await PATIENT_MODEL.advancedSearch(params)
+
+    SectionLoader(table_element, '')
+    table_element.find('.tbody').html('')
+    if ( res.code == 404 ) return
+
+    var data = res.data
+    var html = ''
+
+    $.each(data, (k,v) =>
+    {
+        html += `<div data-role="row" data-id="${v.patientId}" data-class-id="${v.classId}" data-class-name="${v.signup_reason}" data-clinic-id="${v.clinicId}" data-clinic-name="${v.clinicName}">
+                    <div class="col-md-12 bg-color-hover-ebebeb py-3 px-2">
+                        <div class="row mx-0">
+
+                            <div class="col-md-1 d-flex align-items-center px-0">
+                                <input type="checkbox" class="form-check-input rounded-circle pointer width-25px height-25px" data-role="CHECK" id="patient_checkbox_${v.patientId}">
+                            </div>
+
+                            <div class="col-md">
+                                
+                                <div class="row gy-2">
+                                
+                                    <div class="col-md-6">
+                                    
+                                        <a href="#" class="fs-20 fw-500 mb-1 cursor-pointer js_go_to_create_patient_medical_data" data-patient-id="${v.patientId}" >
+                                            <span class="fs-20 fw-500">${v.patientName}</span> 
+                                            <span class="fs-14 fw-400">(${v.patientPhone})</span>   
+                                        </a>
+                                        <div class="fs-14 fw-400 text-color-17">${v.created_at_diff.auto} (${v.date_format})</div>
+                                        <div class="fs-14 fw-400 text-color-17">${v.patientDate}</div>
+                                        
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        
+                                        ${
+                                            (v.last_apt_date_diff)
+                                            ? `<div class="mb-2">
+                                                    <div class="fs-14 fw-400"> 
+                                                        <span class="fs-17">${FUI_DISPLAY_LANG.views.pages.global.text97}:</span>
+                                                        <span class="text-color-17">${v.last_apt_date_diff.auto} (${v.last_apt_date_format})</span>
+                                                    </div>
+                                                    <div class="fs-14 fw-400 text-color-17">${v.last_apt_date}</div>    
+                                                </div>`
+                                            : ''
+                                        }
+                                        
+                                        ${
+                                            (v.last_weight_date_diff)
+                                            ? `<div class="">
+                                                    <div class="fs-14 fw-400">
+                                                        <span class="fs-17">${FUI_DISPLAY_LANG.views.pages.global.text98}:</span>
+                                                        <span class="text-color-17">${v.last_weight_date_diff.auto} (${v.last_weight_date_format})</span>
+                                                    </div>
+                                                    <div class="fs-14 fw-400 text-color-17">${v.last_weight_date}</div>    
+                                                </div>`
+                                            : ''
+                                        }
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+
+                        </div>    
+                    </div>
+				</div>PAG_SEP`
+    })
+
+    // pagination total results
+    pagination.data('total-results', data.length)
+    //
+    new SmoothPagination(pagination, table_element.find('.tbody'), {
+        data: html.split('PAG_SEP')
+    })
+}
+// selected rows
+function selectedPatients()
+{
+    var list = []
+    var items = table_element.find('[data-role="row"]')
+    for (var i = 0; i < items.length; i++) 
+    {
+        var parent = $(items[i])
+        var check = parent.find('[data-role="CHECK"]')
+        if ( check.is(':checked') )
+        {
+            list.push({ 
+                patientId: parent.data('id'),
+                clinicId: parent.data('clinic-id'),
+                clinicName: parent.data('clinic-name'),
+                classId: parent.data('class-id'),
+                className: parent.data('class-name'),
+                aptName: `موعد ${parent.data('class-name')}`,
+                aptNote: null,
+                aptDate: aptDate_input.val(),
+                aptTime: aptTime_input.val(),
+            })
+        }
+    }
+
+    return list
+}
+
+})
+
+</script>

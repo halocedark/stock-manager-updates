@@ -1,0 +1,290 @@
+<div class="container-fluid" id="onlineAppointementsWaitingApprovalContainer">
+	<div class="wrapper d-none">
+		<h1 class="title-medium"></h1>
+	</div>
+	<div class="mt-3">
+		<div class="alert alert-info my-2" style="display:none;" id="ERROR_BOX">
+			<img src="assets/img/utils/info.png" class="alert-icon" alt="">
+			<div class="alert-text" id="text"></div>
+		</div>
+	</div>
+	<div class="mt-3 WRAPPER" id="wrapper01">
+		<div class="table-nav">
+
+			<div class="row gx-2 gy-5">
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/searchbox.template.ejs`, {
+                        searchBtnId: 'search_btn',
+                        searchInputId: 'search_input',
+                    }) -%>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<%- include(`${SETTINGS.UI_Settings.MAIN_DIR_NAME}/views/templates/start-end-date.template.ejs`, {
+                        dateStartId: 'date_start_input',
+                        dateEndId: 'date_end_input',
+                    }) -%>
+				</div>
+
+			</div>
+
+		</div>
+		<div id="pagination" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="tableElement">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card hover-shadow" data-role="APT" data-aptid="" style="cursor: pointer;">
+					<div class="card-body no-pointer">
+						<div class="h5">قسم الحجامة</div>
+						<div class="text-02">(4) جلسات</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+	<div class="mt-3 app-block WRAPPER" id="wrapper02" style="display: none;">
+		<button class="btn btn-light btn-sm mb-4" data-role="BACK_TO_MAIN_UI_BTN" style="width:120px;">
+			<i class="fas fa-arrow-left"></i>
+		</button>
+		<div id="pagination2" class="my-3 flex flex-center"></div>
+		<div class="row gx-4 gy-3" id="infoDiv">
+			<!--
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="mb-5 py-2 border-bottom">
+					<div class="card-body no-pointer">
+						<div class="h5"></div>
+						<div class="text-02"></div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var page_container = $('#onlineAppointementsWaitingApprovalContainer');
+
+var ERROR_BOX = page_container.find('#ERROR_BOX');
+var deleteSelectedBTN = page_container.find('#deleteSelectedBTN');
+var pagination = page_container.find('#pagination');
+var tableElement = page_container.find('#tableElement');
+
+var search_input = page_container.find('#search_input');
+var search_btn = page_container.find('#search_btn');
+var date_start_input = page_container.find('#date_start_input');
+var date_end_input = page_container.find('#date_end_input');
+
+date_start_input.val(CURRENT_DATE);
+date_end_input.val(CURRENT_DATE);
+
+var infoDiv = page_container.find('#infoDiv');
+
+var BACK_TO_MAIN_UI_BTN = page_container.find('[data-role="BACK_TO_MAIN_UI_BTN"]');
+
+var wrapper01 = page_container.find('#wrapper01');
+var wrapper02 = page_container.find('#wrapper02');
+
+var AppointementObject = {
+    apt_id: null
+}
+
+// delete selected
+deleteSelectedBTN.off('click');
+deleteSelectedBTN.on('click', e =>
+{
+    PromptConfirmDialog().then(async c =>
+    {
+        // display loader
+        SectionLoader(tableElement);
+        var response = await ONLINE_APPOINTMENT_MODEL.batchDelete(selectedRows());
+        // hide loader
+        SectionLoader(tableElement, '');
+        if ( response.code == 404 )
+        {
+            ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+            return;
+        }
+        ERROR_BOX.show(0).delay(7*1000).hide(0).find('#text').text(response.message);
+        //
+        search_btn.trigger('click');
+    });
+});
+// back to main ui
+BACK_TO_MAIN_UI_BTN.off('click');
+BACK_TO_MAIN_UI_BTN.on('click', e =>
+{
+    wrapper01.slideDown(200).siblings('.WRAPPER').slideUp(200);
+});
+// tableElement click
+tableElement.on('click', async e =>
+{
+    var target = $(e.target);
+    if ( target.data('role') == 'APT' )
+    {
+        AppointementObject.apt_id = target.data('apt_id');
+        displayInfo();
+    }
+    else if ( target.data('role') == 'ACCEPT' )
+    {
+        PromptConfirmDialog().then(async c =>
+        {
+            SectionLoader(tableElement);
+            var response = await ONLINE_APPOINTMENT_MODEL.setAccepted({
+                apt_id: target.data('apt_id'),
+                status: ST_YES
+            })
+            SectionLoader(tableElement, '');
+            if ( response.code == 404 )
+            {
+                ERROR_BOX.show(0).delay(7*1000).hide(0)
+                .find('#text').text(response.message);
+                return;
+            }
+            ERROR_BOX.show(0).delay(7*1000).hide(0)
+            .find('#text').text(response.message);
+            //
+            search_btn.trigger('click');
+        });
+    }
+});
+// search
+search_btn.on('click', e =>
+{
+    displayAll({
+        method_type: 'search',
+        clinicId: USER_CONFIG.administration.clinicId,
+        isAccepted: ST_NO,
+        query: search_input.val(),
+        advanced: {
+            start: date_start_input.val(),
+            end: date_end_input.val()
+        }
+    })
+});
+search_input.on('keyup', async e =>
+{
+    displayAll({
+        method_type: 'search',
+        clinicId: USER_CONFIG.administration.clinicId,
+        isAccepted: ST_NO,
+        query: search_input.val()
+    })
+});
+displayAll({
+    method_type: 'search',
+    clinicId: USER_CONFIG.administration.clinicId,
+    isAccepted: ST_NO,
+    query: search_input.val()
+})
+// display all
+async function displayAll(params)
+{
+    SectionLoader(tableElement)
+    // clear html
+    tableElement.html('')
+    if ( params.method_type == 'search' )
+        var res = await ONLINE_APPOINTMENT_MODEL.search(params)
+
+    SectionLoader(tableElement, '')
+
+    if ( res.code == 404 ) return;
+
+    var data = res.data;
+    var html = '';
+    $.each(data, (k,v) =>
+    {
+        html += `<div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card hover-shadow" data-role="APT" data-apt_id="${v.apt_id}" style="cursor: pointer;">
+                        <div class="form-check border-bottom p-1">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault_${v.apt_id}" data-role="CHECK" data-apt_id="${v.apt_id}">
+                            <label class="form-check-label" for="flexCheckDefault_${v.apt_id}">
+                                ${FUI_DISPLAY_LANG.views.pages.global.select}
+                            </label>
+                        </div>
+                        <div class="card-body no-pointer">
+                            <div class="h6">${ strSnippet(v.apt_body) }</div>
+                            <div class="text-02">${v.client_date}</div>
+                            <div class="text-02">${v.client_time}</div>
+                            <div class="text-02 mt-2">
+                                <button class="btn btn-success btn-sm pointer" data-role="ACCEPT"  data-apt_id="${v.apt_id}">
+                                    <i class="fas fa-check no-pointer"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+    });
+    // add html
+    var options = {
+        data: html.split('PAG_SEP'),
+        resultsPerPage: 9
+    };
+    new SmoothPagination(pagination, tableElement, options);
+}
+// display info
+async function displayInfo()
+{
+    // display loader
+    SectionLoader(wrapper02);
+    wrapper02.slideDown(200).siblings('.WRAPPER').slideUp(200);
+    var response = await ONLINE_APPOINTMENT_MODEL.show(AppointementObject.apt_id);
+    // hide loader
+    SectionLoader(wrapper02, '');
+    // clear html
+    infoDiv.html('');
+    if ( response.code == 404 )
+        return;
+
+    var data = response.data;
+    var html = '';
+
+    html = `<div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="border-bottom py-2 mb-3">
+                    <div class="text-02">
+                        ${data.client_name}
+                    </div>
+                    <div class="text-02">
+                        ${data.client_phone}
+                    </div>
+                </div>
+                <div class="border-bottom py-4 mb-3">
+                    <div class="text-02">
+                        ${data.apt_body}
+                    </div>
+                </div>
+                <div class="border-bottom py-2">
+                    <span class="text-02">
+                        ${data.client_date}
+                    </span>
+                    <span class="text-02">
+                        ${data.client_time}
+                    </span>
+                </div>
+            </div>`;
+    
+    infoDiv.html(html);
+}
+// selected rows
+function selectedRows()
+{
+    var list = [];
+    var items = tableElement.find('[data-role="CHECK"]');
+    for (var i = 0; i < items.length; i++) 
+    {
+        var check = $(items[i]);
+        if ( check.is(':checked') )
+            list.push({ apt_id: check.data('apt_id') });
+    }
+
+    return list;
+}
+
+})
+
+</script>

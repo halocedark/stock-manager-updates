@@ -1,0 +1,72 @@
+<span id="select_drivers_template_<%= locals.componentId %>" class="pointer">
+
+    <label for="" class="form-label"><%= UI_DISPLAY_LANG.views.pages.global.label86 %></label>
+    <input type="text" class="input-text input-text-outline mb-2 border-bottom-forced" placeholder="<%= UI_DISPLAY_LANG.views.pages.global.placeholder5 %>" id="select_drivers_template_search_input">
+    <select name="" class="input-text" id="<%= locals.selectId ? locals.selectId : 'select_drivers_template_driver_select' %>">
+        
+    </select>
+
+</span>
+
+<script>
+
+    $(async function()
+    {
+        var eventsReceiverId = `<%- locals.eventsReceiverId %>`
+        var componentId = `<%- locals.componentId %>`
+        var selectId = (`<%- locals.selectId %>` == '' || `<%- locals.selectId %>` == null) ? 'select_drivers_template_driver_select' : `<%- locals.selectId %>`
+        var selectionEventName = (`<%- locals.selectionEventName %>` == '' || `<%- locals.selectionEventName %>` == null) ? 'driver-selected' : `<%- locals.selectionEventName %>`
+
+        var select_drivers_template = $('#select_drivers_template_'+componentId)
+        var select_drivers_template_search_input = select_drivers_template.find('#select_drivers_template_search_input')
+
+        var select_drivers_template_driver_select = select_drivers_template.find(`#${selectId}`)
+
+        detectTypingEnd(select_drivers_template_search_input, () =>
+        {
+            select_drivers_template_displayAll()
+        }, 500)
+        // select_drivers_template_search_input.on('keyup', select_drivers_template_displayAll)
+        // display all
+        select_drivers_template_displayAll()
+        async function select_drivers_template_displayAll()
+        {
+            // select_drivers_template_driver_select.html(`<option value="">${FUI_DISPLAY_LANG.views.pages.global.label31}</option>`)
+            var res = await EMPLOYEE_MODEL.searchLocal({
+                query: select_drivers_template_search_input.val(),
+                administration_id: 0,
+                employee_administration: '.'
+            })
+            
+            if ( res.code == 404 ) return
+
+            // dispatch event
+            
+            var data = res.data
+            var html = ''
+
+            $.each(data, (k,v) =>
+            {
+                var data = btoa( encodeURIComponent(JSON.stringify(v)) )
+                if ( v.type.employee_type_code == EMP_TYPE_DRIVER )
+                    html += `<option value="${v.employee_id}" data-object="${data}">${v.employee_name}</option>`	
+            })
+            // add html
+            select_drivers_template_driver_select.html(html)
+            // dispatch an event
+            var event = new CustomEvent(selectionEventName, { 
+                detail: { 
+                    driver: {
+                        id: select_drivers_template_driver_select.find(':selected').val(),
+                        name: select_drivers_template_driver_select.find(':selected').text(),
+                        data: checkJSON( decodeURIComponent( atob( select_drivers_template_driver_select.find(':selected').data('object') ) ) ),
+                    },
+                    eventsReceiverId: eventsReceiverId 
+                } 
+            });
+
+            document.dispatchEvent(event)
+        } 
+    })
+
+</script>

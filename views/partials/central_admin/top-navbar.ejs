@@ -1,0 +1,339 @@
+<div class="top-navbar-container" id="topNavbarContainer">
+	<div class="wrapper clearfix" style="overflow: unset;">
+		<button class="btn btn-primary btn-sm toggle-sidebar-btn" style="background: #5bb877;border-color: transparent;box-shadow: 10px 10px 19px 0px rgba(35,178,227,0.75) inset;
+		-webkit-box-shadow: 10px 10px 19px 0px rgba(35,178,227,0.75) inset;
+		-moz-box-shadow: 10px 10px 19px 0px rgba(35,178,227,0.75) inset;" id="toggleSideBarBTN">
+			<span><i class="fas fa-arrows-alt-h"></i></span>
+		</button>
+		<ul class="tnb-navmenu" id="topbarNavMenu">
+			<li>
+				<a href="" data-role="LOGOUT_NAV_LINK">
+					<%= UI_DISPLAY_LANG.views.partials.sidebar.nav05 %>
+				</a>
+			</li>
+			<li>
+				<a href="" data-role="CHECK_FOR_UPDATES_NAV_LINK">
+					<%= UI_DISPLAY_LANG.views.partials.sidebar.nav04 %>
+				</a>
+			</li>
+			<li data-perm="settings">
+				<a href="../views/pages/central_admin/settings/account.ejs" data-name="account-settings" data-role="NAV_LINK">
+					<%= UI_DISPLAY_LANG.views.partials.sidebar.nav03 %>
+				</a>
+			</li>
+			<li data-perm="ringing_the_bell">
+				<a href="#" data-role="RING_BELL_NAV_LINK">
+					<%= UI_DISPLAY_LANG.views.partials.sidebar.nav124 %>
+				</a>
+			</li>
+			<li data-perm="create_driver_jobs">
+				<a href="#" data-role="CREATE_DRIVER_JOB_NAV_LINK">
+					<%= UI_DISPLAY_LANG.views.partials.sidebar.nav144 %>
+				</a>
+			</li>
+			<li>
+				<div class="dropdown">
+					<a class="dropdown-toggle" type="button" id="top_nav_bar_more_list_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						<%= UI_DISPLAY_LANG.views.pages.global.more %>
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="top_nav_bar_more_list_dropdown">
+						<li class="d-block has-text-centered" data-perm="chats">
+							<a class="dropdown-item text-dark" href="#" data-role="CHAT_PRIVATE_CONVERSATIONS"><%= UI_DISPLAY_LANG.views.pages.global.navs.nav86 %></a>
+						</li>
+						<li class="d-block has-text-centered" data-perm="set_order_global_settings">
+							<a class="dropdown-item text-dark" href="#" onclick="SetOrderGlobalSettings()"><%= UI_DISPLAY_LANG.views.pages.global.set_order_global_settings %></a>
+						</li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+
+		<span class="gna-button-toggler-wrapper"></span>
+		
+	</div>
+</div>
+
+<script>
+
+$(function()
+{
+
+var toggleSideBarBTN = TOP_NAV_BAR.find('#toggleSideBarBTN');
+var topbarNavMenu = TOP_NAV_BAR.find('#topbarNavMenu');
+
+// toggle side bar
+toggleSideBarBTN.on('click', e =>
+{
+	SIDE_NAV_CONTAINER.toggleClass('hidden');
+	MAIN_CONTENT_CONTAINER.toggleClass('maximized');
+	TOP_NAV_BAR.toggleClass('maximized');
+});
+// Click on nav
+topbarNavMenu.on('click', e =>
+{
+	e.preventDefault();
+	var target = $(e.target);
+	if ( target.data('role') == 'NAV_LINK' )
+	{
+		goToPage(target.data('name'))
+	}
+	else if ( target.data('role') == 'LOGOUT_NAV_LINK' )
+	{
+		PromptConfirmDialog().then(c =>
+		{
+            EMPLOYEE_MODEL.logout()
+		});
+	}
+	else if ( target.data('role') == 'CHECK_FOR_UPDATES_NAV_LINK' )
+	{
+		// translate
+		if ( FUI_DISPLAY_LANG.lang == 'ar' )
+		{
+			PromptConfirmDialog('تأكيد العمل', 'هل انت متأكد؟ سيبدأ التحميل مباشرة عند ايجاد اصدار جديد.').then(c =>
+			{
+				ipcIndexRenderer.send('check-for-updates', '');
+			});
+		}
+		else if ( FUI_DISPLAY_LANG.lang == 'fr' )
+		{
+			PromptConfirmDialog("Confirmer l'action", "Êtes-vous sûr? Le téléchargement commencera immédiatement lorsqu'une nouvelle version sera trouvée.").then(c =>
+			{
+				ipcIndexRenderer.send('check-for-updates', '');
+			});
+		}
+	}
+	else if ( target.data('role') == 'RING_BELL_NAV_LINK' )
+	{
+		RingingBellDialog({
+			visible: true,
+			center_type: 'CENTRAL_ADMINISTRATION'
+		})
+	}
+	else if ( target.data('role') == 'CHAT_PRIVATE_CONVERSATIONS' )
+	{
+		setupChatPrivateConversationUsers()
+	}
+	else if ( target.data('role') == 'CREATE_DRIVER_JOB_NAV_LINK' )
+	{
+		RequestDriverDialog()
+	}
+	else
+		return;
+});
+
+async function setupChatPrivateConversationUsers()
+{
+	var html = await getPage('../views/templates/chat-conversations.template.ejs')
+
+	var chat_private_conversation_users = $('#chat_private_conversation_users')
+	if ( !chat_private_conversation_users[0] )
+	{
+		$('body').prepend(html)
+		chat_private_conversation_users = $('#chat_private_conversation_users')
+		// dispatch event for new content on page
+		dispatch_onNewAjaxContentLoaded()
+	}
+
+	chat_private_conversation_users__show()
+
+	const chat_private_conversation_users_close_button = chat_private_conversation_users.find('#chat_private_conversation_users_close_button')
+	const chat_private_conversation_users_body = chat_private_conversation_users.find('#chat_private_conversation_users_body')
+
+	const chat_private_conversation_users_search_btn = chat_private_conversation_users.find('#chat_private_conversation_users_search_btn')
+	const chat_private_conversation_users_search_input = chat_private_conversation_users.find('#chat_private_conversation_users_search_input')
+
+	const chat_private_conversation_groups_body = chat_private_conversation_users.find('#chat_private_conversation_groups_body')
+
+	const chat_private_conversation_groups_search_btn = chat_private_conversation_users.find('#chat_private_conversation_groups_search_btn')
+	const chat_private_conversation_groups_search_input = chat_private_conversation_users.find('#chat_private_conversation_groups_search_input')
+
+	// select contact
+	chat_private_conversation_users_body.on('click', e =>
+	{
+		var target = $(e.target)
+
+		if ( target.data('role') == 'row' )
+		{
+			var PatientObject = checkJSON( decodeURIComponent( atob( target.data('object') ) ) )
+			PatientObject['conversationUuid'] = target.data('conversation-uuid')
+			
+			CreateChatPrivateConversationDialog(PatientObject)
+		}
+	})
+	// search contacts
+	chat_private_conversation_users_search_btn.on('click', e =>
+	{
+		chat_private_conversation_users_search_input.trigger('keyup')
+	})
+	detectTypingEnd(chat_private_conversation_users_search_input, val =>
+	{
+		chat_private_conversation_users_displayContacts({
+			method_type: 'advancedSearch',
+			query: val,
+			advanced: {
+				limit: 20,
+				offset: 0,
+				orderBy: 'patientId',
+				order: 'desc',
+			}
+		})
+	})
+
+	// select group
+	chat_private_conversation_groups_body.on('click', async e =>
+	{
+		var target = $(e.target)
+
+		if ( target.data('role') == 'row' )
+		{
+			var GroupObject = checkJSON( decodeURIComponent( atob( target.data('object') ) ) )
+			GroupObject['conversationUuid'] = target.data('conversation-uuid')
+			
+			// GroupObject = (await CHAT_MODEL.group_show({
+			// 	id: GroupObject.id
+			// })).data
+		
+			CreateChatGroupConversationDialog(GroupObject)
+		}
+	})
+	// search groups
+	chat_private_conversation_groups_search_btn.on('click', e =>
+	{
+		chat_private_conversation_groups_search_input.trigger('keyup')
+	})
+	detectTypingEnd(chat_private_conversation_groups_search_input, val =>
+	{
+		chat_private_conversation_users_displayGroups({
+			method_type: 'group_search',
+			query: val,
+			advanced: {
+				limit: 20,
+				offset: 0,
+				orderBy: 'id',
+				order: 'desc',
+			}
+		})
+	})
+
+
+	// hide
+	chat_private_conversation_users_close_button.on('click', e =>
+	{
+		chat_private_conversation_users__hide()
+	})
+
+	function chat_private_conversation_users__show()
+	{
+		chat_private_conversation_users.addClass('show')
+	}
+
+	function chat_private_conversation_users__hide()
+	{
+		chat_private_conversation_users.removeClass('show')
+	}
+
+	// display contacts
+	chat_private_conversation_users_displayContacts({
+		method_type: 'advancedSearch',
+		query: '',
+		advanced: {
+			limit: 20,
+			offset: 0,
+			orderBy: 'patientId',
+			order: 'desc',
+		}
+	})
+	async function chat_private_conversation_users_displayContacts(params)
+	{
+		SectionLoader(chat_private_conversation_users_body)
+		if ( params.method_type == 'advancedSearch' ) var res = await PATIENT_MODEL.advancedSearch(params)
+		SectionLoader(chat_private_conversation_users_body, '')
+		if ( res.code == 404 )
+		{
+			chat_private_conversation_users_body.html('')
+			return
+		}
+
+		var data = res.data
+		var html = ''
+
+		$.each(data, (k,v) =>
+		{
+			var dataObject = btoa( encodeURIComponent(JSON.stringify(v)) )
+			var avatar = imgFallback(v.patientAvatar, '../assets/img/utils/user.png')
+			html += `<div class="chat-private-conversation-user" data-role="row" data-object="${dataObject}" data-conversation-uuid="${uniqid()}">
+						<div class="row no-pointer">
+							<div class="col-2" style="max-width: 13%;">
+								<img src="${avatar}" class="width-36px height-36px rounded-circle" alt="">
+							</div>
+							<div class="col d-flex align-items-center">
+								<span class="fs-15 fw-500">${v.patientName}</span>
+							</div>
+						</div>
+					</div>`
+		})
+
+		chat_private_conversation_users_body.html(html)
+	}
+	// display groups
+	setTimeout(() => {
+		
+		chat_private_conversation_users_displayGroups({
+			method_type: 'group_search',
+			query: '',
+			advanced: {
+				limit: 20,
+				offset: 0,
+				orderBy: 'id',
+				order: 'desc',
+			}
+		})
+
+	}, 1*1000);
+	async function chat_private_conversation_users_displayGroups(params)
+	{
+		SectionLoader(chat_private_conversation_groups_body)
+		if ( params.method_type == 'group_search' ) var res = await CHAT_MODEL.group_search(params)
+		SectionLoader(chat_private_conversation_groups_body, '')
+		if ( res.code == 404 )
+		{
+			chat_private_conversation_groups_body.html('')
+			return
+		}
+
+		var data = res.data
+		var html = ''
+
+		$.each(data, (k,v) =>
+		{
+			var dataObject = btoa( encodeURIComponent(JSON.stringify(v)) )
+			var cover = imgFallback(v.cover, '../assets/img/utils/placeholder.png')
+			html += `<div class="chat-private-conversation-user user-card-1" data-role="row" data-object="${dataObject}" data-conversation-uuid="${uniqid()}">
+						<div class="no-pointer d-flex align-items-center">
+							<div class="user-card-1-thumb">
+								<img src="${cover}" class="width-36px height-36px rounded" alt="">
+							</div>
+							<div class="user-card-1-details">
+								<div class="user-card-1-name fs-15 mb-2">
+									<span>${v.name}</span>	
+								</div>
+								<div class="user-card-1-status fw-400 fs-14">
+									<span class="d-inline-block vertical-align-middle">
+										${ (v.type == 'private') ? `<i class="xfb xfb-lock pointer" title="${FUI_DISPLAY_LANG.views.pages.global.chat_group_types[v.type]}"></i>` : `<i class="xfb xfb-globe pointer" title="${FUI_DISPLAY_LANG.views.pages.global.chat_group_types[v.type]}"></i>` }
+									</span>
+									<span>${FUI_DISPLAY_LANG.views.pages.global.chat_group_types[v.type]}</span>
+								</div>
+							</div>
+						</div>
+					</div>`
+		})
+
+		chat_private_conversation_groups_body.html(html)
+	}
+
+}
+
+
+})
+
+</script>
